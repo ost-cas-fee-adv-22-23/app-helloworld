@@ -8,7 +8,7 @@ import {
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { getSession, signOut } from 'next-auth/react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { fetchMumbles, Mumble } from '../services/mumble';
+import {fetchMumbles, likePost, Mumble} from '../services/mumble';
 import { useState } from 'react';
 import { fetchUsers } from '../services/users';
 
@@ -22,6 +22,11 @@ export default function PageHome({
   mumbles: initialMumbles,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+
+
+   const likedPost = (postId: string) => likePost({postId});
+
+
   const [mumbles] = useState(initialMumbles);
 
   if (error) {
@@ -64,7 +69,7 @@ export default function PageHome({
                     onClick={undefined}
                   />
                   <LikeButtonWithReactionButton
-                    onClick={undefined}
+                    onClick={() => likedPost(mumble.id)}
                     active
                     label={{
                       noReaction: 'Like',
@@ -86,7 +91,7 @@ export default function PageHome({
   );
 }
 
-export const getServerSideProps: GetServerSideProps<PageProps> = async (context) => {
+export const getServerSideProps: GetServerSideProps= async (context) => {
   const session = await getSession(context);
 
   if (!session) {

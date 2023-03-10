@@ -1,4 +1,5 @@
 import {decodeTime} from 'ulid';
+import {User} from './users';
 
 export type Mumble = {
   id: string;
@@ -53,3 +54,21 @@ const transformMumble = (mumble: RawMumble) => ({
   createdTimestamp: decodeTime(mumble.id),
   createdDate: new Date(decodeTime(mumble.id)).toLocaleDateString(),
 });
+
+export const likePost = async (params?: { postId: string }) => {
+  const { postId } = params || {};
+
+  const accessToken = '';
+  // TODO: Fix this accessToken
+  const token = accessToken;
+
+  const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}/likes`;
+
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: {
+      'content-type': 'application/json',
+      Authorization: token
+    },
+  });
+};
