@@ -10,31 +10,26 @@ export type User = {
 
 type QwackerUserResponse = {
   count?: number;
-  data?: User[];
+  data?: User[];accessToken
 };
 
-export const fetchUsers = async (params?: { limit?: number; accessToken?: string }) => {
-  const { limit, accessToken } = params || {};
-  const session = await getSession();
+export const fetchUsers = async (params?: { accessToken?: string }) => {
+  const { accessToken } = params || {};
 
-  // TODO: Fix this accessToken
-  const token = accessToken;
-
-  if (!token) {
+/*  if (!accessToken) {
     throw new Error('No access token');
-  }
+  }*/
 
   const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}/users?${new URLSearchParams({
-    limit: limit?.toString() || '100',
+    limit: '100',
   })}`;
 
   const res = await fetch(url, {
     headers: {
       'content-type': 'application/json',
-      Authorization: token,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
-  console.log(res);
 
   const { count, data } = (await res.json()) as QwackerUserResponse;
 

@@ -105,7 +105,7 @@ export const getServerSideProps: GetServerSideProps= async (context) => {
 
   try {
     const { count, mumbles } = await fetchMumbles({ limit: 200 });
-    const { users } = await fetchUsers();
+    const { users } = await fetchUsers({accessToken: session.accessToken});
 
     const mumblesWithUserInfo = mumbles.map((mumble) => {
       const creator = users?.find((user) => user.id === mumble.creator);

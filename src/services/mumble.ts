@@ -58,9 +58,9 @@ const transformMumble = (mumble: RawMumble) => ({
 export const likePost = async (params?: { postId: string }) => {
   const { postId } = params || {};
 
-  const accessToken = '';
+  const accessToken = undefined;
   // TODO: Fix this accessToken
-  const token = accessToken;
+  const token = accessToken ?? 'Bearer fwE0Gk7rcCjCYYOxt-ZVdWT69WVmpgsFbIVom87GhOqz3r2o7A3nIluKl-ZSwPgjnl_1qf8';
 
   const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}/likes`;
 
