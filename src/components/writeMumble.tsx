@@ -10,15 +10,16 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postMumble } from '../services/posts';
 import { useSession } from 'next-auth/react';
+import { PostArgs, UploadImage } from '../services/serviceTypes';
 
 export const WriteMumble: FC = () => {
   const [text, setText] = React.useState<string>('');
-  const [file, setFile] = useState<File>();
+  const [file, setFile] = useState<UploadImage>();
   const { data: session } = useSession();
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation(postMumble, {
+  const mutation = useMutation((args: PostArgs) => postMumble(args), {
     onSuccess: async (data) => {
       await queryClient.invalidateQueries();
       console.log(data);
@@ -35,7 +36,7 @@ export const WriteMumble: FC = () => {
   const onSubmitPostHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
-    const mutationArgs = {
+    const mutationArgs: PostArgs = {
       text: text,
       file: file,
       accessToken: session?.accessToken,
@@ -43,6 +44,7 @@ export const WriteMumble: FC = () => {
 
     mutation.mutate(mutationArgs);
     setText('');
+    setFile(undefined);
   };
 
   return (
@@ -64,7 +66,7 @@ export const WriteMumble: FC = () => {
                 <Textfield placeholder="Was gibt's Neues?" value={''} onChange={(e) => textfieldChangeHandler(e)} />
               </div>
               <div className="flex flex-row gap-l justify-between unset">
-                <Button label="Bild hochladen" size="L" variant="default" onClick={}>
+                <Button label="Bild hochladen" size="L" variant="default" onClick={(e) => console.log('File upload' + e)}>
                   <UploadIcon size={16} />
                 </Button>
                 <Button label="Absenden" size="L" variant="purple" onClick={(e) => onSubmitPostHandler(e)}>
