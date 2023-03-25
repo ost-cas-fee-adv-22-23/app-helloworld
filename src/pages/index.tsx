@@ -8,9 +8,10 @@ import {
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { getSession, signOut } from 'next-auth/react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import {fetchMumbles, likePost, Mumble} from '../services/mumble';
+import { fetchMumbles, likePost, Mumble } from '../services/mumble';
 import { useState } from 'react';
 import { fetchUsers } from '../services/users';
+import { WriteMumble } from '../components/writeMumble';
 
 type PageProps = {
   count: number;
@@ -22,10 +23,7 @@ export default function PageHome({
   mumbles: initialMumbles,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-
-
-   const likedPost = (postId: string) => likePost({postId});
-
+  const likedPost = (postId: string) => likePost({ postId });
 
   const [mumbles] = useState(initialMumbles);
 
@@ -44,6 +42,7 @@ export default function PageHome({
       </Navbar>
 
       <div className={'grid grid-cols-1 justify-items-center'}>
+        <WriteMumble></WriteMumble>
         <ul className={'w-screen md:w-615'}>
           {mumbles.map((mumble) => (
             <li key={mumble.id} className={'m-s'}>
@@ -91,7 +90,7 @@ export default function PageHome({
   );
 }
 
-export const getServerSideProps: GetServerSideProps= async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
 
   if (!session) {
@@ -105,7 +104,7 @@ export const getServerSideProps: GetServerSideProps= async (context) => {
 
   try {
     const { count, mumbles } = await fetchMumbles({ limit: 200 });
-    const { users } = await fetchUsers({accessToken: session.accessToken});
+    const { users } = await fetchUsers({ accessToken: session.accessToken });
 
     const mumblesWithUserInfo = mumbles.map((mumble) => {
       const creator = users?.find((user) => user.id === mumble.creator);

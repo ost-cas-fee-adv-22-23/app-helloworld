@@ -1,5 +1,3 @@
-import {getSession} from 'next-auth/react';
-
 export type User = {
   id: string;
   userName: string;
@@ -10,15 +8,16 @@ export type User = {
 
 type QwackerUserResponse = {
   count?: number;
-  data?: User[];accessToken
+  data?: User[];
+  accessToken: string;
 };
 
 export const fetchUsers = async (params?: { accessToken?: string }) => {
   const { accessToken } = params || {};
 
-/*  if (!accessToken) {
+  if (!accessToken) {
     throw new Error('No access token');
-  }*/
+  }
 
   const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}/users?${new URLSearchParams({
     limit: '100',
