@@ -16,17 +16,17 @@ export const WriteMumble: FC = () => {
   const [file, setFile] = useState<File>();
   const { data: session } = useSession();
 
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
-  const mutation = useMutation(postMumble, {
-    onSuccess: async (data) => {
-      await queryClient.invalidateQueries();
-      console.log(data);
-    },
-    onError: async (error) => {
-      console.log(error);
-    },
-  });
+  // const mutation = useMutation(postMumble, {
+  //   onSuccess: async (data) => {
+  //     await queryClient.invalidateQueries();
+  //     console.log(data);
+  //   },
+  //   onError: async (error) => {
+  //     console.log(error);
+  //   },
+  // });
 
   const textfieldChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
@@ -64,7 +64,7 @@ export const WriteMumble: FC = () => {
                 <Textfield placeholder="Was gibt's Neues?" value={''} onChange={(e) => textfieldChangeHandler(e)} />
               </div>
               <div className="flex flex-row gap-l justify-between unset">
-                <Button label="Bild hochladen" size="L" variant="default" onClick={}>
+                <Button label="Bild hochladen" size="L" variant="default">
                   <UploadIcon size={16} />
                 </Button>
                 <Button label="Absenden" size="L" variant="purple" onClick={(e) => onSubmitPostHandler(e)}>
