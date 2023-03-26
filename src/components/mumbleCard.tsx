@@ -1,22 +1,43 @@
-import React, {FC} from 'react';
-import {likePost, Mumble} from '../services/mumble';
+import React, { FC, useReducer } from 'react';
+import { likePost, Mumble } from '../services/mumble';
 import {
-    Card,
-    CommentButton,
-    CopyButton,
-    LikeButtonWithReactionButton,
-    ProfileHeader,
+  Card,
+  CommentButton,
+  CopyButton,
+  LikeButtonWithReactionButton,
+  ProfileHeader,
 } from '@smartive-education/design-system-component-library-hello-world-team';
-import {useSession} from 'next-auth/react';
+import { useSession } from 'next-auth/react';
+import { WriteMumble } from './writeMumble';
 
 interface MumbleCard {
-    mumble: Mumble
+  mumble: Mumble;
 }
 
 export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
-    const { data: session } = useSession();
+  const { data: session } = useSession();
 
-    const likedPost = (postId: string, likedByUser: boolean) => likePost({ postId, likedByUser, accessToken: session?.accessToken });
+  const [state, dispatch] = useReducer(mumbleCardReducer, { showComment: false });
+
+  const likedPost = (postId: string, likedByUser: boolean) =>
+    likePost({ postId, likedByUser, accessToken: session?.accessToken });
+
+  function mumbleCardReducer(state, action) {
+    switch (action.type) {
+      case 'comment': {
+        return {
+          ...state,
+          showComment: !state.showComment,
+        };
+      }
+      case 'add_comment': {
+        return {
+          ...state,
+          showComment: false,
+        };
+      }
+    }
+  }
 
   return (
     <>
@@ -39,7 +60,9 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
           <CommentButton
             label={{ noComments: 'Comment', someComments: 'Comments' }}
             numberOfComments={mumble.replyCount}
-            onClick={undefined}
+            onClick={(e) => {
+              dispatch({ type: 'comment'})
+            }}
           />
           <LikeButtonWithReactionButton
             onClick={() => likedPost(mumble.id, mumble.likedByUser)}
@@ -55,6 +78,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
           />
           <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
         </div>
+        <div>{state.showComment ? <WriteMumble></WriteMumble> : null}</div>
       </Card>
     </>
   );
