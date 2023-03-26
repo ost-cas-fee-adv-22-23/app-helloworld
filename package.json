@@ -13,7 +13,7 @@
     "depcruise": "npx depcruise --config .dependency-cruiser.js src"
   },
   "dependencies": {
-    "@smartive-education/design-system-component-library-hello-world-team": "^1.13.3",
+    "@smartive-education/design-system-component-library-hello-world-team": "^1.15.0",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.8",
