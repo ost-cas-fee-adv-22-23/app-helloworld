@@ -1,24 +1,10 @@
-import {
-  Card,
-  CommentButton,
-  CopyButton,
-  LikeButtonWithReactionButton,
-  Navbar,
-  ProfileHeader,
-} from '@smartive-education/design-system-component-library-hello-world-team';
-import {getSession, signOut, useSession} from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { fetchMumbles, likePost, Mumble } from '../services/mumble';
+import { fetchMumbles } from '../services/mumble';
 import { useState } from 'react';
 import { fetchUsers } from '../services/users';
 import { WriteMumble } from '../components/writeMumble';
 import { MumbleCard } from '../components/mumbleCard';
-
-type PageProps = {
-  count: number;
-  mumbles: Mumble[];
-  error?: string;
-};
 
 export default function PageHome({
   mumbles: initialMumbles,
@@ -27,21 +13,12 @@ export default function PageHome({
   const { data: session } = useSession();
   const [mumbles] = useState(initialMumbles);
 
-
   if (error) {
     return <div>An error occurred: {error}</div>;
   }
 
   return (
     <div>
-      <Navbar logoHref={'#'} logoAriaLabel={'Navigate to home'}>
-        <span>Profile</span>
-        <span>Settings</span>
-        <a href="#" onClick={() => signOut()}>
-          <p>Logout</p>
-        </a>
-      </Navbar>
-
       <div className={'grid grid-cols-1 justify-items-center'}>
         <WriteMumble></WriteMumble>
         <ul className={'w-screen md:w-615'}>
