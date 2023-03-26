@@ -12,6 +12,7 @@ import { fetchMumbles, likePost, Mumble } from '../services/mumble';
 import { useState } from 'react';
 import { fetchUsers } from '../services/users';
 import { WriteMumble } from '../components/writeMumble';
+import { MumbleCard } from '../components/mumbleCard';
 
 type PageProps = {
   count: number;
@@ -24,10 +25,9 @@ export default function PageHome({
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { data: session } = useSession();
+  const [mumbles] = useState(initialMumbles);
 
   const likedPost = (postId: string) => likePost({ postId, accessToken: session?.accessToken });
-
-  const [mumbles] = useState(initialMumbles);
 
   if (error) {
     return <div>An error occurred: {error}</div>;
@@ -48,42 +48,7 @@ export default function PageHome({
         <ul className={'w-screen md:w-615'}>
           {mumbles.map((mumble) => (
             <li key={mumble.id} className={'m-s'}>
-              <Card borderType={'rounded'}>
-                <ProfileHeader
-                  fullName={`${mumble?.creatorProfile?.firstName} ${mumble?.creatorProfile?.lastName}`}
-                  labelType={'M'}
-                  profilePictureSize={'M'}
-                  timestamp={mumble.createdDate}
-                  username={mumble?.creatorProfile?.userName}
-                  imageSrc={mumble?.creatorProfile?.avatarUrl}
-                  hrefProfile={'#'}
-                  altText={'Avatar'}
-                ></ProfileHeader>
-                <div className={'mt-l'}>
-                  <p className={'paragraph-M'}>{mumble.text}</p>
-                </div>
-
-                <div className="flex relative -left-3 space-x-8">
-                  <CommentButton
-                    label={{ noComments: 'Comment', someComments: 'Comments' }}
-                    numberOfComments={mumble.replyCount}
-                    onClick={undefined}
-                  />
-                  <LikeButtonWithReactionButton
-                    onClick={() => likedPost(mumble.id)}
-                    active
-                    label={{
-                      noReaction: 'Like',
-                      oneReaction: 'Like',
-                      reactionByCurrentUser: 'Liked',
-                      severalReaction: 'Likes',
-                    }}
-                    likes={mumble.likeCount ?? 0}
-                    reactionByCurrentUser={mumble.likedByUser}
-                  />
-                  <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
-                </div>
-              </Card>
+              <MumbleCard mumble={mumble}></MumbleCard>
             </li>
           ))}
         </ul>
