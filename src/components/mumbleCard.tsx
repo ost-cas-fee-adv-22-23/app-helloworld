@@ -9,6 +9,7 @@ import {
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useSession } from 'next-auth/react';
 import { WriteMumble } from './writeMumble';
+import { CommentMumble } from './comment';
 
 interface MumbleCard {
   mumble: Mumble;
@@ -78,7 +79,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
           />
           <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
         </div>
-        <div>{state.showComment ? <WriteMumble></WriteMumble> : null}</div>
+        <div>{state.showComment ? <CommentMumble></CommentMumble> : null}</div>
       </Card>
     </>
   );
