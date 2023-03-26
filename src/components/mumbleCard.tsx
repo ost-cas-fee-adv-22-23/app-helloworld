@@ -79,7 +79,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
           />
           <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
         </div>
-        <div>{state.showComment ? <CommentMumble></CommentMumble> : null}</div>
+        <div>{state.showComment ? <CommentMumble mumbleId={mumble.id}></CommentMumble> : null}</div>
       </Card>
     </>
   );

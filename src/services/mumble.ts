@@ -75,7 +75,7 @@ export const likePost = async (params?: { postId: string, likedByUser: boolean, 
   });
 };
 
-export const commentPost = async (params: { comment: string, postId: string, accessToken?: string }) => {
+export const commentPost = async (params: { postId: string, comment: string,  accessToken?: string }) => {
   const { postId, comment, accessToken } = params || {};
 
   if (!accessToken) {
