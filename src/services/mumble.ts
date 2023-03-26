@@ -74,3 +74,24 @@ export const likePost = async (params?: { postId: string, likedByUser: boolean, 
     },
   });
 };
+
+export const commentPost = async (params: { comment: string, postId: string, accessToken?: string }) => {
+  const { postId, comment, accessToken } = params || {};
+
+  if (!accessToken) {
+    throw new Error('No access token');
+  }
+
+  const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}`;
+
+  const res = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify({
+      text: comment
+    }),
+    headers: {
+      'content-type': 'application/json',
+      Authorization: `Bearer ${accessToken}`
+    },
+  });
+};
