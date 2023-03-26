@@ -1,5 +1,5 @@
-import {decodeTime} from 'ulid';
-import {User} from './users';
+import { decodeTime } from 'ulid';
+import { User } from './users';
 
 export type Mumble = {
   id: string;
@@ -65,10 +65,10 @@ export const likePost = async (params?: { postId: string }) => {
   const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}/likes`;
 
   const res = await fetch(url, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
       'content-type': 'application/json',
-      Authorization: token
+      Authorization: token,
     },
   });
 };
