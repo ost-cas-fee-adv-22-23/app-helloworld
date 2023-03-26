@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Mumble} from '../services/mumble';
+import {likePost, Mumble} from '../services/mumble';
 import {
     Card,
     CommentButton,
@@ -7,12 +7,17 @@ import {
     LikeButtonWithReactionButton,
     ProfileHeader,
 } from '@smartive-education/design-system-component-library-hello-world-team';
+import {useSession} from 'next-auth/react';
 
 interface MumbleCard {
     mumble: Mumble
 }
 
 export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
+    const { data: session } = useSession();
+
+    const likedPost = (postId: string, likedByUser: boolean) => likePost({ postId, likedByUser, accessToken: session?.accessToken });
+
   return (
     <>
       <Card borderType={'rounded'}>
@@ -37,7 +42,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
             onClick={undefined}
           />
           <LikeButtonWithReactionButton
-            onClick={undefined}
+            onClick={() => likedPost(mumble.id, mumble.likedByUser)}
             active
             label={{
               noReaction: 'Like',
@@ -46,7 +51,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
               severalReaction: 'Likes',
             }}
             likes={mumble.likeCount ?? 0}
-            reactionByCurrentUser={mumble.likedByUser}
+            reactionByCurrentUser={false}
           />
           <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
         </div>

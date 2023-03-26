@@ -27,7 +27,6 @@ export default function PageHome({
   const { data: session } = useSession();
   const [mumbles] = useState(initialMumbles);
 
-  const likedPost = (postId: string) => likePost({ postId, accessToken: session?.accessToken });
 
   if (error) {
     return <div>An error occurred: {error}</div>;
