@@ -41,7 +41,7 @@ export const WriteMumble: FC = () => {
       accessToken: session?.accessToken,
     };
 
-    mutation.mutate(mutationArgs);
+    // mutation.mutate(mutationArgs);
     setText('');
   };
 

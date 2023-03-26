@@ -6,7 +6,7 @@ import {
   Navbar,
   ProfileHeader,
 } from '@smartive-education/design-system-component-library-hello-world-team';
-import { getSession, signOut } from 'next-auth/react';
+import {getSession, signOut, useSession} from 'next-auth/react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { fetchMumbles, likePost, Mumble } from '../services/mumble';
 import { useState } from 'react';
@@ -23,7 +23,9 @@ export default function PageHome({
   mumbles: initialMumbles,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const likedPost = (postId: string) => likePost({ postId });
+  const { data: session } = useSession();
+
+  const likedPost = (postId: string) => likePost({ postId, accessToken: session?.accessToken });
 
   const [mumbles] = useState(initialMumbles);
 

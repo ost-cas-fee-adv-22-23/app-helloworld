@@ -47,7 +47,6 @@ export const fetchMumbles = async (params?: { limit?: number; offset?: number; n
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const transformMumble = (mumble: RawMumble) => ({
   ...mumble,
@@ -55,12 +54,12 @@ const transformMumble = (mumble: RawMumble) => ({
   createdDate: new Date(decodeTime(mumble.id)).toLocaleDateString(),
 });
 
-export const likePost = async (params?: { postId: string }) => {
-  const { postId } = params || {};
+export const likePost = async (params?: { postId: string, accessToken?: string }) => {
+  const { postId, accessToken } = params || {};
 
-  const accessToken = undefined;
-  // TODO: Fix this accessToken
-  const token = accessToken ?? 'Bearer fwE0Gk7rcCjCYYOxt-ZVdWT69WVmpgsFbIVom87GhOqz3r2o7A3nIluKl-ZSwPgjnl_1qf8';
+  if (!accessToken) {
+    throw new Error('No access token');
+  }
 
   const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}/likes`;
 
@@ -68,7 +67,7 @@ export const likePost = async (params?: { postId: string }) => {
     method: 'PUT',
     headers: {
       'content-type': 'application/json',
-      Authorization: token,
+      Authorization: `Bearer ${accessToken}`
     },
   });
 };
