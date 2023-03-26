@@ -8,7 +8,6 @@ import {
   ProfileHeader,
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useSession } from 'next-auth/react';
-import { WriteMumble } from './writeMumble';
 import { CommentMumble } from './comment';
 
 interface MumbleCard {
@@ -62,7 +61,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
             label={{ noComments: 'Comment', someComments: 'Comments' }}
             numberOfComments={mumble.replyCount}
             onClick={(e) => {
-              dispatch({ type: 'comment'})
+              dispatch({ type: 'comment' });
             }}
           />
           <LikeButtonWithReactionButton

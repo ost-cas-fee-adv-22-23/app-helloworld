@@ -1,15 +1,13 @@
-import React, { FC, useContext, useReducer, useState } from 'react';
+import React, { FC, useReducer } from 'react';
 import {
   Button,
-  Card,
   ProfileHeader,
   SendIcon,
   Textfield,
   UploadIcon,
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useSession } from 'next-auth/react';
-import {commentPost, likePost, Mumble} from '../services/mumble';
-import { User } from '../services/users';
+import { commentPost } from '../services/mumble';
 
 interface CurrentUser {
   mumbleId: string;
@@ -30,8 +28,7 @@ export const CommentMumble: FC<CurrentUser> = ({ mumbleId }) => {
     }
   }
 
-  const comment = () =>
-      commentPost({ postId: mumbleId, comment: state.comment, accessToken: session?.accessToken });
+  const comment = () => commentPost({ postId: mumbleId, comment: state.comment, accessToken: session?.accessToken });
 
   return (
     <>
@@ -46,9 +43,12 @@ export const CommentMumble: FC<CurrentUser> = ({ mumbleId }) => {
           altText={'Avatar'}
         />
         <div className="mt-xxxs">
-          <Textfield placeholder="Und was meinst du dazu?" onChange={(e) => {
-            dispatch({ type: 'comment_changed', comment: e.target.value})
-          }} />
+          <Textfield
+            placeholder="Und was meinst du dazu?"
+            onChange={(e) => {
+              dispatch({ type: 'comment_changed', comment: e.target.value });
+            }}
+          />
         </div>
         <div className="flex flex-row gap-l justify-between unset">
           <Button label="Bild hochladen" size="L" variant="default">
