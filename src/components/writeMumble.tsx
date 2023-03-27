@@ -11,6 +11,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postMumble } from '../services/posts';
 import { useSession } from 'next-auth/react';
 import { PostArgs, UploadImage } from '../services/serviceTypes';
+import toast, { Toaster } from 'react-hot-toast';
+import { Oval } from 'react-loader-spinner';
 
 export const WriteMumble: FC = () => {
   const [text, setText] = React.useState<string>('');
@@ -19,7 +21,9 @@ export const WriteMumble: FC = () => {
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation((args: PostArgs) => postMumble(args), {
+  const mutation = useMutation({
+    mutationKey: ['post'],
+    mutationFn: (args: PostArgs) => postMumble(args),
     onSuccess: async (data) => {
       await queryClient.invalidateQueries();
       console.log(data);
@@ -43,6 +47,13 @@ export const WriteMumble: FC = () => {
     };
 
     mutation.mutate(mutationArgs);
+
+    if (mutation.isError) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      toast.error('Something went wrong: ' + mutation?.error.message);
+    }
+
     setText('');
     setFile(undefined);
   };
@@ -50,20 +61,36 @@ export const WriteMumble: FC = () => {
   return (
     <>
       <div className="bg-slate-100 p-10">
+        {mutation.isLoading && (
+          <div>
+            <Oval
+              height={80}
+              width={80}
+              color="#4fa94d"
+              wrapperStyle={{}}
+              wrapperClass=""
+              visible={true}
+              ariaLabel="oval-loading"
+              secondaryColor="#4fa94d"
+              strokeWidth={2}
+              strokeWidthSecondary={2}
+            />
+          </div>
+        )}
         <div className="w-[550px]">
           <Card as="div" borderType="rounded" size="M">
             <div className="grid grid-cols-1">
               <div className="absolute flex flex-row md:-left-l">
                 <ProfileHeader
-                  altText="Robert Vogt"
-                  fullName="Hey, was gibts neues?"
-                  imageSrc="https://media.licdn.com/dms/image/D4E03AQEXHsHgH4BwJg/profile-displayphoto-shrink_800_800/0/1666815812197?e=2147483647&v=beta&t=Vx6xecdYFjUt3UTCmKdh2U-iHvY0bS-fcxlp_LKbxYw"
+                  altText={session?.user.username}
+                  fullName={`${session?.user.firstname} ${session?.user.lastname}`}
+                  imageSrc={`../profile/${session?.user.id}`}
                   labelType="h4"
                   profilePictureSize="M"
                 />
               </div>
               <div className="mt-xl">
-                <Textfield placeholder="Was gibt's Neues?" value={''} onChange={(e) => textfieldChangeHandler(e)} />
+                <Textfield placeholder="Was gibt's Neues?" value={text || ''} onChange={(e) => textfieldChangeHandler(e)} />
               </div>
               <div className="flex flex-row gap-l justify-between unset">
                 <Button label="Bild hochladen" size="L" variant="default" onClick={(e) => console.log('File upload' + e)}>
@@ -76,6 +103,7 @@ export const WriteMumble: FC = () => {
             </div>
           </Card>
         </div>
+        <Toaster />
       </div>
     </>
   );
