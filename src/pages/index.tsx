@@ -1,7 +1,7 @@
-import {getSession, useSession} from 'next-auth/react';
+import {getSession} from 'next-auth/react';
 import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
 import {fetchMumbles} from '../services/mumble';
-import {useContext, useState} from 'react';
+import {useState} from 'react';
 import {fetchUsers} from '../services/users';
 import {WriteMumble} from '../components/writeMumble';
 import {MumbleCard} from '../components/mumbleCard';
@@ -10,7 +10,6 @@ export default function PageHome({
   mumbles: initialMumbles,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const { data: session } = useSession();
   const [mumbles] = useState(initialMumbles);
 
   if (error) {
