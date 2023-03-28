@@ -52,10 +52,11 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
           hrefProfile={'#'}
           altText={'Avatar'}
         ></ProfileHeader>
-        <div className={'mt-l'}>
-          <p className={'paragraph-M'}>{mumble.text}</p>
-        </div>
-
+        <a href={`/mumble/${mumble.id}`}>
+          <div className={'mt-l'}>
+            <p className={'paragraph-M'}>{mumble.text}</p>
+          </div>
+        </a>
         <div className="flex relative -left-3 space-x-8">
           <CommentButton
             label={{ noComments: 'Comment', someComments: 'Comments' }}
