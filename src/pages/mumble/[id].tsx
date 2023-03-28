@@ -15,9 +15,9 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
   const replies1 = replies ?? [];
   return (
     <>
-      <div className={'grid grid-cols-1 justify-items-center'}>
+      <div className={'grid grid-cols-1 justify-items-center mt-m'}>
         <MumbleCard mumble={mumble}></MumbleCard>
-        <ul className={'w-screen md:w-615'}>
+        <ul>
           {replies1.map((reply) => (
             <li key={reply.id} className={'m-s'}>
               <MumbleCard mumble={reply}></MumbleCard>
