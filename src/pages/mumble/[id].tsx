@@ -1,10 +1,8 @@
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { fetchMumbleById, fetchReplies, Mumble, Reply } from '../../services/mumble';
-import { getToken } from 'next-auth/jwt';
-import { MumbleCard } from '../../components/mumbleCard';
-import { fetchUsers } from '../../services/users';
-import {mockSession} from 'next-auth/client/__tests__/helpers/mocks';
-import user = mockSession.user;
+import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
+import {fetchMumbleById, fetchReplies, Mumble, Reply} from '../../services/mumble';
+import {getToken} from 'next-auth/jwt';
+import {MumbleCard} from '../../components/mumbleCard';
+import {fetchUsers} from '../../services/users';
 
 type Props = {
   mumble: Mumble;
