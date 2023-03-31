@@ -86,7 +86,6 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
   return (
     <>
       <Card borderType={'rounded'}>
-        {state.comment}
         <ProfileHeader
           fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
           labelType={'M'}
