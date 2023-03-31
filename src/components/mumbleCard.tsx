@@ -95,7 +95,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
         altText={'Avatar'}
       ></ProfileHeader>
       <a href={`/mumble/${state.mumble.id}`}>
-        <div className={'mt-l'}>
+        <div className={'my-l'}>
           <p className={'paragraph-M'}>{state.mumble.text}</p>
           <img src={state.mumble.mediaUrl}></img>
         </div>
