@@ -97,7 +97,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
       <a href={`/mumble/${state.mumble.id}`}>
         <div className={'my-l'}>
           <p className={'paragraph-M'}>{state.mumble.text}</p>
-          <img src={state.mumble.mediaUrl}></img>
+          <img src={state.mumble.mediaUrl} className="h-178 w-264"></img>
         </div>
       </a>
       <div className="flex relative -left-3 space-x-8">
