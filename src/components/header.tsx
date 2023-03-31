@@ -8,7 +8,7 @@ export const Header: FC = () => {
   if (session.data) {
     return (
       <>
-        <Navbar logoHref={'#'} logoAriaLabel={'Navigate to home'}>
+        <Navbar logoHref={'/'} logoAriaLabel={'Navigate to home'}>
           <span>Profile</span>
           <span>Settings</span>
           <a href="#" onClick={() => signOut()}>
