@@ -1,5 +1,6 @@
 import { decodeTime } from 'ulid';
 import { User } from './users';
+import axios from 'axios';
 
 export type Mumble = {
   id: string;
@@ -54,44 +55,4 @@ const transformMumble = (mumble: RawMumble) => ({
   createdDate: new Date(decodeTime(mumble.id)).toLocaleDateString(),
 });
 
-export const likePost = async (params?: { postId: string, likedByUser: boolean, accessToken?: string }) => {
-  const { postId, likedByUser, accessToken } = params || {};
 
-  if (!accessToken) {
-    throw new Error('No access token');
-  }
-
-  const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}/likes`;
-
-  const method = likedByUser ? 'DELETE' : 'PUT'
-  // const method = 'DELETE'
-
-  const res = await fetch(url, {
-    method: method,
-    headers: {
-      'content-type': 'application/json',
-      Authorization: `Bearer ${accessToken}`
-    },
-  });
-};
-
-export const commentPost = async (params: { postId: string, comment: string,  accessToken?: string }) => {
-  const { postId, comment, accessToken } = params || {};
-
-  if (!accessToken) {
-    throw new Error('No access token');
-  }
-
-  const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}`;
-
-  const res = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify({
-      text: comment
-    }),
-    headers: {
-      'content-type': 'application/json',
-      Authorization: `Bearer ${accessToken}`
-    },
-  });
-};

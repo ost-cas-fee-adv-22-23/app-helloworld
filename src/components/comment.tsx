@@ -7,7 +7,7 @@ import {
   UploadIcon,
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useSession } from 'next-auth/react';
-import { commentPost } from '../services/mumble';
+import { commentPost } from '../services/posts';
 
 interface CurrentUser {
   mumbleId: string;
@@ -42,16 +42,16 @@ export const CommentMumble: FC<CurrentUser> = ({ mumbleId }) => {
           hrefProfile={'#'}
           altText={'Avatar'}
         />
-        <div className="mt-xxxs">
+        <form className="mt-xxxs">
           <Textfield
             placeholder="Und was meinst du dazu?"
             onChange={(e) => {
               dispatch({ type: 'comment_changed', comment: e.target.value });
             }}
           />
-        </div>
+        </form>
         <div className="flex flex-row gap-l justify-between unset">
-          <Button label="Bild hochladen" size="L" variant="default">
+          <Button label="Bild hochladen" size="L" variant="default" onClick={(e) => console.log('File upload' + e)}>
             <UploadIcon size={16} />
           </Button>
           <Button label="Absenden" size="L" variant="purple" onClick={() => comment()}>
