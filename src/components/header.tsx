@@ -5,7 +5,7 @@ import { signOut, useSession } from 'next-auth/react';
 export const Header: FC = () => {
   const session = useSession();
 
-  if (session) {
+  if (session.data) {
     return (
       <>
         <Navbar logoHref={'#'} logoAriaLabel={'Navigate to home'}>
