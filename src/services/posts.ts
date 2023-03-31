@@ -1,7 +1,7 @@
 import { transformMumble, PostArgs } from './serviceTypes';
 import axios from 'axios';
 
-export const postMumble = async (postArgs: PostArgs) => {
+export const createPost = async (postArgs: PostArgs) => {
   if (!postArgs.accessToken) {
     throw new Error('No access token');
   }

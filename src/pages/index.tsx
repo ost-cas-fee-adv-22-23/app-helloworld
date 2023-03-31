@@ -8,16 +8,9 @@ import {
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { getSession, signOut } from 'next-auth/react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { fetchMumbles, likePost, Mumble } from '../services/mumble';
+import { fetchMumbles, likePost } from '../services/mumble';
 import { useState } from 'react';
 import { fetchUsers } from '../services/users';
-import { WriteMumble } from '../components/writeMumble';
-
-type PageProps = {
-  count: number;
-  mumbles: Mumble[];
-  error?: string;
-};
 
 export default function PageHome({
   mumbles: initialMumbles,
@@ -42,7 +35,6 @@ export default function PageHome({
       </Navbar>
 
       <div className={'grid grid-cols-1 justify-items-center'}>
-        <WriteMumble></WriteMumble>
         <ul className={'w-screen md:w-615'}>
           {mumbles.map((mumble) => (
             <li key={mumble.id} className={'m-s'}>

@@ -8,22 +8,28 @@ import {
   UploadIcon,
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { postMumble } from '../services/posts';
+import { createPost } from '../services/posts';
 import { useSession } from 'next-auth/react';
 import { PostArgs, UploadImage } from '../services/serviceTypes';
 import toast, { Toaster } from 'react-hot-toast';
 import { Oval } from 'react-loader-spinner';
+import {
+  BorderType,
+  Size,
+} from '@smartive-education/design-system-component-library-hello-world-team/dist/components/molecules/card/card';
+import {
+  ProfileHeaderLabelType,
+  ProfileHeaderPictureSize,
+} from '@smartive-education/design-system-component-library-hello-world-team/dist/components/molecules/profile-header/profile-header';
 
-export const WriteMumble: FC = () => {
+export const WriteCard: FC = () => {
   const [text, setText] = React.useState<string>('');
   const [file, setFile] = useState<UploadImage>();
   const { data: session } = useSession();
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation({
-    mutationKey: ['post'],
-    mutationFn: (args: PostArgs) => postMumble(args),
+  const mutation = useMutation((args: PostArgs) => createPost(args), {
     onSuccess: async (data) => {
       await queryClient.invalidateQueries();
       console.log(data);
@@ -77,21 +83,22 @@ export const WriteMumble: FC = () => {
             />
           </div>
         )}
+        §§
         <div className="w-[550px]">
-          <Card as="div" borderType="rounded" size="M">
+          <Card as="div" borderType={BorderType.rounded} size={Size.M}>
             <div className="grid grid-cols-1">
               <div className="absolute flex flex-row md:-left-l">
                 <ProfileHeader
                   altText={session?.user.username}
                   fullName={`${session?.user.firstname} ${session?.user.lastname}`}
-                  imageSrc={`../profile/${session?.user.id}`}
-                  labelType="h4"
-                  profilePictureSize="M"
+                  imageSrc={session?.user.avatarUrl}
+                  labelType={ProfileHeaderLabelType.h4}
+                  profilePictureSize={ProfileHeaderPictureSize.M}
                 />
               </div>
-              <div className="mt-xl">
+              <form className="mt-xl">
                 <Textfield placeholder="Was gibt's Neues?" value={text || ''} onChange={(e) => textfieldChangeHandler(e)} />
-              </div>
+              </form>
               <div className="flex flex-row gap-l justify-between unset">
                 <Button label="Bild hochladen" size="L" variant="default" onClick={(e) => console.log('File upload' + e)}>
                   <UploadIcon size={16} />
