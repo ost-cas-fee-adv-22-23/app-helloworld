@@ -14,8 +14,9 @@ type Props = {
 export default function MumblePage({ mumble, replies }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
   return (
     <>
-      <div className={'grid grid-cols-1 justify-items-center mt-m w-full '}>
-        <Card borderType={'rounded'}>
+      <div className={'grid grid-cols-1 justify-items-center mt-m'}>
+        <div className={'w-screen md:w-615'}s>
+        <Card borderType={'rounded'} size={'M'}>
           <div className={'divide-y-1 divide-slate-200'}>
             <div className={'pb-m'}>
               <MumbleCard mumble={mumble}></MumbleCard>
@@ -33,6 +34,7 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
             )}
           </div>
         </Card>
+      </div>
       </div>
     </>
   );
