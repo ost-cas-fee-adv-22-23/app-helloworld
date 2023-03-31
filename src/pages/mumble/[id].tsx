@@ -17,16 +17,20 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
     <>
       <div className={'grid grid-cols-1 justify-items-center mt-m w-full '}>
         <Card borderType={'rounded'}>
-          <MumbleCard mumble={mumble}></MumbleCard>
-          <ul className={'divide-y-1 divide-slate-200 -mx-xl'}>
-            {replies1.map((reply) => (
-              <li key={reply.id} className={'pt-xl pb-m'}>
-                <div className={'mx-xl'}>
-                  <MumbleCard mumble={reply}></MumbleCard>
-                </div>
-              </li>
-            ))}
-          </ul>
+          <div className={'divide-y-1 divide-slate-200'}>
+            <div className={'pb-m'}>
+              <MumbleCard mumble={mumble}></MumbleCard>
+            </div>
+            <ul className={'divide-y-1 divide-slate-200 -mx-xl'}>
+              {replies1.map((reply) => (
+                <li key={reply.id} className={'pt-xl pb-m'}>
+                  <div className={'mx-xl'}>
+                    <MumbleCard mumble={reply}></MumbleCard>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </Card>
       </div>
     </>
