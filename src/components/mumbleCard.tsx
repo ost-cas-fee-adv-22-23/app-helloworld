@@ -1,5 +1,4 @@
 import React, { FC, useReducer } from 'react';
-import { Mumble } from '../services/mumble';
 import {
   Card,
   CommentButton,
@@ -10,6 +9,7 @@ import {
 import { useSession } from 'next-auth/react';
 import { CommentMumble } from './comment';
 import { likePost } from '../services/likes';
+import { Mumble } from '../services/serviceTypes';
 
 interface MumbleCard {
   mumble: Mumble;

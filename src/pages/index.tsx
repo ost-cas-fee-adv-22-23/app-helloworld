@@ -1,9 +1,9 @@
 import { getSession } from 'next-auth/react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { fetchMumbles } from '../services/mumble';
 import { useState } from 'react';
 import { fetchUsers } from '../services/users';
 import { MumbleCard } from '../components/mumbleCard';
+import { fetchMumbles } from '../services/posts';
 
 export default function PageHome({
   mumbles: initialMumbles,
