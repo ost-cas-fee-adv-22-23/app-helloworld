@@ -1,6 +1,5 @@
 import React, { ChangeEvent, FC, useReducer } from 'react';
 import {
-  Card,
   CommentButton,
   CopyButton,
   LikeButtonWithReactionButton,
@@ -85,52 +84,50 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
 
   return (
     <>
-      <Card borderType={'rounded'}>
-        <ProfileHeader
-          fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
-          labelType={'M'}
-          profilePictureSize={'M'}
-          timestamp={state.mumble.createdDate}
-          username={state.mumble?.creatorProfile?.userName}
-          imageSrc={state.mumble?.creatorProfile?.avatarUrl}
-          hrefProfile={'#'}
-          altText={'Avatar'}
-        ></ProfileHeader>
-        <a href={`/mumble/${state.mumble.id}`}>
-          <div className={'mt-l'}>
-            <p className={'paragraph-M'}>{state.mumble.text}</p>
-          </div>
-        </a>
-        <div className="flex relative -left-3 space-x-8">
-          <CommentButton
-            label={{ noComments: 'Comment', someComments: 'Comments' }}
-            numberOfComments={state.mumble.replyCount}
-            onClick={(e) => {
-              dispatch({ type: 'comment' });
-            }}
-          />
-          <LikeButtonWithReactionButton
-            onClick={() => likedPost()}
-            active
-            label={{
-              noReaction: 'Like',
-              oneReaction: 'Like',
-              reactionByCurrentUser: 'Liked',
-              severalReaction: 'Likes',
-            }}
-            likes={state.mumble.likeCount ?? 0}
-            reactionByCurrentUser={state.mumble.likedByUser}
-          />
-          <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
+      <ProfileHeader
+        fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
+        labelType={'M'}
+        profilePictureSize={'M'}
+        timestamp={state.mumble.createdDate}
+        username={state.mumble?.creatorProfile?.userName}
+        imageSrc={state.mumble?.creatorProfile?.avatarUrl}
+        hrefProfile={'#'}
+        altText={'Avatar'}
+      ></ProfileHeader>
+      <a href={`/mumble/${state.mumble.id}`}>
+        <div className={'mt-l'}>
+          <p className={'paragraph-M'}>{state.mumble.text}</p>
         </div>
-        {state.showComment && (
-          <CommentMumble
-            user={session?.user}
-            handleCommentChanged={handleCommentChanged}
-            submitComment={submitComment}
-          ></CommentMumble>
-        )}
-      </Card>
+      </a>
+      <div className="flex relative -left-3 space-x-8">
+        <CommentButton
+          label={{ noComments: 'Comment', someComments: 'Comments' }}
+          numberOfComments={state.mumble.replyCount}
+          onClick={(e) => {
+            dispatch({ type: 'comment' });
+          }}
+        />
+        <LikeButtonWithReactionButton
+          onClick={() => likedPost()}
+          active
+          label={{
+            noReaction: 'Like',
+            oneReaction: 'Like',
+            reactionByCurrentUser: 'Liked',
+            severalReaction: 'Likes',
+          }}
+          likes={state.mumble.likeCount ?? 0}
+          reactionByCurrentUser={state.mumble.likedByUser}
+        />
+        <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
+      </div>
+      {state.showComment && (
+        <CommentMumble
+          user={session?.user}
+          handleCommentChanged={handleCommentChanged}
+          submitComment={submitComment}
+        ></CommentMumble>
+      )}
     </>
   );
 };

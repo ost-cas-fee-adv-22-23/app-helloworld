@@ -4,6 +4,7 @@ import { MumbleCard } from '../../components/mumbleCard';
 import { fetchUsers } from '../../services/users';
 import { fetchMumbleById, fetchReplies } from '../../services/posts';
 import { Mumble, Reply } from '../../services/serviceTypes';
+import { Card } from '@smartive-education/design-system-component-library-hello-world-team';
 
 type Props = {
   mumble: Mumble;
@@ -15,14 +16,16 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
   return (
     <>
       <div className={'grid grid-cols-1 justify-items-center mt-m'}>
-        <MumbleCard mumble={mumble}></MumbleCard>
-        <ul>
-          {replies1.map((reply) => (
-            <li key={reply.id} className={'m-s'}>
-              <MumbleCard mumble={reply}></MumbleCard>
-            </li>
-          ))}
-        </ul>
+        <Card borderType={'rounded'}>
+          <MumbleCard mumble={mumble}></MumbleCard>
+          <ul>
+            {replies1.map((reply) => (
+              <li key={reply.id} className={'m-s'}>
+                <MumbleCard mumble={reply}></MumbleCard>
+              </li>
+            ))}
+          </ul>
+        </Card>
       </div>
     </>
   );
