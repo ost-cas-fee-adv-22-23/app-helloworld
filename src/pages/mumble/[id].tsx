@@ -1,8 +1,9 @@
-import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
-import {fetchMumbleById, fetchReplies, Mumble, Reply} from '../../services/mumble';
-import {getToken} from 'next-auth/jwt';
-import {MumbleCard} from '../../components/mumbleCard';
-import {fetchUsers} from '../../services/users';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { getToken } from 'next-auth/jwt';
+import { MumbleCard } from '../../components/mumbleCard';
+import { fetchUsers } from '../../services/users';
+import { fetchMumbleById, fetchReplies } from '../../services/posts';
+import { Mumble, Reply } from '../../services/serviceTypes';
 
 type Props = {
   mumble: Mumble;
@@ -42,19 +43,21 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query: { id 
     fetchUsers({ accessToken: session?.accessToken }),
   ]);
 
-  const repliesWithUserInfo = replies.map(reply => {
-      const creator = users?.find((user) => user.id === reply.creator);
+  const repliesWithUserInfo = replies.map((reply) => {
+    const creator = users?.find((user) => user.id === reply.creator);
 
-      return ({...reply,
-          creatorProfile: {
-          id: creator?.id,
-              userName: creator?.userName,
-              firstName: creator?.firstName,
-              lastName: creator?.lastName,
-              fullName: `${mumble?.creatorProfile?.firstName} ${mumble?.creatorProfile?.lastName}`,
-              avatarUrl: creator?.avatarUrl,
-      }})
-  })
+    return {
+      ...reply,
+      creatorProfile: {
+        id: creator?.id,
+        userName: creator?.userName,
+        firstName: creator?.firstName,
+        lastName: creator?.lastName,
+        fullName: `${mumble?.creatorProfile?.firstName} ${mumble?.creatorProfile?.lastName}`,
+        avatarUrl: creator?.avatarUrl,
+      },
+    };
+  });
 
   const creator = users?.find((user) => user.id === mumble.creator);
   const mumbleWithUserInfo = {
