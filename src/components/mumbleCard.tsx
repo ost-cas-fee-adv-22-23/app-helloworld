@@ -1,4 +1,4 @@
-import React, { FC, useReducer } from 'react';
+import React, { ChangeEvent, FC, useReducer } from 'react';
 import {
   Card,
   CommentButton,
@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react';
 import { CommentMumble } from './comment';
 import { likePost } from '../services/likes';
 import { Mumble } from '../services/serviceTypes';
+import { commentPost } from '../services/posts';
 
 interface MumbleCard {
   mumble: Mumble;
@@ -18,17 +19,24 @@ interface MumbleCard {
 export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
   const { data: session } = useSession();
 
-  const [state, dispatch] = useReducer(mumbleCardReducer, { showComment: false, mumble });
+  const [state, dispatch] = useReducer(mumbleCardReducer, { showComment: false, mumble, comment: '' });
 
   const likedPost = async () => {
-    const test = await likePost({
+    await likePost({
       postId: state.mumble.id,
       likedByUser: state.mumble.likedByUser,
       accessToken: session?.accessToken,
     });
-    console.log('asdf');
-    console.log(test);
     dispatch({ type: 'post_liked', likedByUser: !state.mumble.likedByUser });
+  };
+
+  const handleCommentChanged = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    dispatch({ type: 'comment_changed', comment: e.target.value });
+  };
+
+  const submitComment = async () => {
+    commentPost({ postId: state.mumble.id, comment: state.comment, accessToken: session?.accessToken });
+    dispatch({ type: 'comment_submitted' });
   };
 
   function mumbleCardReducer(state, action) {
@@ -55,12 +63,30 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
           showComment: false,
         };
       }
+      case 'comment_changed': {
+        return {
+          ...state,
+          comment: action.comment,
+        };
+      }
+      case 'comment_submitted': {
+        return {
+          ...state,
+          comment: '',
+          showComment: false,
+          mumble: {
+            ...state.mumble,
+            replyCount: state.mumble.replyCount + 1,
+          },
+        };
+      }
     }
   }
 
   return (
     <>
       <Card borderType={'rounded'}>
+        {state.comment}
         <ProfileHeader
           fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
           labelType={'M'}
@@ -98,7 +124,13 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
           />
           <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
         </div>
-        {state.showComment && <CommentMumble mumbleId={state.mumble.id}></CommentMumble>}
+        {state.showComment && (
+          <CommentMumble
+            user={session?.user}
+            handleCommentChanged={handleCommentChanged}
+            submitComment={submitComment}
+          ></CommentMumble>
+        )}
       </Card>
     </>
   );
