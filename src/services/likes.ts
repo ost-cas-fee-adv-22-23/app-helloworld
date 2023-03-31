@@ -11,11 +11,11 @@ export const likePost = async (params?: { postId: string; likedByUser: boolean; 
 
   if (likedByUser) {
     return await axios.delete(url, {
-      headers: { 'content-type': 'application/json', Authorization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
   } else {
     return await axios.put(url, undefined, {
-      headers: { 'content-type': 'application/json', Authorization: `Bearer ${accessToken}` },
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
   }
 };
