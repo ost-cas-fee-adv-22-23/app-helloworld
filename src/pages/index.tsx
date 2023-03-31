@@ -1,23 +1,14 @@
-import {
-  Card,
-  CommentButton,
-  CopyButton,
-  LikeButtonWithReactionButton,
-  Navbar,
-  ProfileHeader,
-} from '@smartive-education/design-system-component-library-hello-world-team';
-import { getSession, signOut } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { fetchMumbles, likePost } from '../services/mumble';
 import { useState } from 'react';
 import { fetchUsers } from '../services/users';
+import { MumbleCard } from '../components/mumbleCard';
+import { fetchMumbles } from '../services/posts';
 
 export default function PageHome({
   mumbles: initialMumbles,
   error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const likedPost = (postId: string) => likePost({ postId });
-
   const [mumbles] = useState(initialMumbles);
 
   if (error) {
@@ -26,54 +17,11 @@ export default function PageHome({
 
   return (
     <div>
-      <Navbar logoHref={'#'} logoAriaLabel={'Navigate to home'}>
-        <span>Profile</span>
-        <span>Settings</span>
-        <a href="#" onClick={() => signOut()}>
-          <p>Logout</p>
-        </a>
-      </Navbar>
-
       <div className={'grid grid-cols-1 justify-items-center'}>
         <ul className={'w-screen md:w-615'}>
           {mumbles.map((mumble) => (
             <li key={mumble.id} className={'m-s'}>
-              <Card borderType={'rounded'}>
-                <ProfileHeader
-                  fullName={`${mumble?.creatorProfile?.firstName} ${mumble?.creatorProfile?.lastName}`}
-                  labelType={'M'}
-                  profilePictureSize={'M'}
-                  timestamp={mumble.createdDate}
-                  username={mumble?.creatorProfile?.userName}
-                  imageSrc={mumble?.creatorProfile?.avatarUrl}
-                  hrefProfile={'#'}
-                  altText={'Avatar'}
-                ></ProfileHeader>
-                <div className={'mt-l'}>
-                  <p className={'paragraph-M'}>{mumble.text}</p>
-                </div>
-
-                <div className="flex relative -left-3 space-x-8">
-                  <CommentButton
-                    label={{ noComments: 'Comment', someComments: 'Comments' }}
-                    numberOfComments={mumble.replyCount}
-                    onClick={undefined}
-                  />
-                  <LikeButtonWithReactionButton
-                    onClick={() => likedPost(mumble.id)}
-                    active
-                    label={{
-                      noReaction: 'Like',
-                      oneReaction: 'Like',
-                      reactionByCurrentUser: 'Liked',
-                      severalReaction: 'Likes',
-                    }}
-                    likes={mumble.likeCount ?? 0}
-                    reactionByCurrentUser={mumble.likedByUser}
-                  />
-                  <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
-                </div>
-              </Card>
+              <MumbleCard mumble={mumble}></MumbleCard>
             </li>
           ))}
         </ul>
@@ -100,6 +48,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const mumblesWithUserInfo = mumbles.map((mumble) => {
       const creator = users?.find((user) => user.id === mumble.creator);
+
       return {
         ...mumble,
         creatorProfile: {
