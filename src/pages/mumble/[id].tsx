@@ -36,7 +36,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query: { id 
 
   const session = await getToken({ req });
 
-  // TODO: Find out how to avoid this fetchUsers-Call
   const [{ mumble }, { replies }, { users }] = await Promise.all([
     fetchMumbleById({ postId, accessToken: session?.accessToken }),
     fetchReplies({ postId, accessToken: session?.accessToken }),
