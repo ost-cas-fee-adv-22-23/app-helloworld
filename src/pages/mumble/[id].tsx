@@ -15,26 +15,26 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
   return (
     <>
       <div className={'grid grid-cols-1 justify-items-center mt-m'}>
-        <div className={'w-screen md:w-615'}s>
-        <Card borderType={'rounded'} size={'M'}>
-          <div className={'divide-y-1 divide-slate-200'}>
-            <div className={'pb-m'}>
-              <MumbleCard mumble={mumble}></MumbleCard>
+        <div className={'w-screen md:w-615'} s>
+          <Card borderType={'rounded'} size={'M'}>
+            <div className={'divide-y-1 divide-slate-200'}>
+              <div className={'pb-m'}>
+                <MumbleCard mumble={mumble}></MumbleCard>
+              </div>
+              {replies && replies.length > 0 && (
+                <ul className={'divide-y-1 divide-slate-200 -mx-xl'}>
+                  {replies.map((reply) => (
+                    <li key={reply.id} className={'pt-xl pb-m'}>
+                      <div className={'mx-xl'}>
+                        <MumbleCard mumble={reply}></MumbleCard>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-            {replies && replies.length > 0 && (
-              <ul className={'divide-y-1 divide-slate-200 -mx-xl'}>
-                {replies.map((reply) => (
-                  <li key={reply.id} className={'pt-xl pb-m'}>
-                    <div className={'mx-xl'}>
-                      <MumbleCard mumble={reply}></MumbleCard>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </Card>
-      </div>
+          </Card>
+        </div>
       </div>
     </>
   );
