@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export type User = {
   id: string;
   userName: string;
@@ -23,14 +25,13 @@ export const fetchUsers = async (params?: { accessToken?: string }) => {
     limit: '100',
   })}`;
 
-  const res = await fetch(url, {
+  const res = await axios.get(url, {
     headers: {
-      'content-type': 'application/json',
       Authorization: `Bearer ${accessToken}`,
     },
   });
 
-  const { count, data } = (await res.json()) as QwackerUserResponse;
+  const { count, data } = res.data as QwackerUserResponse;
 
   return {
     count,

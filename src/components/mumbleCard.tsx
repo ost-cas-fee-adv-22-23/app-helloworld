@@ -1,5 +1,4 @@
 import React, { FC, useReducer } from 'react';
-import { likePost, Mumble } from '../services/mumble';
 import {
   Card,
   CommentButton,
@@ -9,6 +8,8 @@ import {
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useSession } from 'next-auth/react';
 import { CommentMumble } from './comment';
+import { likePost } from '../services/likes';
+import { Mumble } from '../services/serviceTypes';
 
 interface MumbleCard {
   mumble: Mumble;
@@ -79,7 +80,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
           />
           <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
         </div>
-        <div>{state.showComment ? <CommentMumble mumbleId={mumble.id}></CommentMumble> : null}</div>
+        {state.showComment && <CommentMumble mumbleId={mumble.id}></CommentMumble>}
       </Card>
     </>
   );

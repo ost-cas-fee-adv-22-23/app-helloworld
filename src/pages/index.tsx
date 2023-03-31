@@ -1,10 +1,9 @@
-import {getSession} from 'next-auth/react';
-import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
-import {fetchMumbles} from '../services/mumble';
-import {useState} from 'react';
-import {fetchUsers} from '../services/users';
-import {WriteMumble} from '../components/writeMumble';
-import {MumbleCard} from '../components/mumbleCard';
+import { getSession } from 'next-auth/react';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { useState } from 'react';
+import { fetchUsers } from '../services/users';
+import { MumbleCard } from '../components/mumbleCard';
+import { fetchMumbles } from '../services/posts';
 
 export default function PageHome({
   mumbles: initialMumbles,
@@ -19,7 +18,6 @@ export default function PageHome({
   return (
     <div>
       <div className={'grid grid-cols-1 justify-items-center'}>
-        <WriteMumble></WriteMumble>
         <ul className={'w-screen md:w-615'}>
           {mumbles.map((mumble) => (
             <li key={mumble.id} className={'m-s'}>
@@ -50,7 +48,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const mumblesWithUserInfo = mumbles.map((mumble) => {
       const creator = users?.find((user) => user.id === mumble.creator);
-
 
       return {
         ...mumble,
