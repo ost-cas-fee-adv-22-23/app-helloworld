@@ -12,7 +12,6 @@ type Props = {
 };
 
 export default function MumblePage({ mumble, replies }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
-  const replies1 = replies ?? [];
   return (
     <>
       <div className={'grid grid-cols-1 justify-items-center mt-m w-full '}>
@@ -21,15 +20,17 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
             <div className={'pb-m'}>
               <MumbleCard mumble={mumble}></MumbleCard>
             </div>
-            <ul className={'divide-y-1 divide-slate-200 -mx-xl'}>
-              {replies1.map((reply) => (
-                <li key={reply.id} className={'pt-xl pb-m'}>
-                  <div className={'mx-xl'}>
-                    <MumbleCard mumble={reply}></MumbleCard>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            {replies && replies.length > 0 && (
+              <ul className={'divide-y-1 divide-slate-200 -mx-xl'}>
+                {replies.map((reply) => (
+                  <li key={reply.id} className={'pt-xl pb-m'}>
+                    <div className={'mx-xl'}>
+                      <MumbleCard mumble={reply}></MumbleCard>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </Card>
       </div>
