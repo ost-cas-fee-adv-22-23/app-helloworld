@@ -11,6 +11,7 @@ import { likePost } from '../services/likes';
 import { Mumble, Reply } from '../services/serviceTypes';
 import { commentPost } from '../services/posts';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface MumbleCard {
   mumble: Mumble;
@@ -100,7 +101,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
       ></ProfileHeader>
       <div className={'my-l'}>
         <p className={'paragraph-M'}>{state.mumble.text}</p>
-        <img src={state.mumble.mediaUrl} className="h-178 w-264"></img>
+        {state.mumble.mediaUrl && <Image src={state.mumble.mediaUrl} alt={'Posted image'} width={264} height={178} />}
       </div>
       <div className="flex relative -left-3 space-x-8">
         {/*TODO This Comment should exist as label in the storybook*/}
