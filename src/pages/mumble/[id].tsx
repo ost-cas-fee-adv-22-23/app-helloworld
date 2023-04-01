@@ -5,6 +5,7 @@ import { fetchUsers } from '../../services/users';
 import { fetchMumbleById, fetchReplies } from '../../services/posts';
 import { Mumble, Reply } from '../../services/serviceTypes';
 import { Card } from '@smartive-education/design-system-component-library-hello-world-team';
+import { useReducer } from 'react';
 
 type Props = {
   mumble: Mumble;
@@ -12,6 +13,28 @@ type Props = {
 };
 
 export default function MumblePage({ mumble, replies }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
+  const [state, dispatch] = useReducer(mumbleReducer, { mumble, replies });
+
+  function mumbleReducer(state, action) {
+    switch (action.type) {
+      case 'comment_submitted': {
+        return {
+          ...state,
+          mumble: {
+            ...state.mumble,
+            replyCount: state.mumble.replyCount + 1,
+          },
+          replies: action.newReply,
+          ...state.replies,
+        };
+      }
+    }
+  }
+
+  const commentSubmitted = (newReply: Reply) => {
+    dispatch({ type: 'comment_submitted', newReply });
+  };
+
   return (
     <>
       <div className={'grid grid-cols-1 justify-items-center mt-m'}>
@@ -19,14 +42,14 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
           <Card borderType={'rounded'} size={'M'}>
             <div className={'divide-y-1 divide-slate-200'}>
               <div className={'pb-m'}>
-                <MumbleCard mumble={mumble}></MumbleCard>
+                <MumbleCard mumble={state.mumble} showComments={true}></MumbleCard>
               </div>
               {replies && replies.length > 0 && (
                 <ul className={'divide-y-1 divide-slate-200 -mx-xl'}>
-                  {replies.map((reply) => (
+                  {state.replies.map((reply) => (
                     <li key={reply.id} className={'pt-xl pb-m'}>
                       <div className={'mx-xl'}>
-                        <MumbleCard mumble={reply}></MumbleCard>
+                        <MumbleCard mumble={reply} commentSubmitted={commentSubmitted}></MumbleCard>
                       </div>
                     </li>
                   ))}

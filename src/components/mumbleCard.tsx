@@ -8,17 +8,20 @@ import {
 import { useSession } from 'next-auth/react';
 import { CommentMumble } from './comment';
 import { likePost } from '../services/likes';
-import { Mumble } from '../services/serviceTypes';
+import { Mumble, Reply } from '../services/serviceTypes';
 import { commentPost } from '../services/posts';
+import Link from 'next/link';
 
 interface MumbleCard {
   mumble: Mumble;
+  showComments?: boolean;
+  commentSubmitted?: (newReply: Reply) => void;
 }
 
-export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
+export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted }) => {
   const { data: session } = useSession();
 
-  const [state, dispatch] = useReducer(mumbleCardReducer, { showComment: false, mumble, comment: '' });
+  const [state, dispatch] = useReducer(mumbleCardReducer, { showComments, mumble, comment: '' });
 
   const likedPost = async () => {
     await likePost({
@@ -34,8 +37,14 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
   };
 
   const submitComment = async () => {
-    commentPost({ postId: state.mumble.id, comment: state.comment, accessToken: session?.accessToken });
-    dispatch({ type: 'comment_submitted' });
+    const newPost = await commentPost({
+      postId: state.mumble.id,
+      comment: state.comment,
+      accessToken: session?.accessToken,
+    });
+    dispatch({ type: 'comment_submitted', newPost });
+
+    commentSubmitted && commentSubmitted(newPost);
   };
 
   function mumbleCardReducer(state, action) {
@@ -53,13 +62,13 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
       case 'comment': {
         return {
           ...state,
-          showComment: !state.showComment,
+          showComments: !state.showComments,
         };
       }
       case 'add_comment': {
         return {
           ...state,
-          showComment: false,
+          showComments: false,
         };
       }
       case 'comment_changed': {
@@ -72,11 +81,6 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
         return {
           ...state,
           comment: '',
-          showComment: false,
-          mumble: {
-            ...state.mumble,
-            replyCount: state.mumble.replyCount + 1,
-          },
         };
       }
     }
@@ -94,20 +98,20 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
         hrefProfile={'#'}
         altText={'Avatar'}
       ></ProfileHeader>
-      <a href={`/mumble/${state.mumble.id}`}>
-        <div className={'my-l'}>
-          <p className={'paragraph-M'}>{state.mumble.text}</p>
-          <img src={state.mumble.mediaUrl} className="h-178 w-264"></img>
-        </div>
-      </a>
+      <div className={'my-l'}>
+        <p className={'paragraph-M'}>{state.mumble.text}</p>
+        <img src={state.mumble.mediaUrl} className="h-178 w-264"></img>
+      </div>
       <div className="flex relative -left-3 space-x-8">
-        <CommentButton
-          label={{ noComments: 'Comment', someComments: 'Comments' }}
-          numberOfComments={state.mumble.replyCount}
-          onClick={(e) => {
-            dispatch({ type: 'comment' });
-          }}
-        />
+        {/*TODO This Comment should exist as label in the storybook*/}
+        <Link href={`/mumble/${state.mumble.id}`}>
+          {' '}
+          <CommentButton
+            label={{ noComments: 'Comment', someComments: 'Comments' }}
+            numberOfComments={state.mumble.replyCount}
+            onClick={() => null}
+          />
+        </Link>
         <LikeButtonWithReactionButton
           onClick={() => likedPost()}
           active
@@ -122,7 +126,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
         />
         <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
       </div>
-      {state.showComment && (
+      {state.showComments && (
         <CommentMumble
           user={session?.user}
           handleCommentChanged={handleCommentChanged}

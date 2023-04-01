@@ -53,7 +53,7 @@ export const commentPost = async (params: { postId: string; comment: string; acc
     throw new Error('No access token');
   }
 
-  return await axios.post(
+  const res = await axios.post(
     `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}`,
     { text: comment },
     {
@@ -62,6 +62,10 @@ export const commentPost = async (params: { postId: string; comment: string; acc
       },
     }
   );
+
+  const reply = (await res.data) as Reply;
+
+  return reply;
 };
 
 export const fetchMumbleById = async (params?: { postId: string; accessToken?: string }) => {
