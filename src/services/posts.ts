@@ -1,4 +1,4 @@
-import { Mumble, QwackerMumbleResponse, Reply, transformMumble, UploadImage } from './serviceTypes';
+import { Mumble, QwackerMumbleResponse, Reply, transformMumble, PostArgs } from './serviceTypes';
 import axios from 'axios';
 
 export const fetchMumbles = async (params?: { limit?: number; offset?: number; newerThanMumbleId?: string }) => {
@@ -22,23 +22,23 @@ export const fetchMumbles = async (params?: { limit?: number; offset?: number; n
   };
 };
 
-export const postMumble = async (text: string, file: UploadImage | null, accessToken?: string) => {
-  if (!accessToken) {
-    throw new Error('No access token');
-  }
-
+export const createPost = async (postArgs: PostArgs) => {
   const formData = new FormData();
-  formData.append('text', text);
-  if (file) {
-    formData.append('image', file);
+  formData.append('text', postArgs.text);
+  if (postArgs.file) {
+    formData.append('image', postArgs.file);
   }
 
   try {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_QWACKER_API_URL}/posts`, formData, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await axios
+      .post(`${process.env.NEXT_PUBLIC_QWACKER_API_URL}/posts`, formData, {
+        headers: {
+          Authorization: `Bearer ${postArgs.accessToken}`,
+        },
+      })
+      .catch((error) => {
+        throw new Error('Posted: ' + error.message);
+      });
 
     return transformMumble(response.data);
   } catch (error) {
