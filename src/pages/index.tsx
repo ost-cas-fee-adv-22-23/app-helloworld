@@ -18,6 +18,7 @@ export default function PageHome({
   return (
     <div>
       <div className={'grid grid-cols-1 justify-items-center'}>
+        <h1 className={'head-1 text-violet-500'}>Willkommen auf Mumble</h1>
         <ul className={'w-screen md:w-615'}>
           {mumbles.map((mumble) => (
             <li key={mumble.id} className={'m-s'}>

@@ -13,15 +13,6 @@ import { useSession } from 'next-auth/react';
 import { PostArgs, UploadImage } from '../services/serviceTypes';
 import toast, { Toaster } from 'react-hot-toast';
 import { Oval } from 'react-loader-spinner';
-import {
-  BorderType,
-  Size,
-} from '@smartive-education/design-system-component-library-hello-world-team/dist/components/molecules/card/card';
-import {
-  ProfileHeaderLabelType,
-  ProfileHeaderPictureSize,
-} from '@smartive-education/design-system-component-library-hello-world-team/dist/components/molecules/profile-header/profile-header';
-
 export const WriteCard: FC = () => {
   const [text, setText] = React.useState<string>('');
   const [file, setFile] = useState<UploadImage>();
@@ -83,17 +74,16 @@ export const WriteCard: FC = () => {
             />
           </div>
         )}
-        §§
         <div className="w-[550px]">
-          <Card as="div" borderType={BorderType.rounded} size={Size.M}>
+          <Card as="div" borderType={'rounded'} size={'M'}>
             <div className="grid grid-cols-1">
               <div className="absolute flex flex-row md:-left-l">
                 <ProfileHeader
                   altText={session?.user.username}
                   fullName={`${session?.user.firstname} ${session?.user.lastname}`}
                   imageSrc={session?.user.avatarUrl}
-                  labelType={ProfileHeaderLabelType.h4}
-                  profilePictureSize={ProfileHeaderPictureSize.M}
+                  labelType={'h4'}
+                  profilePictureSize={'M'}
                 />
               </div>
               <form className="mt-xl">
