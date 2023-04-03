@@ -1,16 +1,32 @@
-import { getSession } from 'next-auth/react';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { useState } from 'react';
-import { fetchUsers } from '../services/users';
-import { MumbleCard } from '../components/mumbleCard';
-import { fetchMumbles } from '../services/posts';
-import { Card } from '@smartive-education/design-system-component-library-hello-world-team';
+import {getSession} from 'next-auth/react';
+import {GetServerSideProps, InferGetServerSidePropsType} from 'next';
+import {useReducer} from 'react';
+import {fetchUsers} from '../services/users';
+import {MumbleCard} from '../components/mumbleCard';
+import {fetchMumbles} from '../services/posts';
+import {Button, Card, MumbleIcon} from '@smartive-education/design-system-component-library-hello-world-team';
 
-export default function PageHome({
-  mumbles: initialMumbles,
-  error,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [mumbles] = useState(initialMumbles);
+export const MUMBLE_LOADING_LIMIT = 10;
+
+export default function PageHome({ mumbles, error }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [state, dispatch] = useReducer(mumbleCardReducer, { mumbles, nextOffset: MUMBLE_LOADING_LIMIT });
+
+  function mumbleCardReducer(state, action) {
+    switch (action.type) {
+      case 'reload_mumbles': {
+        return {
+          ...state,
+          mumbles: [...state.mumbles, ...action.reloadedMumbles],
+          nextOffset: state.nextOffset + MUMBLE_LOADING_LIMIT,
+        };
+      }
+    }
+  }
+
+  const loadMore = async () => {
+    const reloadedMumbles = await fetchMumbles({ limit: MUMBLE_LOADING_LIMIT, offset: state.nextOffset });
+    dispatch({ type: 'reload_mumbles', reloadedMumbles: reloadedMumbles.mumbles });
+  };
 
   if (error) {
     return <div>An error occurred: {error}</div>;
@@ -21,7 +37,7 @@ export default function PageHome({
       <div className={'grid grid-cols-1 justify-items-center'}>
         <h1 className={'head-1 text-violet-500'}>Willkommen auf Mumble</h1>
         <ul className={'w-screen md:w-615'}>
-          {mumbles.map((mumble) => (
+          {state.mumbles.map((mumble) => (
             <li key={mumble.id} className={'m-s'}>
               <Card borderType={'rounded'}>
                 <MumbleCard mumble={mumble}></MumbleCard>
@@ -29,6 +45,9 @@ export default function PageHome({
             </li>
           ))}
         </ul>
+        <Button label="Load more" onClick={() => loadMore()} variant="purple">
+          <MumbleIcon size={16} />
+        </Button>
       </div>
     </div>
   );
@@ -47,7 +66,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   try {
-    const { count, mumbles } = await fetchMumbles({ limit: 200 });
+    const { count, mumbles } = await fetchMumbles({ limit: MUMBLE_LOADING_LIMIT });
     const { users } = await fetchUsers({ accessToken: session.accessToken });
 
     const mumblesWithUserInfo = mumbles.map((mumble) => {
