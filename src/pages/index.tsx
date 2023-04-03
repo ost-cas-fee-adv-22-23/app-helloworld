@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { fetchUsers } from '../services/users';
 import { MumbleCard } from '../components/mumbleCard';
 import { fetchMumbles } from '../services/posts';
+import { Card } from '@smartive-education/design-system-component-library-hello-world-team';
 
 export default function PageHome({
   mumbles: initialMumbles,
@@ -22,7 +23,9 @@ export default function PageHome({
         <ul className={'w-screen md:w-615'}>
           {mumbles.map((mumble) => (
             <li key={mumble.id} className={'m-s'}>
-              <MumbleCard mumble={mumble}></MumbleCard>
+              <Card borderType={'rounded'}>
+                <MumbleCard mumble={mumble}></MumbleCard>
+              </Card>
             </li>
           ))}
         </ul>

@@ -1,4 +1,4 @@
-import { QwackerMumbleResponse, transformMumble, PostArgs } from './serviceTypes';
+import { Mumble, QwackerMumbleResponse, Reply, transformMumble, PostArgs } from './serviceTypes';
 import axios from 'axios';
 
 export const fetchMumbles = async (params?: { limit?: number; offset?: number; newerThanMumbleId?: string }) => {
@@ -53,7 +53,7 @@ export const commentPost = async (params: { postId: string; comment: string; acc
     throw new Error('No access token');
   }
 
-  return await axios.post(
+  const res = await axios.post(
     `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}`,
     { text: comment },
     {
@@ -62,4 +62,51 @@ export const commentPost = async (params: { postId: string; comment: string; acc
       },
     }
   );
+
+  const reply = (await res.data) as Reply;
+
+  return reply;
+};
+
+export const fetchMumbleById = async (params?: { postId: string; accessToken?: string }) => {
+  const { postId, accessToken } = params || {};
+
+  if (!accessToken) {
+    throw new Error('No access token');
+  }
+
+  const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}`;
+
+  const res = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  const mumble = (await res.data) as Mumble;
+
+  return {
+    mumble,
+  };
+};
+
+export const fetchReplies = async (params?: { postId: string; accessToken?: string }) => {
+  const { postId, accessToken } = params || {};
+  if (!accessToken) {
+    throw new Error('No access token');
+  }
+
+  const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}/replies`;
+
+  const res = await axios.get(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  const replies = (await res.data) as Reply[];
+
+  return {
+    replies,
+  };
 };

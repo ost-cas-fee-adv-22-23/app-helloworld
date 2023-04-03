@@ -10,12 +10,12 @@ export const likePost = async (params?: { postId: string; likedByUser: boolean; 
   const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}/likes`;
 
   if (likedByUser) {
-    return await axios.delete(url, { headers: { Authorization: `Bearer ${accessToken}` } }).then((response) => {
-      console.log(response.data);
+    return await axios.delete(url, {
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
   } else {
-    return await axios.put(url, undefined, { headers: { Authorization: `Bearer ${accessToken}` } }).then((response) => {
-      console.log(response.data);
+    return await axios.put(url, undefined, {
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
   }
 };

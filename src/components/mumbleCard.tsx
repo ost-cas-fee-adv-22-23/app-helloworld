@@ -1,6 +1,5 @@
-import React, { FC, useReducer } from 'react';
+import React, { ChangeEvent, FC, useReducer } from 'react';
 import {
-  Card,
   CommentButton,
   CopyButton,
   LikeButtonWithReactionButton,
@@ -9,32 +8,80 @@ import {
 import { useSession } from 'next-auth/react';
 import { CommentMumble } from './comment';
 import { likePost } from '../services/likes';
-import { Mumble } from '../services/serviceTypes';
+import { Mumble, Reply } from '../services/serviceTypes';
+import { commentPost } from '../services/posts';
+import Link from 'next/link';
+import Image from 'next/image';
 
 interface MumbleCard {
   mumble: Mumble;
+  showComments?: boolean;
+  commentSubmitted?: (newReply: Reply) => void;
 }
 
-export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
+export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted }) => {
   const { data: session } = useSession();
 
-  const [state, dispatch] = useReducer(mumbleCardReducer, { showComment: false });
+  const [state, dispatch] = useReducer(mumbleCardReducer, { showComments, mumble, comment: '' });
 
-  const likedPost = (postId: string, likedByUser: boolean) =>
-    likePost({ postId, likedByUser, accessToken: session?.accessToken });
+  const likedPost = async () => {
+    await likePost({
+      postId: state.mumble.id,
+      likedByUser: state.mumble.likedByUser,
+      accessToken: session?.accessToken,
+    });
+    dispatch({ type: 'post_liked', likedByUser: !state.mumble.likedByUser });
+  };
+
+  const handleCommentChanged = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    dispatch({ type: 'comment_changed', comment: e.target.value });
+  };
+
+  const submitComment = async () => {
+    const newPost = await commentPost({
+      postId: state.mumble.id,
+      comment: state.comment,
+      accessToken: session?.accessToken,
+    });
+    dispatch({ type: 'comment_submitted', newPost });
+
+    commentSubmitted && commentSubmitted(newPost);
+  };
 
   function mumbleCardReducer(state, action) {
     switch (action.type) {
+      case 'post_liked': {
+        return {
+          ...state,
+          mumble: {
+            ...state.mumble,
+            likedByUser: action.likedByUser,
+            likeCount: action.likedByUser ? (state.mumble?.likeCount ?? 0) + 1 : state.mumble?.likeCount - 1,
+          },
+        };
+      }
       case 'comment': {
         return {
           ...state,
-          showComment: !state.showComment,
+          showComments: !state.showComments,
         };
       }
       case 'add_comment': {
         return {
           ...state,
-          showComment: false,
+          showComments: false,
+        };
+      }
+      case 'comment_changed': {
+        return {
+          ...state,
+          comment: action.comment,
+        };
+      }
+      case 'comment_submitted': {
+        return {
+          ...state,
+          comment: '',
         };
       }
     }
@@ -42,45 +89,51 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble }) => {
 
   return (
     <>
-      <Card borderType={'rounded'}>
-        <ProfileHeader
-          fullName={`${mumble?.creatorProfile?.firstName} ${mumble?.creatorProfile?.lastName}`}
-          labelType={'M'}
-          profilePictureSize={'M'}
-          timestamp={mumble.createdDate}
-          username={mumble?.creatorProfile?.userName}
-          imageSrc={mumble?.creatorProfile?.avatarUrl}
-          hrefProfile={'#'}
-          altText={'Avatar'}
-        ></ProfileHeader>
-        <div className={'mt-l'}>
-          <p className={'paragraph-M'}>{mumble.text}</p>
-        </div>
-
-        <div className="flex relative -left-3 space-x-8">
+      <ProfileHeader
+        fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
+        labelType={'M'}
+        profilePictureSize={'M'}
+        timestamp={state.mumble.createdDate}
+        username={state.mumble?.creatorProfile?.userName}
+        imageSrc={state.mumble?.creatorProfile?.avatarUrl}
+        hrefProfile={'#'}
+        altText={'Avatar'}
+      ></ProfileHeader>
+      <div className={'my-l'}>
+        <p className={'paragraph-M'}>{state.mumble.text}</p>
+        {state.mumble.mediaUrl && <Image src={state.mumble.mediaUrl} alt={'Posted image'} width={264} height={178} />}
+      </div>
+      <div className="flex relative -left-3 space-x-8">
+        {/*TODO This Comment should exist as label in the storybook*/}
+        <Link href={`/mumble/${state.mumble.id}`}>
+          {' '}
           <CommentButton
             label={{ noComments: 'Comment', someComments: 'Comments' }}
-            numberOfComments={mumble.replyCount}
-            onClick={(e) => {
-              dispatch({ type: 'comment' });
-            }}
+            numberOfComments={state.mumble.replyCount}
+            onClick={() => null}
           />
-          <LikeButtonWithReactionButton
-            onClick={() => likedPost(mumble.id, mumble.likedByUser)}
-            active
-            label={{
-              noReaction: 'Like',
-              oneReaction: 'Like',
-              reactionByCurrentUser: 'Liked',
-              severalReaction: 'Likes',
-            }}
-            likes={mumble.likeCount ?? 0}
-            reactionByCurrentUser={false}
-          />
-          <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
-        </div>
-        {state.showComment && <CommentMumble mumbleId={mumble.id}></CommentMumble>}
-      </Card>
+        </Link>
+        <LikeButtonWithReactionButton
+          onClick={() => likedPost()}
+          active
+          label={{
+            noReaction: 'Like',
+            oneReaction: 'Like',
+            reactionByCurrentUser: 'Liked',
+            severalReaction: 'Likes',
+          }}
+          likes={state.mumble.likeCount ?? 0}
+          reactionByCurrentUser={state.mumble.likedByUser}
+        />
+        <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
+      </div>
+      {state.showComments && (
+        <CommentMumble
+          user={session?.user}
+          handleCommentChanged={handleCommentChanged}
+          submitComment={submitComment}
+        ></CommentMumble>
+      )}
     </>
   );
 };

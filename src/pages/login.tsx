@@ -21,7 +21,7 @@ export default function Home() {
             <BrandingLogo orientation={'horizontal'} color={'white'}></BrandingLogo>
           </div>
           <div className={'text-pink-300'}>
-            Find out what's new in <span className={'text-white'}>#fashion</span>.
+            Find out what&apos;s new in <span className={'text-white'}>#fashion</span>.
           </div>
         </div>
       </div>

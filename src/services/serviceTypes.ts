@@ -38,3 +38,15 @@ export type QwackerMumbleResponse = {
   count: number;
   data: RawMumble[];
 };
+
+export type Reply = {
+  id: string;
+  creator: string;
+  text: string;
+  mediaUrl: string;
+  mediaType: string;
+  likeCount: number;
+  likedByUser: boolean;
+  type: string;
+  parentId: string;
+};
