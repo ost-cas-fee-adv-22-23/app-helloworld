@@ -1,21 +1,23 @@
 import React, { FC, useReducer } from 'react';
-import { Button, Card, MumbleIcon } from '@smartive-education/design-system-component-library-hello-world-team';
+import { Card } from '@smartive-education/design-system-component-library-hello-world-team';
 import { Mumble } from '../services/serviceTypes';
 import { MumbleCard } from './mumbleCard';
 import { fetchMumbles } from '../services/posts';
 import { User } from 'next-auth';
+import InfiniteScroll from 'react-infinite-scroller';
 
 interface MumbleList {
   mumbles: Mumble[];
   users: User[];
-  listFilter: 'all' | 'likedByUser' | 'createdByUser';
+  totalMumbles: number;
 }
 
-export const MumbleList: FC<MumbleList> = ({ mumbles, users }) => {
+export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles }) => {
   const [state, dispatch] = useReducer(mumbleCardReducer, {
     mumbles: addCreatorToMumble(mumbles, users),
     users,
     nextOffset: 10,
+    totalMumbles,
   });
 
   function addCreatorToMumble(mumbles: Mumble[], users: User[]) {
@@ -54,21 +56,20 @@ export const MumbleList: FC<MumbleList> = ({ mumbles, users }) => {
 
   return (
     <>
-      <div className={'grid grid-cols-1 justify-items-center'}>
-        <h1 className={'head-1 text-violet-500'}>Willkommen auf Mumble</h1>
-        <ul className={'w-screen md:w-615'}>
-          {state.mumbles.map((mumble: Mumble) => (
-            <li key={mumble.id} className={'m-s'}>
-              <Card borderType={'rounded'}>
-                <MumbleCard mumble={mumble}></MumbleCard>
-              </Card>
-            </li>
-          ))}
-        </ul>
-        <Button label="Load more" onClick={() => loadMore()} variant="purple">
-          <MumbleIcon size={16} />
-        </Button>
-      </div>
+      <InfiniteScroll pageStart={0} loadMore={loadMore} hasMore={state.nextOffset < totalMumbles} useWindow={true}>
+        <div className={'grid grid-cols-1 justify-items-center'}>
+          <h1 className={'head-1 text-violet-500'}>Willkommen auf Mumble</h1>
+          <ul className={'w-screen md:w-615'}>
+            {state.mumbles.map((mumble: Mumble) => (
+              <li key={mumble.id} className={'m-s'}>
+                <Card borderType={'rounded'}>
+                  <MumbleCard mumble={mumble}></MumbleCard>
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </InfiniteScroll>
     </>
   );
 };

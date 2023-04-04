@@ -5,14 +5,14 @@ import { fetchUsers } from '../services/users';
 import { fetchMumbles } from '../services/posts';
 import { MumbleList } from '../components/mumbleList';
 
-export default function PageHome({ mumbles, users, error }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function PageHome({ mumbles, users, error, count }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   if (error) {
     return <div>An error occurred: {error}</div>;
   }
 
   return (
     <div>
-      <MumbleList mumbles={mumbles} users={users}></MumbleList>
+      <MumbleList mumbles={mumbles} users={users} totalMumbles={count}></MumbleList>
     </div>
   );
 }
