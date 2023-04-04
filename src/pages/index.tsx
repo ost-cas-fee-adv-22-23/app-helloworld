@@ -33,23 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     const { count, mumbles } = await fetchMumbles({ limit: 10 });
     const { users } = await fetchUsers({ accessToken: session.accessToken });
 
-    const mumblesWithUserInfo = mumbles.map((mumble) => {
-      const creator = users?.find((user) => user.id === mumble.creator);
-
-      return {
-        ...mumble,
-        creatorProfile: {
-          id: creator?.id,
-          userName: creator?.userName,
-          firstName: creator?.firstName,
-          lastName: creator?.lastName,
-          fullName: `${mumble?.creatorProfile?.firstName} ${mumble?.creatorProfile?.lastName}`,
-          avatarUrl: creator?.avatarUrl,
-        },
-      };
-    });
-
-    return { props: { count, mumbles: mumblesWithUserInfo, users } };
+    return { props: { count, mumbles, users } };
   } catch (error) {
     let message;
     if (error instanceof Error) {
