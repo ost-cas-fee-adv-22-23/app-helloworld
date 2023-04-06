@@ -7,6 +7,7 @@ import {
   UploadIcon,
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { User } from 'next-auth';
+import Link from 'next/link';
 
 interface CurrentUser {
   user?: User;
@@ -26,6 +27,8 @@ export const CommentMumble: FC<CurrentUser> = ({ user, handleCommentChanged, sub
           imageSrc={user?.avatarUrl}
           hrefProfile={'#'}
           altText={'Avatar'}
+          link={Link}
+          href={`/profile/${user?.username}`}
         />
         <form className="mt-xxxs">
           <Textfield placeholder="Und was meinst du dazu?" onChange={handleCommentChanged} />

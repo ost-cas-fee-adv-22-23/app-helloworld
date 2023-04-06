@@ -98,6 +98,8 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
         imageSrc={state.mumble?.creatorProfile?.avatarUrl}
         hrefProfile={'#'}
         altText={'Avatar'}
+        link={Link}
+        href={`/profile/${state.mumble?.creatorProfile?.username}`}
       ></ProfileHeader>
       <div className={'my-l'}>
         <p className={'paragraph-M'}>{state.mumble.text}</p>
@@ -125,7 +127,11 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           likes={state.mumble.likeCount ?? 0}
           reactionByCurrentUser={state.mumble.likedByUser}
         />
-        <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
+        <CopyButton
+          onClick={(e) => console.log(e)}
+          active={false}
+          label={{ inactive: 'Copy Link', active: 'Link copied' }}
+        />
       </div>
       {state.showComments && (
         <CommentMumble
