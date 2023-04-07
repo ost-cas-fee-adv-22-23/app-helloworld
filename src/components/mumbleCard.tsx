@@ -89,16 +89,18 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
 
   return (
     <>
-      <ProfileHeader
-        fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
-        labelType={'M'}
-        profilePictureSize={'M'}
-        timestamp={state.mumble.createdDate}
-        username={state.mumble?.creatorProfile?.userName}
-        imageSrc={state.mumble?.creatorProfile?.avatarUrl}
-        hrefProfile={'#'}
-        altText={'Avatar'}
-      ></ProfileHeader>
+      <div className={'mb-l'}>
+        <ProfileHeader
+          fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
+          labelType={'M'}
+          profilePictureSize={'M'}
+          timestamp={state.mumble.createdDate}
+          username={state.mumble?.creatorProfile?.userName}
+          imageSrc={state.mumble?.creatorProfile?.avatarUrl}
+          hrefProfile={'#'}
+          altText={'Avatar'}
+        ></ProfileHeader>
+      </div>
       {state.mumble.text && (
         <div className={'mt-l mb-s w-full'}>
           <p className={'paragraph-M'}>{state.mumble.text}</p>
