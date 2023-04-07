@@ -102,7 +102,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
         ></ProfileHeader>
       </div>
       {state.mumble.text && (
-        <div className={'mt-l mb-s w-full'}>
+        <div className={'mb-s w-full'}>
           <p className={'paragraph-M'}>{state.mumble.text}</p>
         </div>
       )}
