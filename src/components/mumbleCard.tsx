@@ -37,6 +37,8 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
     dispatch({ type: 'comment_changed', comment: e.target.value });
   };
 
+  const copyMumbleUrl = () => navigator.clipboard.writeText(`${window.location.href}mumble/${state.mumble.id}`);
+
   const submitComment = async () => {
     const newPost = await commentPost({
       postId: state.mumble.id,
@@ -125,7 +127,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           likes={state.mumble.likeCount ?? 0}
           reactionByCurrentUser={state.mumble.likedByUser}
         />
-        <CopyButton onClick={undefined} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
+        <CopyButton onClick={copyMumbleUrl} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
       </div>
       {state.showComments && (
         <CommentMumble
