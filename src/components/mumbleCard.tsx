@@ -99,10 +99,16 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
         hrefProfile={'#'}
         altText={'Avatar'}
       ></ProfileHeader>
-      <div className={'my-l'}>
-        <p className={'paragraph-M'}>{state.mumble.text}</p>
-        {state.mumble.mediaUrl && <Image src={state.mumble.mediaUrl} alt={'Posted image'} width={264} height={178} />}
-      </div>
+      {state.mumble.text && (
+        <div className={'mt-l mb-s w-full'}>
+          <p className={'paragraph-M'}>{state.mumble.text}</p>
+        </div>
+      )}
+      {state.mumble.mediaUrl && (
+        <div className={'mb-l h-328 w-full relative'}>
+          <Image src={state.mumble.mediaUrl} alt={'Posted image'} fill className={'object-cover'} />
+        </div>
+      )}
       <div className="flex relative -left-3 space-x-8">
         {/*TODO This Comment should exist as label in the storybook*/}
         <Link href={`/mumble/${state.mumble.id}`}>
