@@ -105,8 +105,15 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
         </div>
       )}
       {state.mumble.mediaUrl && (
-        <div className={'mb-l h-328 w-full relative'}>
-          <Image src={state.mumble.mediaUrl} alt={'Posted image'} fill className={'object-cover'} />
+        <div className={'mb-l h-328 w-full relative bg-slate-50'}>
+          <Image
+            src={state.mumble.mediaUrl}
+            alt={'Posted image'}
+            fill
+            className={'object-cover'}
+            blurDataURL={'../../public/vercel.svg'}
+            placeholder="blur"
+          />
         </div>
       )}
       <div className="flex relative -left-3 space-x-8">
