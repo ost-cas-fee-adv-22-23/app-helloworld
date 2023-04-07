@@ -112,7 +112,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
             src={state.mumble.mediaUrl}
             alt={'Posted image'}
             fill
-            className={'object-cover'}
+            className={'object-cover rounded-s'}
             blurDataURL={'../../public/vercel.svg'}
             placeholder="blur"
           />
