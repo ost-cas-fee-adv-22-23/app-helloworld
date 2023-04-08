@@ -50,3 +50,13 @@ export type Reply = {
   type: string;
   parentId: string;
 };
+
+export type SearchRequestBody = {
+  text?: string;
+  tags?: string[];
+  likedBy?: string[];
+  mentions?: string[];
+  isReply?: boolean;
+  limit?: number;
+  offset?: number;
+};

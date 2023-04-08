@@ -12,7 +12,7 @@ interface MumbleList {
   totalMumbles: number;
 }
 
-export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles }) => {
+export const LikedList: FC<MumbleList> = ({ mumbles, users, totalMumbles }) => {
   const [state, dispatch] = useReducer(mumbleCardReducer, {
     mumbles: addCreatorToMumble(mumbles, users),
     users,

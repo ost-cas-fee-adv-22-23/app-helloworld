@@ -99,7 +99,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
         hrefProfile={'#'}
         altText={'Avatar'}
         link={Link}
-        href={`/profile/${state.mumble?.creatorProfile?.username}`}
+        href={`/profile/${state.mumble?.creatorProfile?.id}`}
       ></ProfileHeader>
       <div className={'my-l'}>
         <p className={'paragraph-M'}>{state.mumble.text}</p>

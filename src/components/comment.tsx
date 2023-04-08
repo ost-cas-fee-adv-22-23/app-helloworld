@@ -28,7 +28,7 @@ export const CommentMumble: FC<CurrentUser> = ({ user, handleCommentChanged, sub
           hrefProfile={'#'}
           altText={'Avatar'}
           link={Link}
-          href={`/profile/${user?.username}`}
+          href={`/profile/${user?.id}`}
         />
         <form className="mt-xxxs">
           <Textfield placeholder="Und was meinst du dazu?" onChange={handleCommentChanged} />

@@ -17,7 +17,7 @@ export const Header: FC = () => {
       <>
         <Navbar logoHref={'/'} logoAriaLabel={'Navigate to home'}>
           <span className={'absolute top-0'}>
-            <Link href={`/profile/${session.user?.username}`}>
+            <Link href={`/profile/${session.user?.id}`}>
               <ProfilePic altText={'Profilbild'} editLabel={'Bearbeiten'} imageUrl={session?.user?.avatarUrl} size={'S'} />
             </Link>
           </span>
