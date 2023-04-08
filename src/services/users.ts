@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 export type User = {
-  id: string;
-  userName: string;
-  firstName: string;
-  lastName: string;
-  avatarUrl: string;
+  id?: string;
+  userName?: string;
+  firstName?: string;
+  lastName?: string;
+  avatarUrl?: string;
 };
 
 type QwackerUserResponse = {

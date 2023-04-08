@@ -4,6 +4,8 @@ import {
   CopyButton,
   LikeButtonWithReactionButton,
   ProfileHeader,
+  ProfileHeaderLabelType,
+  ProfileHeaderPictureSize,
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useSession } from 'next-auth/react';
 import { CommentMumble } from './comment';
@@ -19,10 +21,29 @@ interface MumbleCard {
   commentSubmitted?: (newReply: Reply) => void;
 }
 
+interface MumbleCardState {
+  showComments: boolean;
+  mumble: Mumble;
+  comment: string;
+}
+
+interface MumbleCardAction {
+  type: 'post_liked' | 'comment' | 'add_comment' | 'comment_changed' | 'comment_submitted';
+  newPost?: Reply;
+  likedByUser?: boolean;
+  comment?: string;
+}
+
 export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted }) => {
   const { data: session } = useSession();
 
-  const [state, dispatch] = useReducer(mumbleCardReducer, { showComments, mumble, comment: '' });
+  const initialMumbleCardState: MumbleCardState = {
+    showComments: !!showComments,
+    mumble,
+    comment: '',
+  };
+
+  const [state, dispatch] = useReducer(mumbleCardReducer, initialMumbleCardState);
 
   const likedPost = async () => {
     await likePost({
@@ -50,14 +71,14 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
     commentSubmitted && commentSubmitted(newPost);
   };
 
-  function mumbleCardReducer(state, action) {
+  function mumbleCardReducer(state: MumbleCardState, action: MumbleCardAction): MumbleCardState {
     switch (action.type) {
       case 'post_liked': {
         return {
           ...state,
           mumble: {
             ...state.mumble,
-            likedByUser: action.likedByUser,
+            likedByUser: !!action.likedByUser,
             likeCount: action.likedByUser ? (state.mumble?.likeCount ?? 0) + 1 : state.mumble?.likeCount - 1,
           },
         };
@@ -77,7 +98,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
       case 'comment_changed': {
         return {
           ...state,
-          comment: action.comment,
+          comment: action.comment ?? '',
         };
       }
       case 'comment_submitted': {
@@ -94,8 +115,8 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
       <div className={'mb-l'}>
         <ProfileHeader
           fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
-          labelType={'M'}
-          profilePictureSize={'M'}
+          labelType={ProfileHeaderLabelType.M}
+          profilePictureSize={ProfileHeaderPictureSize.M}
           timestamp={state.mumble.createdDate}
           username={state.mumble?.creatorProfile?.userName}
           imageSrc={state.mumble?.creatorProfile?.avatarUrl}
@@ -114,8 +135,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
             src={state.mumble.mediaUrl}
             alt={'Posted image'}
             fill
-            className={'object-cover rounded-s'}
-            blurDataURL={'../../public/vercel.svg'}
+            className="object-cover rounded-s"
             placeholder="blur"
           />
         </div>
@@ -126,7 +146,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           {' '}
           <CommentButton
             label={{ noComments: 'Comment', someComments: 'Comments' }}
-            numberOfComments={state.mumble.replyCount}
+            numberOfComments={state.mumble.replyCount ?? 0}
             onClick={() => null}
           />
         </Link>
