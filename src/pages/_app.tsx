@@ -8,11 +8,11 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
   const queryClient = new QueryClient();
 
   return (
-      <QueryClientProvider client={queryClient}>
-          <SessionProvider session={session}>
-              <Header></Header>
-              <Component {...pageProps} />
-          </SessionProvider>
-      </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <SessionProvider session={session}>
+        <Header></Header>
+        <Component {...pageProps} />
+      </SessionProvider>
+    </QueryClientProvider>
   );
 }
