@@ -58,7 +58,7 @@ export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles }) => 
     <>
       <InfiniteScroll pageStart={0} loadMore={loadMore} hasMore={state.nextOffset < totalMumbles} useWindow={true}>
         <div className={'grid grid-cols-1 justify-items-center'}>
-          <ul className={'w-screen md:w-615'}>
+          <ul className={'w-screen md:w-630'}>
             {state.mumbles.map((mumble: Mumble) => (
               <li key={mumble.id} className={'m-s'}>
                 <Card borderType={'rounded'}>

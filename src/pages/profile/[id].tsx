@@ -34,45 +34,51 @@ export default function ProfilePage({
 
   return (
     <>
-      <div className={'grid grid-cols-1 justify-items-center my-xl'}>
-        <div>
-          <div className={'rounded-m bg-violet-200'}>
-            <img alt={'image'} className={'object-cover rounded-m '} src={'https://picsum.photos/700/400'} />
+      <div className={'relative grid grid-cols-1 gap-2 place-content-center justify-items-center'}>
+        <div className={'my-m'}>
+          <div className={'w-full pt-16/9 bg-violet-200 rounded-l relative mb-s'}>
+            <div className={'rounded-l bg-violet-200'}>
+              <img alt={'image'} className={'object-cover rounded-m w-full h-full'} src={'https://picsum.photos/600/300'} />
+            </div>
+            <div className={'absolute -mt-xl4 right-xl7'}>
+              <Link href={'/'}>
+                <ProfilePic editLabel={'Bearbeiten'} altText={'Profilbild'} imageUrl={''} size={'XL'} />
+              </Link>
+            </div>
           </div>
         </div>
-        <div className={'flex'}>
-          <Link href={'/'}>
-            <ProfilePic editLabel={'Bearbeiten'} altText={'Profilbild'} imageUrl={''} size={'XL'} />
-          </Link>
-        </div>
       </div>
-      <div className={'relative flex flex-row md:-left-xxl p-xxs'}>
+      <div className={'grid grid-cols-1 gap-1 place-items-start'}>
         <ProfileHeader
           fullName={'Robert Vogt'}
           labelType={'XL'}
-          joined={'Mitglied seit 4 Wochen'}
           username={'robertvogt'}
-          hrefProfile={''}
+          hrefProfile={'#'}
           location={'St.Gallen'}
+          joined={'Mitglied seit 4 Wochen'}
           timestamp={'vor 42 Minuten'}
           link={Link}
           href={'/'}
         />
       </div>
-      <div className={'relative mt-m'}>
-        <div className={'paragraph-M'}>
-          Quia aut et aut. Sunt et eligendi similique enim qui quo minus. Aut aut error velit voluptatum optio sed quis
-          cumque error magni.
+      <div className={'grid grid-cols-1 gap-2 place-items-center'}>
+        <div className={'relative flex mt-m mb-m'}>
+          <p className={'paragraph-M justify-text-center text-slate-400'}>
+            Quia aut et aut. Sunt et eligendi similique enim qui quo minus. Aut aut error velit voluptatum optio sed quis
+            cumque error magni.
+          </p>
+        </div>
+        <div className={'w-screen px-xs md:w-615'}>
+          <Tabs>
+            <TabsItem
+              onClick={() => setActiveTab('mumbles')}
+              label={'Deine Mumbels'}
+              active={activeTab === 'mumbles'}
+            ></TabsItem>
+            <TabsItem onClick={() => setActiveTab('likes')} label={'Deine Likes'} active={activeTab === 'likes'}></TabsItem>
+          </Tabs>
         </div>
       </div>
-      <Tabs>
-        <TabsItem
-          onClick={() => setActiveTab('mumbles')}
-          label={'Deine Mumbels'}
-          active={activeTab === 'mumbles'}
-        ></TabsItem>
-        <TabsItem onClick={() => setActiveTab('likes')} label={'Deine Likes'} active={activeTab === 'likes'}></TabsItem>
-      </Tabs>
       {activeTab === 'mumbles' ? (
         <MumbleList mumbles={mumbles} users={users} totalMumbles={count}></MumbleList>
       ) : (
