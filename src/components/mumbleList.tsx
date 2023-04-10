@@ -58,7 +58,8 @@ export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles }) => 
     <>
       <InfiniteScroll pageStart={0} loadMore={loadMore} hasMore={state.nextOffset < totalMumbles} useWindow={true}>
         <div className={'grid grid-cols-1 justify-items-center'}>
-          <h1 className={'head-1 text-violet-500'}>Willkommen auf Mumble</h1>
+          {/* TODO: remove md:text-violet-500*/}
+          <h1 className={'head-4 md:head-1 text-violet-500 md:text-violet-500'}>Willkommen auf Mumble</h1>
           <ul className={'w-screen md:w-615'}>
             {state.mumbles.map((mumble: Mumble) => (
               <li key={mumble.id} className={'m-s'}>
