@@ -3,16 +3,17 @@ import { Card } from '@smartive-education/design-system-component-library-hello-
 import { Mumble } from '../services/serviceTypes';
 import { MumbleCard } from './mumbleCard';
 import { fetchMumbles } from '../services/posts';
-import { User } from 'next-auth';
 import InfiniteScroll from 'react-infinite-scroller';
+import { User } from '../services/users';
 
 interface MumbleList {
   mumbles: Mumble[];
   users: User[];
   totalMumbles: number;
+  heading?: string;
 }
 
-export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles }) => {
+export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles, heading }) => {
   const [state, dispatch] = useReducer(mumbleCardReducer, {
     mumbles: addCreatorToMumble(mumbles, users),
     users,
@@ -58,7 +59,7 @@ export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles }) => 
     <>
       <InfiniteScroll pageStart={0} loadMore={loadMore} hasMore={state.nextOffset < totalMumbles} useWindow={true}>
         <div className={'grid grid-cols-1 justify-items-center'}>
-          <h1 className={'head-1 text-violet-500'}>Willkommen auf Mumble</h1>
+          {heading && <h1 className={'head-1 text-violet-500'}>{heading}</h1>}
           <ul className={'w-screen md:w-615'}>
             {state.mumbles.map((mumble: Mumble) => (
               <li key={mumble.id} className={'m-s'}>
