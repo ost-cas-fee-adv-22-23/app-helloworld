@@ -1,21 +1,28 @@
 import React, { FC, useState } from 'react';
 import {
+  BorderType,
   Button,
   Card,
   ProfileHeader,
+  ProfileHeaderLabelType,
+  ProfileHeaderPictureSize,
   SendIcon,
+  Size,
   Textfield,
   UploadIcon,
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPost } from '../services/posts';
 import { useSession } from 'next-auth/react';
-import { PostArgs, UploadImage } from '../services/serviceTypes';
+import { PostArgs, UploadImage } from '../services/service-types';
 import toast, { Toaster } from 'react-hot-toast';
 import { Oval } from 'react-loader-spinner';
+import { ModalFileUpload } from './modal-file-upload';
+
 export const WriteCard: FC = () => {
   const [text, setText] = React.useState<string>('');
   const [file, setFile] = useState<UploadImage>();
+  const [isOpenUpload, setIsOpenUpload] = useState(false);
   const { data: session } = useSession();
 
   const queryClient = useQueryClient();
@@ -29,6 +36,10 @@ export const WriteCard: FC = () => {
       console.log(error);
     },
   });
+
+  const fileUploadClick = () => {
+    setIsOpenUpload(true);
+  };
 
   const textfieldChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
@@ -57,7 +68,7 @@ export const WriteCard: FC = () => {
 
   return (
     <>
-      <div className="bg-slate-100 p-10">
+      <div className="p-10">
         {mutation.isLoading && (
           <div>
             <Oval
@@ -74,23 +85,29 @@ export const WriteCard: FC = () => {
             />
           </div>
         )}
-        <div className="w-[550px]">
-          <Card as="div" borderType={'rounded'} size={'M'}>
+        <ModalFileUpload title="Bild hochladen" isOpen={isOpenUpload} onClose={() => setIsOpenUpload(false)} />
+        <div className="m-s w-fill">
+          <Card as="div" borderType={BorderType.rounded} size={Size.M}>
             <div className="grid grid-cols-1">
               <div className="absolute flex flex-row md:-left-l">
                 <ProfileHeader
                   altText={session?.user.username}
-                  fullName={`${session?.user.firstname} ${session?.user.lastname}`}
+                  fullName={'Hey, was läuft?'}
                   imageSrc={session?.user.avatarUrl}
-                  labelType={'h4'}
-                  profilePictureSize={'M'}
+                  labelType={ProfileHeaderLabelType.L}
+                  href={'#'}
+                  profilePictureSize={ProfileHeaderPictureSize.M}
                 />
               </div>
               <form className="mt-xl">
-                <Textfield placeholder="Was gibt's Neues?" value={text || ''} onChange={(e) => textfieldChangeHandler(e)} />
+                <Textfield
+                  placeholder="Deine Meinung zählt?"
+                  value={text || ''}
+                  onChange={(e) => textfieldChangeHandler(e)}
+                />
               </form>
-              <div className="flex flex-row gap-l justify-between unset">
-                <Button label="Bild hochladen" size="L" variant="default" onClick={(e) => console.log('File upload' + e)}>
+              <div className="flex flex-row gap-l justify-between unset pt-xl">
+                <Button label="Bild hochladen" size="L" variant="default" onClick={fileUploadClick}>
                   <UploadIcon size={16} />
                 </Button>
                 <Button label="Absenden" size="L" variant="purple" onClick={(e) => onSubmitPostHandler(e)}>

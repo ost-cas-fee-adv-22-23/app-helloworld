@@ -1,10 +1,10 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { getToken } from 'next-auth/jwt';
-import { MumbleCard } from '../../components/mumbleCard';
-import { fetchUsers } from '../../services/users';
+import { MumbleCard } from '../../components/mumble-card';
+import { fetchUsers, User } from '../../services/users';
 import { fetchMumbleById, fetchReplies } from '../../services/posts';
-import { Mumble, Reply } from '../../services/serviceTypes';
-import { Card } from '@smartive-education/design-system-component-library-hello-world-team';
+import { Mumble, Reply } from '../../services/service-types';
+import { BorderType, Card, Size } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useReducer } from 'react';
 
 type Props = {
@@ -38,21 +38,36 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
   return (
     <>
       <div className={'grid grid-cols-1 justify-items-center my-m'}>
-        <div className={'w-screen md:w-615'} s>
-          <Card borderType={'rounded'} size={'M'}>
+        <div className={'w-screen md:w-615'}>
+          <Card borderType={BorderType.rounded} size={Size.M}>
             <div className={'divide-y-1 divide-slate-200'}>
               <div className={'pb-m'}>
                 <MumbleCard mumble={state.mumble} showComments={true}></MumbleCard>
               </div>
               {replies && replies.length > 0 && (
                 <ul className={'divide-y-1 divide-slate-200 -mx-xl'}>
-                  {state.replies.map((reply) => (
-                    <li key={reply.id} className={'pt-xl pb-m'}>
-                      <div className={'mx-xl'}>
-                        <MumbleCard mumble={reply} commentSubmitted={commentSubmitted}></MumbleCard>
-                      </div>
-                    </li>
-                  ))}
+                  {state.replies.map(
+                    (reply: {
+                      id: any;
+                      creator?: string;
+                      creatorProfile?: User | undefined;
+                      text?: string;
+                      mediaUrl?: string;
+                      mediaType?: string;
+                      likeCount?: number;
+                      likedByUser?: boolean;
+                      type?: string;
+                      replyCount?: number;
+                      createdTimestamp?: number;
+                      createdDate?: string | undefined;
+                    }) => (
+                      <li key={reply.id} className={'pt-xl pb-m'}>
+                        <div className={'mx-xl'}>
+                          <MumbleCard mumble={reply} commentSubmitted={commentSubmitted}></MumbleCard>
+                        </div>
+                      </li>
+                    )
+                  )}
                 </ul>
               )}
             </div>

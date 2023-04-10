@@ -4,11 +4,13 @@ import {
   CopyButton,
   LikeButtonWithReactionButton,
   ProfileHeader,
+  ProfileHeaderLabelType,
+  ProfileHeaderPictureSize,
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useSession } from 'next-auth/react';
 import { CommentMumble } from './comment';
 import { likePost } from '../services/likes';
-import { Mumble, Reply } from '../services/serviceTypes';
+import { Mumble, Reply } from '../services/service-types';
 import { commentPost } from '../services/posts';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -94,8 +96,8 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
       <div className={'mb-l'}>
         <ProfileHeader
           fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
-          labelType={'M'}
-          profilePictureSize={'M'}
+          labelType={ProfileHeaderLabelType.M}
+          profilePictureSize={ProfileHeaderPictureSize.M}
           timestamp={state.mumble.createdDate}
           username={state.mumble?.creatorProfile?.userName}
           imageSrc={state.mumble?.creatorProfile?.avatarUrl}

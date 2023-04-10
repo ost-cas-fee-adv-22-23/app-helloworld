@@ -1,23 +1,26 @@
 import React, { FC, useReducer } from 'react';
-import { Card } from '@smartive-education/design-system-component-library-hello-world-team';
-import { Mumble } from '../services/serviceTypes';
-import { MumbleCard } from './mumbleCard';
+import { BorderType, Card } from '@smartive-education/design-system-component-library-hello-world-team';
+import { Mumble } from '../services/service-types';
+import { MumbleCard } from './mumble-card';
 import { fetchMumbles } from '../services/posts';
 import { User } from 'next-auth';
 import InfiniteScroll from 'react-infinite-scroller';
+import { WriteCard } from './write-card';
 
 interface MumbleList {
   mumbles: Mumble[];
   users: User[];
   totalMumbles: number;
+  showWriteCard?: boolean;
 }
 
-export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles }) => {
+export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles, showWriteCard = false }) => {
   const [state, dispatch] = useReducer(mumbleCardReducer, {
     mumbles: addCreatorToMumble(mumbles, users),
     users,
     nextOffset: 10,
     totalMumbles,
+    showWriteCard,
   });
 
   function addCreatorToMumble(mumbles: Mumble[], users: User[]) {
@@ -58,11 +61,15 @@ export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles }) => 
     <>
       <InfiniteScroll pageStart={0} loadMore={loadMore} hasMore={state.nextOffset < totalMumbles} useWindow={true}>
         <div className={'grid grid-cols-1 justify-items-center'}>
-          <h1 className={'head-1 text-violet-500'}>Willkommen auf Mumble</h1>
           <ul className={'w-screen md:w-615'}>
+            {state.showWriteCard && (
+              <li>
+                <WriteCard />
+              </li>
+            )}
             {state.mumbles.map((mumble: Mumble) => (
               <li key={mumble.id} className={'m-s'}>
-                <Card borderType={'rounded'}>
+                <Card borderType={BorderType.rounded}>
                   <MumbleCard mumble={mumble}></MumbleCard>
                 </Card>
               </li>

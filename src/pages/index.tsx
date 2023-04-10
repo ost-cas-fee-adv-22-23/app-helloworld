@@ -3,7 +3,7 @@ import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import React from 'react';
 import { fetchUsers } from '../services/users';
 import { fetchMumbles } from '../services/posts';
-import { MumbleList } from '../components/mumbleList';
+import { MumbleList } from '../components/mumble-list';
 
 export default function PageHome({ mumbles, users, error, count }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   if (error) {
@@ -12,7 +12,13 @@ export default function PageHome({ mumbles, users, error, count }: InferGetServe
 
   return (
     <div>
-      <MumbleList mumbles={mumbles} users={users} totalMumbles={count}></MumbleList>
+      <div className={'grid grid-cols-1 justify-items-center'}>
+        <h2 className={'head-2 text-violet-500'}>Willkommen auf Mumble</h2>
+        <h4 className={'head-4 text-slate-500 w-[550px] mb-m'}>
+          Voluptatem qui cumque voluptatem quia tempora dolores distinctio vel repellat dicta.
+        </h4>
+      </div>
+      <MumbleList mumbles={mumbles} users={users} totalMumbles={count} showWriteCard={true}></MumbleList>
     </div>
   );
 }

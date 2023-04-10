@@ -1,4 +1,4 @@
-import { Mumble, PostArgs, QwackerMumbleResponse, Reply, transformMumble } from './serviceTypes';
+import { Mumble, PostArgs, QwackerMumbleResponse, Reply, transformMumble } from './service-types';
 import axios from 'axios';
 
 export const fetchMumbles = async (params?: { limit?: number; offset?: number; newerThanMumbleId?: string }) => {
