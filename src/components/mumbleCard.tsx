@@ -12,6 +12,7 @@ import { Mumble, Reply } from '../services/serviceTypes';
 import { commentPost } from '../services/posts';
 import Link from 'next/link';
 import Image from 'next/image';
+import { MumbleTextContent } from './mumbleTextContent';
 
 interface MumbleCard {
   mumble: Mumble;
@@ -105,7 +106,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
       </div>
       {state.mumble.text && (
         <div className={'mb-s w-full'}>
-          <p className={'paragraph-M'}>{state.mumble.text}</p>
+          <MumbleTextContent text={state.mumble.text}></MumbleTextContent>
         </div>
       )}
       {state.mumble.mediaUrl && (
