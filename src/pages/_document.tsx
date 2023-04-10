@@ -6,7 +6,7 @@ export default function Document() {
       <title>Mumble - The world's best social network!</title>
       <meta
         name="description"
-        content="This is the world's best social media network and we would add much more descriptive keys words here to improve SEO. :)"
+        content="This is the world's best social media network and we would add many more descriptive keys words here to improve SEO. ;-)"
       ></meta>
       <Head />
       <body className="width-full">
