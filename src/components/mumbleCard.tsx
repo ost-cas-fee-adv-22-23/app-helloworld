@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useReducer } from 'react';
+import React, { ChangeEvent, FC, useEffect, useReducer } from 'react';
 import {
   CommentButton,
   CopyButton,
@@ -17,12 +17,31 @@ interface MumbleCard {
   mumble: Mumble;
   showComments?: boolean;
   commentSubmitted?: (newReply: Reply) => void;
+  device: 'mobile' | 'desktop'
 }
 
 export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted }) => {
   const { data: session } = useSession();
 
-  const [state, dispatch] = useReducer(mumbleCardReducer, { showComments, mumble, comment: '' });
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      console.log(innerWidth);
+      console.log(state.device);
+      if (state.device === 'desktop' && innerWidth < 600) {
+        console.log('now mobile')
+        dispatch({ type: 'device_mobile' });
+      } else if (state.device === 'mobile' && innerWidth > 600) {
+        console.log('now desktop')
+        dispatch({ type: 'device_desktop' });
+      }
+    });
+  }, []);
+
+  const [state, dispatch] = useReducer(mumbleCardReducer, {
+    showComments,
+    mumble,
+    device: 'mobile',
+  });
 
   const likedPost = async () => {
     await likePost({
@@ -52,6 +71,18 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
 
   function mumbleCardReducer(state, action) {
     switch (action.type) {
+      case 'device_mobile': {
+        return {
+          ...state,
+          device: 'mobile',
+        };
+      }
+      case 'device_desktop': {
+        return {
+          ...state,
+          device: 'desktop',
+        };
+      }
       case 'post_liked': {
         return {
           ...state,
@@ -103,6 +134,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           altText={'Avatar'}
         ></ProfileHeader>
       </div>
+      <div>{state.device}</div>
       {state.mumble.text && (
         <div className={'mb-s w-full'}>
           <p className={'paragraph-M'}>{state.mumble.text}</p>
@@ -125,7 +157,10 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
         <Link href={`/mumble/${state.mumble.id}`}>
           {' '}
           <CommentButton
-            label={{ noComments: 'Comment', someComments: 'Comments' }}
+            label={{
+              noComments: state.device === 'desktop' ? 'Comment' : '',
+              someComments: state.device === 'desktop' ? 'Comments' : '',
+            }}
             numberOfComments={state.mumble.replyCount}
             onClick={() => null}
           />
@@ -134,15 +169,22 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           onClick={() => likedPost()}
           active
           label={{
-            noReaction: 'Like',
-            oneReaction: 'Like',
-            reactionByCurrentUser: 'Liked',
-            severalReaction: 'Likes',
+            noReaction: state.device === 'desktop' ? 'Like' : '',
+            oneReaction: state.device === 'desktop' ? 'Like' : '',
+            reactionByCurrentUser: state.device === 'desktop' ? 'Liked' : '',
+            severalReaction: state.device === 'desktop' ? 'Likes' : '',
           }}
           likes={state.mumble.likeCount ?? 0}
           reactionByCurrentUser={state.mumble.likedByUser}
         />
-        <CopyButton onClick={copyMumbleUrl} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
+        <CopyButton
+          onClick={copyMumbleUrl}
+          active={false}
+          label={{
+            inactive: state.device === 'desktop' ? 'Copy Link' : '',
+            active: state.device === 'desktop' ? 'Link copied' : '',
+          }}
+        />
       </div>
       {state.showComments && (
         <CommentMumble
