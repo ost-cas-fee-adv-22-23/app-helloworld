@@ -17,25 +17,23 @@ interface MumbleCard {
   mumble: Mumble;
   showComments?: boolean;
   commentSubmitted?: (newReply: Reply) => void;
-  device: 'mobile' | 'desktop'
 }
 
 export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted }) => {
   const { data: session } = useSession();
 
+  const handleResize = () => {
+    if (state.device === 'desktop' && innerWidth < 600) {
+      dispatch({ type: 'device_mobile' });
+    } else if (state.device === 'mobile' && innerWidth > 600) {
+      dispatch({ type: 'device_desktop' });
+    }
+  };
+
   useEffect(() => {
-    window.addEventListener('resize', () => {
-      console.log(innerWidth);
-      console.log(state.device);
-      if (state.device === 'desktop' && innerWidth < 600) {
-        console.log('now mobile')
-        dispatch({ type: 'device_mobile' });
-      } else if (state.device === 'mobile' && innerWidth > 600) {
-        console.log('now desktop')
-        dispatch({ type: 'device_desktop' });
-      }
-    });
-  }, []);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [handleResize]);
 
   const [state, dispatch] = useReducer(mumbleCardReducer, {
     showComments,
@@ -134,7 +132,6 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           altText={'Avatar'}
         ></ProfileHeader>
       </div>
-      <div>{state.device}</div>
       {state.mumble.text && (
         <div className={'mb-s w-full'}>
           <p className={'paragraph-M'}>{state.mumble.text}</p>

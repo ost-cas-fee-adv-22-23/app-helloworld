@@ -9,7 +9,7 @@ export default function Document() {
         content="This is the world's best social media network and we would add many more descriptive keys words here to improve SEO. ;-)"
       ></meta>
       <Head />
-      <body className="width-full">
+      <body className="width-full min-w-264">
         <Main />
         <NextScript />
       </body>
