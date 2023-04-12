@@ -1,26 +1,39 @@
 import React, { FC, useReducer } from 'react';
-import { Card } from '@smartive-education/design-system-component-library-hello-world-team';
+import { BorderType, Card } from '@smartive-education/design-system-component-library-hello-world-team';
 import { Mumble } from '../services/serviceTypes';
 import { MumbleCard } from './mumbleCard';
 import { fetchMumbles } from '../services/posts';
-import { User } from 'next-auth';
 import InfiniteScroll from 'react-infinite-scroller';
+import { User } from '../services/users';
 
-interface MumbleList {
+interface MumbleListProps {
   mumbles: Mumble[];
   users: User[];
   totalMumbles: number;
 }
 
-export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles }) => {
-  const [state, dispatch] = useReducer(mumbleCardReducer, {
+interface MumbleListState {
+  mumbles: Mumble[];
+  users: User[];
+  nextOffset: number;
+  totalMumbles: number;
+}
+
+interface MumbleCardAction {
+  type: 'reload_mumbles';
+  reloadedMumbles: Mumble[];
+}
+
+export const MumbleList: FC<MumbleListProps> = ({ mumbles, users, totalMumbles }) => {
+  const initialMumbleListState: MumbleListState = {
     mumbles: addCreatorToMumble(mumbles, users),
     users,
     nextOffset: 10,
     totalMumbles,
-  });
+  };
+  const [state, dispatch] = useReducer(mumbleCardReducer, initialMumbleListState);
 
-  function addCreatorToMumble(mumbles: Mumble[], users: User[]) {
+  function addCreatorToMumble(mumbles: Mumble[], users: User[]): Mumble[] {
     return mumbles.map((mumble) => {
       const creator = users?.find((user) => user.id === mumble.creator);
       return {
@@ -37,7 +50,7 @@ export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles }) => 
     });
   }
 
-  function mumbleCardReducer(state, action) {
+  function mumbleCardReducer(state: MumbleListState, action: MumbleCardAction): MumbleListState {
     switch (action.type) {
       case 'reload_mumbles': {
         return {
@@ -62,7 +75,7 @@ export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles }) => 
           <ul className={'w-screen md:w-615'}>
             {state.mumbles.map((mumble: Mumble) => (
               <li key={mumble.id} className={'m-s'}>
-                <Card borderType={'rounded'}>
+                <Card borderType={BorderType.rounded}>
                   <MumbleCard mumble={mumble}></MumbleCard>
                 </Card>
               </li>

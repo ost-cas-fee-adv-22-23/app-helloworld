@@ -1,4 +1,4 @@
-import { Mumble, PostArgs, QwackerMumbleResponse, Reply, transformMumble } from './serviceTypes';
+import { calculateCreatedDate, Mumble, PostArgs, QwackerMumbleResponse, Reply, transformMumble } from './serviceTypes';
 import axios from 'axios';
 
 export const fetchMumbles = async (params?: { limit?: number; offset?: number; newerThanMumbleId?: string }) => {
@@ -65,7 +65,7 @@ export const commentPost = async (params: { postId: string; comment: string; acc
 
   const reply = (await res.data) as Reply;
 
-  return reply;
+  return { ...reply, createdDate: calculateCreatedDate(reply.id) };
 };
 
 export const fetchMumbleById = async (params?: { postId: string; accessToken?: string }) => {

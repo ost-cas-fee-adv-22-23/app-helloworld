@@ -4,7 +4,7 @@ import { MumbleCard } from '../../components/mumbleCard';
 import { fetchUsers } from '../../services/users';
 import { fetchMumbleById, fetchReplies } from '../../services/posts';
 import { Mumble, Reply } from '../../services/serviceTypes';
-import { Card } from '@smartive-education/design-system-component-library-hello-world-team';
+import { BorderType, Card, Size } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useReducer } from 'react';
 
 type Props = {
@@ -12,20 +12,30 @@ type Props = {
   replies?: Reply[];
 };
 
-export default function MumblePage({ mumble, replies }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
-  const [state, dispatch] = useReducer(mumbleReducer, { mumble, replies });
+interface MumblePageState {
+  mumble: Mumble;
+  replies: Reply[];
+}
 
-  function mumbleReducer(state, action) {
+interface MumblePageAction {
+  type: 'comment_submitted';
+  newReply: Reply;
+}
+
+export default function MumblePage({ mumble, replies }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
+  const initialMumbleCardState: MumblePageState = { mumble, replies: replies ?? [] };
+  const [state, dispatch] = useReducer(mumbleReducer, initialMumbleCardState);
+
+  function mumbleReducer(state: MumblePageState, action: MumblePageAction): MumblePageState {
     switch (action.type) {
       case 'comment_submitted': {
         return {
           ...state,
           mumble: {
             ...state.mumble,
-            replyCount: state.mumble.replyCount + 1,
+            replyCount: state.mumble.replyCount ?? 0 + 1,
           },
-          replies: action.newReply,
-          ...state.replies,
+          replies: [action.newReply, ...state.replies],
         };
       }
     }
@@ -38,8 +48,8 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
   return (
     <>
       <div className={'grid grid-cols-1 justify-items-center my-m'}>
-        <div className={'w-screen md:w-615'} s>
-          <Card borderType={'rounded'} size={'M'}>
+        <div className={'w-screen md:w-615'}>
+          <Card borderType={BorderType.rounded} size={Size.M}>
             <div className={'divide-y-1 divide-slate-200'}>
               <div className={'pb-m'}>
                 <MumbleCard mumble={state.mumble} showComments={true}></MumbleCard>
