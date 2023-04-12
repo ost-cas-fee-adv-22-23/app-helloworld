@@ -22,23 +22,9 @@ interface MumbleCard {
 export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted }) => {
   const { data: session } = useSession();
 
-  const handleResize = () => {
-    if (state.device === 'desktop' && innerWidth < 600) {
-      dispatch({ type: 'device_mobile' });
-    } else if (state.device === 'mobile' && innerWidth > 600) {
-      dispatch({ type: 'device_desktop' });
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [handleResize]);
-
   const [state, dispatch] = useReducer(mumbleCardReducer, {
     showComments,
-    mumble,
-    device: 'mobile',
+    mumble
   });
 
   const likedPost = async () => {
@@ -69,18 +55,6 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
 
   function mumbleCardReducer(state, action) {
     switch (action.type) {
-      case 'device_mobile': {
-        return {
-          ...state,
-          device: 'mobile',
-        };
-      }
-      case 'device_desktop': {
-        return {
-          ...state,
-          device: 'desktop',
-        };
-      }
       case 'post_liked': {
         return {
           ...state,
@@ -149,14 +123,14 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           />
         </div>
       )}
-      <div className="flex relative -left-3 space-x-8">
+      <div className="flex relative -left-3 space-x-8 visible md:invisible">
         {/*TODO This Comment should exist as label in the storybook*/}
         <Link href={`/mumble/${state.mumble.id}`}>
           {' '}
           <CommentButton
             label={{
-              noComments: state.device === 'desktop' ? 'Comment' : '',
-              someComments: state.device === 'desktop' ? 'Comments' : '',
+              noComments: '',
+              someComments: '',
             }}
             numberOfComments={state.mumble.replyCount}
             onClick={() => null}
@@ -166,10 +140,10 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           onClick={() => likedPost()}
           active
           label={{
-            noReaction: state.device === 'desktop' ? 'Like' : '',
-            oneReaction: state.device === 'desktop' ? 'Like' : '',
-            reactionByCurrentUser: state.device === 'desktop' ? 'Liked' : '',
-            severalReaction: state.device === 'desktop' ? 'Likes' : '',
+            noReaction: '',
+            oneReaction: '',
+            reactionByCurrentUser: '',
+            severalReaction: '',
           }}
           likes={state.mumble.likeCount ?? 0}
           reactionByCurrentUser={state.mumble.likedByUser}
@@ -178,8 +152,42 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           onClick={copyMumbleUrl}
           active={false}
           label={{
-            inactive: state.device === 'desktop' ? 'Copy Link' : '',
-            active: state.device === 'desktop' ? 'Link copied' : '',
+            inactive: '',
+            active: '',
+          }}
+        />
+      </div>
+      <div className="flex relative -left-3 space-x-8 invisible md:visible">
+        {/*TODO This Comment should exist as label in the storybook*/}
+        <Link href={`/mumble/${state.mumble.id}`}>
+          {' '}
+          <CommentButton
+            label={{
+              noComments: 'Comment',
+              someComments: 'Comments',
+            }}
+            numberOfComments={state.mumble.replyCount}
+            onClick={() => null}
+          />
+        </Link>
+        <LikeButtonWithReactionButton
+          onClick={() => likedPost()}
+          active
+          label={{
+            noReaction: 'Like',
+            oneReaction: 'Like',
+            reactionByCurrentUser: 'Liked',
+            severalReaction: 'Likes',
+          }}
+          likes={state.mumble.likeCount ?? 0}
+          reactionByCurrentUser={state.mumble.likedByUser}
+        />
+        <CopyButton
+          onClick={copyMumbleUrl}
+          active={false}
+          label={{
+            inactive: 'Copy Link',
+            active: 'Link copied',
           }}
         />
       </div>
