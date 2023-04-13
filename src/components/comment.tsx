@@ -2,6 +2,8 @@ import React, { ChangeEvent, FC } from 'react';
 import {
   Button,
   ProfileHeader,
+  ProfileHeaderLabelType,
+  ProfileHeaderPictureSize,
   SendIcon,
   Textfield,
   UploadIcon,
@@ -21,8 +23,8 @@ export const CommentMumble: FC<CurrentUser> = ({ user, handleCommentChanged, sub
       <div className="grid grid-cols-1 mt-xl">
         <ProfileHeader
           fullName={`${user?.firstname} ${user?.lastname}`}
-          labelType={'S'}
-          profilePictureSize={'S'}
+          labelType={ProfileHeaderLabelType.S}
+          profilePictureSize={ProfileHeaderPictureSize.S}
           username={user?.username}
           imageSrc={user?.avatarUrl}
           hrefProfile={'#'}

@@ -4,6 +4,8 @@ import {
   CopyButton,
   LikeButtonWithReactionButton,
   ProfileHeader,
+  ProfileHeaderLabelType,
+  ProfileHeaderPictureSize,
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useSession } from 'next-auth/react';
 import { CommentMumble } from './comment';
@@ -19,10 +21,29 @@ interface MumbleCard {
   commentSubmitted?: (newReply: Reply) => void;
 }
 
+interface MumbleCardState {
+  showComments: boolean;
+  mumble: Mumble;
+  comment: string;
+}
+
+interface MumbleCardAction {
+  type: 'post_liked' | 'comment' | 'add_comment' | 'comment_changed' | 'comment_submitted';
+  newPost?: Reply;
+  likedByUser?: boolean;
+  comment?: string;
+}
+
 export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted }) => {
   const { data: session } = useSession();
 
-  const [state, dispatch] = useReducer(mumbleCardReducer, { showComments, mumble, comment: '' });
+  const initialMumbleCardState: MumbleCardState = {
+    showComments: !!showComments,
+    mumble,
+    comment: '',
+  };
+
+  const [state, dispatch] = useReducer(mumbleCardReducer, initialMumbleCardState);
 
   const likedPost = async () => {
     await likePost({
@@ -37,6 +58,8 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
     dispatch({ type: 'comment_changed', comment: e.target.value });
   };
 
+  const copyMumbleUrl = () => navigator.clipboard.writeText(`${window.location.href}mumble/${state.mumble.id}`);
+
   const submitComment = async () => {
     const newPost = await commentPost({
       postId: state.mumble.id,
@@ -48,14 +71,14 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
     commentSubmitted && commentSubmitted(newPost);
   };
 
-  function mumbleCardReducer(state, action) {
+  function mumbleCardReducer(state: MumbleCardState, action: MumbleCardAction): MumbleCardState {
     switch (action.type) {
       case 'post_liked': {
         return {
           ...state,
           mumble: {
             ...state.mumble,
-            likedByUser: action.likedByUser,
+            likedByUser: !!action.likedByUser,
             likeCount: action.likedByUser ? (state.mumble?.likeCount ?? 0) + 1 : state.mumble?.likeCount - 1,
           },
         };
@@ -75,7 +98,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
       case 'comment_changed': {
         return {
           ...state,
-          comment: action.comment,
+          comment: action.comment ?? '',
         };
       }
       case 'comment_submitted': {
@@ -89,10 +112,11 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
 
   return (
     <>
-      <ProfileHeader
-        fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
-        labelType={'M'}
-        profilePictureSize={'M'}
+      <div className={'mb-l'}>
+        <ProfileHeader
+          fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
+          labelType={ProfileHeaderLabelType.M}
+          profilePictureSize={ProfileHeaderPictureSize.M}
         timestamp={state.mumble.createdDate}
         username={state.mumble?.creatorProfile?.userName}
         imageSrc={state.mumble?.creatorProfile?.avatarUrl}
@@ -100,18 +124,30 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
         altText={'Avatar'}
         link={Link}
         href={`/profile/${state.mumble?.creatorProfile?.id}`}
-      ></ProfileHeader>
-      <div className={'my-l'}>
-        <p className={'paragraph-M'}>{state.mumble.text}</p>
-        {state.mumble.mediaUrl && <Image src={state.mumble.mediaUrl} alt={'Posted image'} width={264} height={178} />}
-      </div>
+      ></ProfileHeader></div>
+      {state.mumble.text && (
+        <div className={'mb-s w-full'}>
+          <p className={'paragraph-M'}>{state.mumble.text}</p>
+        </div>
+      )}
+      {state.mumble.mediaUrl && (
+        <div className={'mb-l h-328 w-full relative bg-slate-50'}>
+          <Image
+            src={state.mumble.mediaUrl}
+            alt={'Posted image'}
+            fill
+            className="object-cover rounded-s"
+            placeholder="blur"
+          />
+        </div>
+      )}
       <div className="flex relative -left-3 space-x-8">
         {/*TODO This Comment should exist as label in the storybook*/}
         <Link href={`/mumble/${state.mumble.id}`}>
           {' '}
           <CommentButton
             label={{ noComments: 'Comment', someComments: 'Comments' }}
-            numberOfComments={state.mumble.replyCount}
+            numberOfComments={state.mumble.replyCount ?? 0}
             onClick={() => null}
           />
         </Link>
@@ -127,11 +163,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           likes={state.mumble.likeCount ?? 0}
           reactionByCurrentUser={state.mumble.likedByUser}
         />
-        <CopyButton
-          onClick={(e) => console.log(e)}
-          active={false}
-          label={{ inactive: 'Copy Link', active: 'Link copied' }}
-        />
+        <CopyButton onClick={copyMumbleUrl} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
       </div>
       {state.showComments && (
         <CommentMumble

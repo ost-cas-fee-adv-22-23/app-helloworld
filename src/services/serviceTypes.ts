@@ -9,13 +9,13 @@ export type PostArgs = {
   accessToken?: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export const transformMumble = (mumble: RawMumble) => ({
+export const transformMumble = (mumble: RawMumble | Reply) => ({
   ...mumble,
   createdTimestamp: decodeTime(mumble.id),
   createdDate: new Date(decodeTime(mumble.id)).toLocaleDateString(),
 });
+
+export const calculateCreatedDate = (mumbleId: string) => new Date(decodeTime(mumbleId)).toLocaleDateString();
 
 export type Mumble = {
   id: string;
@@ -27,8 +27,8 @@ export type Mumble = {
   likeCount: number;
   likedByUser: boolean;
   type: string;
-  replyCount: number;
-  createdTimestamp: number;
+  replyCount?: number;
+  createdTimestamp?: number;
   createdDate?: string;
 };
 
@@ -49,6 +49,8 @@ export type Reply = {
   likedByUser: boolean;
   type: string;
   parentId: string;
+  createdTimestamp?: number;
+  createdDate?: string;
 };
 
 export type SearchRequestBody = {
