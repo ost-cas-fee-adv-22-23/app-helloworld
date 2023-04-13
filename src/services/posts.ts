@@ -1,33 +1,26 @@
-import { calculateCreatedDate, Mumble, PostArgs, QwackerMumbleResponse, Reply, SearchRequestBody, transformMumble } from './serviceTypes';
+import {
+  calculateCreatedDate,
+  Mumble,
+  PostArgs,
+  QwackerMumbleResponse,
+  Reply,
+  SearchRequestBody,
+  transformMumble,
+} from './serviceTypes';
 import axios from 'axios';
 
-export const fetchMumbles = async (params?: { limit?: number; offset?: number; newerThanMumbleId?: string }) => {
-  const { limit, offset, newerThanMumbleId } = params || {};
+export const fetchMumbles = async (params?: {
+  limit?: number;
+  offset?: number;
+  newerThanMumbleId?: string;
+  creator?: string;
+}) => {
+  const { limit, offset, newerThanMumbleId, creator } = params || {};
 
   const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}/posts?${new URLSearchParams({
     limit: limit?.toString() || '10',
     offset: offset?.toString() || '0',
     newerThan: newerThanMumbleId || '',
-  })}`;
-
-  const res = await axios.get(url);
-
-  const { count, data } = res.data as QwackerMumbleResponse;
-
-  const mumbles = data.map(transformMumble);
-
-  return {
-    count,
-    mumbles,
-  };
-};
-
-export const fetchMumblesByUser = async (params?: { limit?: number; offset?: number; creator: string }) => {
-  const { limit, offset, creator } = params || {};
-
-  const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}/posts?${new URLSearchParams({
-    limit: limit?.toString() || '10',
-    offset: offset?.toString() || '0',
     creator: creator || '',
   })}`;
 

@@ -1,19 +1,20 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import {
+  ProfileHeader,
+  ProfileHeaderLabelType,
+  ProfilePic,
   Tabs,
   TabsItem,
-  ProfilePic,
-  ProfileHeader,
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import Link from 'next/link';
 import { getToken } from 'next-auth/jwt';
 import React, { useState } from 'react';
-import { fetchMumblesByUser, fetchMumblesSearch } from '../../services/posts';
+import { fetchMumbles, fetchMumblesSearch } from '../../services/posts';
 import { fetchUsers } from '../../services/users';
 import { Mumble } from '../../services/serviceTypes';
 import { MumbleList } from '../../components/mumbleList';
 import { User } from 'next-auth';
-import { LikedList } from '../../components/likedList';
+import Image from 'next/image';
 
 type Props = {
   count: number;
@@ -38,7 +39,9 @@ export default function ProfilePage({
         <div className={'my-m'}>
           <div className={'w-full pt-16/9 bg-violet-200 rounded-l relative mb-s'}>
             <div className={'rounded-l bg-violet-200'}>
-              <img alt={'image'} className={'object-cover rounded-m w-full h-full'} src={'https://picsum.photos/600/300'} />
+              <div className={'object-cover rounded-s w-auto h-auto'}>
+                <Image alt={'image'} src={'https://picsum.photos/600/300'} width={600} height={300} />
+              </div>
             </div>
             <div className={'absolute -mt-xl4 right-xl7'}>
               <Link href={'/'}>
@@ -48,22 +51,24 @@ export default function ProfilePage({
           </div>
         </div>
       </div>
-      <div className={'grid grid-cols-1 gap-1 place-items-start'}>
-        <ProfileHeader
-          fullName={'Robert Vogt'}
-          labelType={'XL'}
-          username={'robertvogt'}
-          hrefProfile={'#'}
-          location={'St.Gallen'}
-          joined={'Mitglied seit 4 Wochen'}
-          timestamp={'vor 42 Minuten'}
-          link={Link}
-          href={'/'}
-        />
+      <div className={'grid grid-cols-1 gap-1 place-items-center'}>
+        <div className={'w-615'}>
+          <ProfileHeader
+            fullName={'Robert Vogt'}
+            labelType={ProfileHeaderLabelType.XL}
+            username={'robertvogt'}
+            hrefProfile={'#'}
+            location={'St.Gallen'}
+            joined={'Mitglied seit 4 Wochen'}
+            timestamp={'vor 42 Minuten'}
+            link={Link}
+            href={'/'}
+          />
+        </div>
       </div>
       <div className={'grid grid-cols-1 gap-2 place-items-center'}>
         <div className={'relative flex mt-m mb-m'}>
-          <p className={'paragraph-M justify-text-center text-slate-400'}>
+          <p className={'paragraph-M justify-text-center text-slate-400 w-[600px]'}>
             Quia aut et aut. Sunt et eligendi similique enim qui quo minus. Aut aut error velit voluptatum optio sed quis
             cumque error magni.
           </p>
@@ -79,11 +84,12 @@ export default function ProfilePage({
           </Tabs>
         </div>
       </div>
-      {activeTab === 'mumbles' ? (
-        <MumbleList mumbles={mumbles} users={users} totalMumbles={count}></MumbleList>
-      ) : (
-        <LikedList mumbles={likedMumbles} users={users} totalMumbles={likedCount}></LikedList>
-      )}
+      <MumbleList
+        mumbles={activeTab === 'mumbles' ? mumbles : likedMumbles}
+        users={users}
+        totalMumbles={activeTab === 'mumbles' ? count : likedCount}
+        key={activeTab === 'mumbles' ? 'mumbles' : 'likes'}
+      ></MumbleList>
     </>
   );
 }
@@ -95,7 +101,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query: { id 
   const session = await getToken({ req });
 
   const [{ count, mumbles }, { count: likedCount, mumbles: likedMumbles }, { users }] = await Promise.all([
-    fetchMumblesByUser({ creator: id as string }),
+    fetchMumbles({ creator: id as string }),
     fetchMumblesSearch({ likedBy: id as string, accessToken: session?.accessToken }),
     fetchUsers({ accessToken: session?.accessToken }),
   ]);
@@ -109,7 +115,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query: { id 
         userName: creator?.userName,
         firstName: creator?.firstName,
         lastName: creator?.lastName,
-        fullName: `${mumble?.creatorProfile?.firstName} ${mumble?.creatorProfile?.lastName}`,
+        fullName: 'creator?.firstName creator?.lastName',
         avatarUrl: creator?.avatarUrl,
       },
     };
