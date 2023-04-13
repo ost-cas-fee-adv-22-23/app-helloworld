@@ -117,14 +117,15 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
           labelType={ProfileHeaderLabelType.M}
           profilePictureSize={ProfileHeaderPictureSize.M}
-        timestamp={state.mumble.createdDate}
-        username={state.mumble?.creatorProfile?.userName}
-        imageSrc={state.mumble?.creatorProfile?.avatarUrl}
-        hrefProfile={'#'}
-        altText={'Avatar'}
-        link={Link}
-        href={`/profile/${state.mumble?.creatorProfile?.id}`}
-      ></ProfileHeader></div>
+          timestamp={state.mumble.createdDate}
+          username={state.mumble?.creatorProfile?.userName}
+          imageSrc={state.mumble?.creatorProfile?.avatarUrl}
+          hrefProfile={'#'}
+          altText={'Avatar'}
+          link={Link}
+          href={`/profile/${state.mumble?.creatorProfile?.id}`}
+        ></ProfileHeader>
+      </div>
       {state.mumble.text && (
         <div className={'mb-s w-full'}>
           <p className={'paragraph-M'}>{state.mumble.text}</p>
@@ -138,6 +139,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
             fill
             className="object-cover rounded-s"
             placeholder="blur"
+            blurDataURL={state.mumble.mediaUrl}
           />
         </div>
       )}

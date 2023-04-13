@@ -10,13 +10,13 @@ import Link from 'next/link';
 import { getToken } from 'next-auth/jwt';
 import React, { useState } from 'react';
 import { fetchMumbles, fetchMumblesSearch } from '../../services/posts';
-import { fetchUsers } from '../../services/users';
+import { fetchUserById, fetchUsers, User } from '../../services/users';
 import { Mumble } from '../../services/serviceTypes';
 import { MumbleList } from '../../components/mumbleList';
-import { User } from 'next-auth';
 import Image from 'next/image';
 
 type Props = {
+  profileUser: User;
   count: number;
   mumbles: Mumble[];
   likedCount: number;
@@ -25,6 +25,7 @@ type Props = {
 };
 
 export default function ProfilePage({
+  profileUser,
   count,
   mumbles,
   likedCount,
@@ -39,13 +40,26 @@ export default function ProfilePage({
         <div className={'my-m'}>
           <div className={'w-full pt-16/9 bg-violet-200 rounded-l relative mb-s'}>
             <div className={'rounded-l bg-violet-200'}>
-              <div className={'object-cover rounded-s w-auto h-auto'}>
-                <Image alt={'image'} src={'https://picsum.photos/600/300'} width={600} height={300} />
+              <div className={'w-auto h-auto'}>
+                <Image
+                  alt={'image'}
+                  src={'https://picsum.photos/id/36/600/300'}
+                  width={600}
+                  height={300}
+                  placeholder={'blur'}
+                  blurDataURL={'https://picsum.photos/id/36/600/300'}
+                  className="object-cover rounded-s"
+                />
               </div>
             </div>
             <div className={'absolute -mt-xl4 right-xl7'}>
-              <Link href={'/'}>
-                <ProfilePic editLabel={'Bearbeiten'} altText={'Profilbild'} imageUrl={''} size={'XL'} />
+              <Link href={`/profile/${profileUser.id}`}>
+                <ProfilePic
+                  editLabel={'Bearbeiten'}
+                  altText={'Profilbild'}
+                  imageUrl={`${profileUser.avatarUrl}`}
+                  size={'XL'}
+                />
               </Link>
             </div>
           </div>
@@ -54,15 +68,12 @@ export default function ProfilePage({
       <div className={'grid grid-cols-1 gap-1 place-items-center'}>
         <div className={'w-615'}>
           <ProfileHeader
-            fullName={'Robert Vogt'}
+            fullName={`${profileUser.firstName} ${profileUser.lastName}`}
             labelType={ProfileHeaderLabelType.XL}
-            username={'robertvogt'}
+            username={`${profileUser.userName}`}
             hrefProfile={'#'}
-            location={'St.Gallen'}
-            joined={'Mitglied seit 4 Wochen'}
-            timestamp={'vor 42 Minuten'}
             link={Link}
-            href={'/'}
+            href={`/profile/${profileUser.id}`}
           />
         </div>
       </div>
@@ -100,9 +111,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query: { id 
   }
   const session = await getToken({ req });
 
-  const [{ count, mumbles }, { count: likedCount, mumbles: likedMumbles }, { users }] = await Promise.all([
-    fetchMumbles({ creator: id as string }),
-    fetchMumblesSearch({ likedBy: id as string, accessToken: session?.accessToken }),
+  const [{ user }, { count, mumbles }, { count: likedCount, mumbles: likedMumbles }, { users }] = await Promise.all([
+    fetchUserById({ userId: id, accessToken: session?.accessToken }),
+    fetchMumbles({ limit: 10, creator: id as string }),
+    fetchMumblesSearch({ likedBy: id as string, limit: 10, accessToken: session?.accessToken }),
     fetchUsers({ accessToken: session?.accessToken }),
   ]);
 
@@ -141,6 +153,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query: { id 
 
   return {
     props: {
+      profileUser: user,
       mumbles: mumblesWithUserInfo,
       count,
       likedCount,
