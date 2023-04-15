@@ -13,7 +13,7 @@ export default function PageHome({ mumbles, users, error, count }: InferGetServe
   return (
     <div>
       <h1 className={'head-1 text-violet-500 grid grid-cols-1 justify-items-center my-xl'}>Willkommen auf Mumble</h1>
-      <MumbleList mumbles={mumbles} users={users} totalMumbles={count}></MumbleList>
+      <MumbleList mumbles={mumbles} users={users} totalMumbles={count} mumbleKey={'mumbles'}></MumbleList>
     </div>
   );
 }

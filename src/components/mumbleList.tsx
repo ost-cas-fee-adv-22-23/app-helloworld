@@ -2,14 +2,17 @@ import React, { FC, useReducer } from 'react';
 import { BorderType, Card } from '@smartive-education/design-system-component-library-hello-world-team';
 import { Mumble } from '../services/serviceTypes';
 import { MumbleCard } from './mumbleCard';
-import { fetchMumbles } from '../services/posts';
+import { fetchMumbles, fetchMumblesSearch } from '../services/posts';
 import InfiniteScroll from 'react-infinite-scroller';
 import { User } from '../services/users';
+import { useSession } from 'next-auth/react';
 
 interface MumbleListProps {
   mumbles: Mumble[];
   users: User[];
   totalMumbles: number;
+  mumbleKey: string;
+  userId?: string;
 }
 
 interface MumbleListState {
@@ -24,13 +27,14 @@ interface MumbleCardAction {
   reloadedMumbles: Mumble[];
 }
 
-export const MumbleList: FC<MumbleListProps> = ({ mumbles, users, totalMumbles }) => {
+export const MumbleList: FC<MumbleListProps> = ({ mumbles, users, totalMumbles, mumbleKey, userId }) => {
   const initialMumbleListState: MumbleListState = {
     mumbles: addCreatorToMumble(mumbles, users),
     users,
     nextOffset: 10,
     totalMumbles,
   };
+  const { data: session } = useSession();
   const [state, dispatch] = useReducer(mumbleCardReducer, initialMumbleListState);
 
   function addCreatorToMumble(mumbles: Mumble[], users: User[]): Mumble[] {
@@ -63,7 +67,17 @@ export const MumbleList: FC<MumbleListProps> = ({ mumbles, users, totalMumbles }
   }
 
   const loadMore = async () => {
-    const reloadedMumbles = await fetchMumbles({ limit: 10, offset: state.nextOffset });
+    let reloadedMumbles: { mumbles: Mumble[]; count?: number };
+    if (mumbleKey === 'likes') {
+      reloadedMumbles = await fetchMumblesSearch({
+        likedBy: userId as string,
+        limit: 10,
+        offset: state.nextOffset,
+        accessToken: session?.accessToken,
+      });
+    } else {
+      reloadedMumbles = await fetchMumbles({ limit: 10, offset: state.nextOffset, creator: userId as string });
+    }
     dispatch({ type: 'reload_mumbles', reloadedMumbles: reloadedMumbles.mumbles });
   };
 

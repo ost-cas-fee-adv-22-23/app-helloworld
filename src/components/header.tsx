@@ -7,7 +7,6 @@ import {
   SettingsIcon,
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { signOut, useSession } from 'next-auth/react';
-import Link from 'next/link';
 
 export const Header: FC = () => {
   const { data: session } = useSession();
@@ -17,9 +16,9 @@ export const Header: FC = () => {
       <>
         <Navbar logoHref={'/'} logoAriaLabel={'Navigate to home'}>
           <span className={'absolute top-0'}>
-            <Link href={`/profile/${session.user?.id}`}>
+            <a href={`/profile/me`}>
               <ProfilePic altText={'Profilbild'} editLabel={'Bearbeiten'} imageUrl={session?.user?.avatarUrl} size={'S'} />
-            </Link>
+            </a>
           </span>
           <div className={'pl-xxl'}>
             <IconButton label={'Settings'} variant={'purple'} iconText={'Settings'}>

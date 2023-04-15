@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { getToken } from 'next-auth/jwt';
 import React, { useState } from 'react';
 import { fetchMumbles, fetchMumblesSearch } from '../../services/posts';
-import { fetchUserById, fetchUsers, User } from '../../services/users';
+import { fetchUserById, fetchUserByMe, fetchUsers, User } from '../../services/users';
 import { Mumble } from '../../services/serviceTypes';
 import { MumbleList } from '../../components/mumbleList';
 import Image from 'next/image';
@@ -100,6 +100,8 @@ export default function ProfilePage({
         users={users}
         totalMumbles={activeTab === 'mumbles' ? count : likedCount}
         key={activeTab === 'mumbles' ? 'mumbles' : 'likes'}
+        mumbleKey={activeTab === 'mumbles' ? 'mumbles' : 'likes'}
+        userId={profileUser.id}
       ></MumbleList>
     </>
   );
@@ -109,55 +111,27 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query: { id 
   if (!id) {
     throw new Error('Id does not exists!');
   }
+
   const session = await getToken({ req });
 
-  const [{ user }, { count, mumbles }, { count: likedCount, mumbles: likedMumbles }, { users }] = await Promise.all([
-    fetchUserById({ userId: id, accessToken: session?.accessToken }),
-    fetchMumbles({ limit: 10, creator: id as string }),
-    fetchMumblesSearch({ likedBy: id as string, limit: 10, accessToken: session?.accessToken }),
+  const { user } =
+    id === 'me'
+      ? await fetchUserByMe({ accessToken: session?.accessToken })
+      : await fetchUserById({ userId: id, accessToken: session?.accessToken });
+
+  const [{ count, mumbles }, { count: likedCount, mumbles: likedMumbles }, { users }] = await Promise.all([
+    fetchMumbles({ limit: 10, creator: user.id as string }),
+    fetchMumblesSearch({ likedBy: user.id as string, limit: 10, accessToken: session?.accessToken }),
     fetchUsers({ accessToken: session?.accessToken }),
   ]);
-
-  const mumblesWithUserInfo = mumbles.map((mumble) => {
-    const creator = users?.find((user) => user.id === mumble.creator);
-    return {
-      ...mumble,
-      creatorProfile: {
-        id: creator?.id,
-        userName: creator?.userName,
-        firstName: creator?.firstName,
-        lastName: creator?.lastName,
-        fullName: 'creator?.firstName creator?.lastName',
-        avatarUrl: creator?.avatarUrl,
-      },
-    };
-  });
-
-  const likedMumblesWithUserInfo = likedMumbles.map((liked) => {
-    const creator = users?.find((user) => user.id === liked.creator);
-
-    return {
-      ...liked,
-      creatorProfile: {
-        id: creator?.id,
-        userName: creator?.userName,
-        firstName: creator?.firstName,
-        lastName: creator?.lastName,
-        fullName: `${creator?.firstName} ${creator?.lastName}`,
-        avatarUrl: creator?.avatarUrl,
-      },
-    };
-  });
-
-  console.log('Mumble: ' + mumblesWithUserInfo);
 
   return {
     props: {
       profileUser: user,
-      mumbles: mumblesWithUserInfo,
+      mumbles,
       count,
       likedCount,
-      likedMumbles: likedMumblesWithUserInfo,
+      likedMumbles,
       users,
     },
   };

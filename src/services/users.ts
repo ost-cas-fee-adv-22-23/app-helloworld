@@ -58,3 +58,22 @@ export const fetchUserById = async (params?: { accessToken: unknown; userId: str
     user,
   };
 };
+export const fetchUserByMe = async (params?: { accessToken: unknown }) => {
+  const { accessToken } = params || {};
+
+  if (!accessToken) {
+    throw new Error('No access token');
+  }
+
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_QWACKER_API_URL}/users/me`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  const user = (await res.data) as User;
+
+  return {
+    user,
+  };
+};
