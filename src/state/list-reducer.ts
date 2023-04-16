@@ -1,6 +1,6 @@
 import { Mumble } from '../services/service-types';
 import { addCreatorToMumble } from '../utils/creator-to-mumble';
-import { ListState } from './helpers/list-helpers';
+import { ListState } from './state-types';
 
 type ListAction = { type: 'reload_mumbles'; reloadedMumbles: Mumble[] };
 export function listReducer(state: ListState, action: ListAction) {

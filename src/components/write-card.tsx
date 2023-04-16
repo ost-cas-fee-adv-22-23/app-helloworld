@@ -19,7 +19,6 @@ import toast, { Toaster } from 'react-hot-toast';
 import { Oval } from 'react-loader-spinner';
 import { ModalFileUpload } from './modal-file-upload';
 import { writeReducer } from '../state/write-reducer';
-import { initialWriteState } from '../state/helpers/write-helpers';
 
 export interface WriteCard {
   form?: {
@@ -32,7 +31,15 @@ export interface WriteCard {
   onSubmitPostHandler?: (e: FormEvent<HTMLFormElement>) => void;
 }
 export const WriteCard: FC<WriteCard> = () => {
-  const [writeState, dispatch] = useReducer(writeReducer, initialWriteState);
+  const [writeState, dispatch] = useReducer(writeReducer, {
+    formInputError: '',
+    form: {
+      file: null,
+      textInput: '',
+      textInputError: '',
+    },
+    isSubmitting: false,
+  });
   const [isOpenUpload, setIsOpenUpload] = useState(false);
   const { data: session } = useSession();
 
@@ -54,6 +61,7 @@ export const WriteCard: FC<WriteCard> = () => {
 
   const onSubmitPostHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
+    dispatch({ type: 'file_upload_submitting' });
 
     const mutationArgs: PostArgs = {
       text: writeState.form.textInput,
@@ -73,6 +81,7 @@ export const WriteCard: FC<WriteCard> = () => {
   };
 
   const onFileHandler = (file: File) => {
+    dispatch({ type: 'file_upload_submitting' });
     dispatch({ type: 'file_upload_reset' });
     dispatch({ type: 'file_upload_add', payload: file });
   };
@@ -105,6 +114,7 @@ export const WriteCard: FC<WriteCard> = () => {
           isOpen={isOpenUpload}
           onClose={(e) => setIsOpenUpload(e)}
           onSubmitFile={onFileHandler}
+          isSubmitting={writeState.isSubmitting}
         />
         <div className="m-s w-fill">
           <Card as="div" borderType={BorderType.rounded} size={Size.M}>
@@ -127,10 +137,22 @@ export const WriteCard: FC<WriteCard> = () => {
                 />
               </form>
               <div className="flex flex-row gap-l justify-between unset pt-xl">
-                <Button label="Bild hochladen" size="L" variant="default" onClick={fileUploadClick}>
+                <Button
+                  label="Bild hochladen"
+                  size="L"
+                  variant="default"
+                  isDisabled={writeState.isSubmitting}
+                  onClick={fileUploadClick}
+                >
                   <UploadIcon size={16} />
                 </Button>
-                <Button label="Absenden" size="L" variant="purple" onClick={(e) => onSubmitPostHandler(e)}>
+                <Button
+                  label="Absenden"
+                  size="L"
+                  variant="purple"
+                  isDisabled={writeState.isSubmitting}
+                  onClick={(e) => onSubmitPostHandler(e)}
+                >
                   <SendIcon size={16} />
                 </Button>
               </div>

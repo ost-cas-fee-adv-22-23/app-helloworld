@@ -1,9 +1,10 @@
-import { WriteState } from './helpers/write-helpers';
+import { WriteState } from './state-types';
 
 type WriteAction =
   | { type: 'file_inputerror_reset' }
   | { type: 'file_upload_add'; payload: File }
   | { type: 'file_upload_reset' }
+  | { type: 'file_upload_submitting' }
   | { type: 'form_change'; textInput: string }
   | { type: 'form_submit_added' }
   | { type: 'form_submit_error'; payload: string }
@@ -11,6 +12,16 @@ type WriteAction =
 
 export function writeReducer(state: WriteState, action: WriteAction): WriteState {
   switch (action.type) {
+    case 'file_upload_add': {
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          file: action.payload,
+        },
+        isSubmitting: false,
+      };
+    }
     case 'file_upload_reset': {
       return {
         ...state,
@@ -20,13 +31,10 @@ export function writeReducer(state: WriteState, action: WriteAction): WriteState
         },
       };
     }
-    case 'file_upload_add': {
+    case 'file_upload_submitting': {
       return {
         ...state,
-        form: {
-          ...state.form,
-          file: action.payload,
-        },
+        isSubmitting: true,
       };
     }
     case 'form_change': {
@@ -47,6 +55,7 @@ export function writeReducer(state: WriteState, action: WriteAction): WriteState
           textInput: '',
           textInputError: '',
         },
+        isSubmitting: false,
       };
     }
     default:

@@ -1,5 +1,5 @@
 import { Reply } from '../services/service-types';
-import { CardState } from './helpers/card-helpers';
+import { CardState } from './state-types';
 
 type WriteAction =
   | { type: 'add_comment' }
