@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { ChangeEvent, FC, FormEvent, useReducer, useState } from 'react';
 import {
   BorderType,
   Button,
@@ -14,14 +14,25 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPost } from '../services/posts';
 import { useSession } from 'next-auth/react';
-import { PostArgs, UploadImage } from '../services/service-types';
+import { PostArgs } from '../services/service-types';
 import toast, { Toaster } from 'react-hot-toast';
 import { Oval } from 'react-loader-spinner';
 import { ModalFileUpload } from './modal-file-upload';
+import { writeReducer } from '../state/write-reducer';
+import { initialWriteState } from '../state/helpers/write-helpers';
 
-export const WriteCard: FC = () => {
-  const [text, setText] = React.useState<string>('');
-  const [file, setFile] = useState<UploadImage>();
+export interface WriteCard {
+  form?: {
+    file: File | null;
+    textinput: string;
+    textinputError: string;
+  };
+  onTextfieldChanged?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onFileHandler?: (file: File) => boolean;
+  onSubmitPostHandler?: (e: FormEvent<HTMLFormElement>) => void;
+}
+export const WriteCard: FC<WriteCard> = () => {
+  const [writeState, dispatch] = useReducer(writeReducer, initialWriteState);
   const [isOpenUpload, setIsOpenUpload] = useState(false);
   const { data: session } = useSession();
 
@@ -37,20 +48,16 @@ export const WriteCard: FC = () => {
     },
   });
 
-  const fileUploadClick = () => {
-    setIsOpenUpload(true);
-  };
-
-  const textfieldChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
+  const onTextfieldChanged = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    dispatch({ type: 'form_change', textInput: e.target.value });
   };
 
   const onSubmitPostHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
 
     const mutationArgs: PostArgs = {
-      text: text,
-      file: file,
+      text: writeState.form.textInput,
+      file: writeState.form.file,
       accessToken: session?.accessToken,
     };
 
@@ -60,10 +67,18 @@ export const WriteCard: FC = () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       toast.error('Something went wrong: ' + mutation?.error.message);
+    } else {
+      dispatch({ type: 'form_submit_added' });
     }
+  };
 
-    setText('');
-    setFile(undefined);
+  const onFileHandler = (file: File) => {
+    dispatch({ type: 'file_upload_reset' });
+    dispatch({ type: 'file_upload_add', payload: file });
+  };
+
+  const fileUploadClick = () => {
+    setIsOpenUpload(true);
   };
 
   return (
@@ -85,11 +100,16 @@ export const WriteCard: FC = () => {
             />
           </div>
         )}
-        <ModalFileUpload title="Bild hochladen" isOpen={isOpenUpload} onClose={() => setIsOpenUpload(false)} />
+        <ModalFileUpload
+          title="Bild hochladen"
+          isOpen={isOpenUpload}
+          onClose={(e) => setIsOpenUpload(e)}
+          onSubmitFile={onFileHandler}
+        />
         <div className="m-s w-fill">
           <Card as="div" borderType={BorderType.rounded} size={Size.M}>
             <div className="grid grid-cols-1">
-              <div className="absolute flex flex-row md:-left-l">
+              <div className="absolute flex flex-row">
                 <ProfileHeader
                   altText={session?.user.username}
                   fullName={'Hey, was läuft?'}
@@ -102,8 +122,8 @@ export const WriteCard: FC = () => {
               <form className="mt-xl">
                 <Textfield
                   placeholder="Deine Meinung zählt?"
-                  value={text || ''}
-                  onChange={(e) => textfieldChangeHandler(e)}
+                  value={writeState.form.textInput}
+                  onChange={onTextfieldChanged}
                 />
               </form>
               <div className="flex flex-row gap-l justify-between unset pt-xl">

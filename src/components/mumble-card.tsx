@@ -14,6 +14,7 @@ import { Mumble, Reply } from '../services/service-types';
 import { commentPost } from '../services/posts';
 import Link from 'next/link';
 import Image from 'next/image';
+import { cardReducer } from '../state/card-reducer';
 
 interface MumbleCard {
   mumble: Mumble;
@@ -24,7 +25,7 @@ interface MumbleCard {
 export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted }) => {
   const { data: session } = useSession();
 
-  const [state, dispatch] = useReducer(mumbleCardReducer, { showComments, mumble, comment: '' });
+  const [state, dispatch] = useReducer(cardReducer, { showComments, mumble, comment: '' });
 
   const likedPost = async () => {
     await likePost({
@@ -51,45 +52,6 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
 
     commentSubmitted && commentSubmitted(newPost);
   };
-
-  function mumbleCardReducer(state, action) {
-    switch (action.type) {
-      case 'post_liked': {
-        return {
-          ...state,
-          mumble: {
-            ...state.mumble,
-            likedByUser: action.likedByUser,
-            likeCount: action.likedByUser ? (state.mumble?.likeCount ?? 0) + 1 : state.mumble?.likeCount - 1,
-          },
-        };
-      }
-      case 'comment': {
-        return {
-          ...state,
-          showComments: !state.showComments,
-        };
-      }
-      case 'add_comment': {
-        return {
-          ...state,
-          showComments: false,
-        };
-      }
-      case 'comment_changed': {
-        return {
-          ...state,
-          comment: action.comment,
-        };
-      }
-      case 'comment_submitted': {
-        return {
-          ...state,
-          comment: '',
-        };
-      }
-    }
-  }
 
   return (
     <>
