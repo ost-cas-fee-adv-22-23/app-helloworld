@@ -48,7 +48,7 @@ export default function ProfilePage({
                   height={300}
                   placeholder={'blur'}
                   blurDataURL={'https://picsum.photos/id/36/600/300'}
-                  className="object-cover rounded-s"
+                  className={'object-cover rounded-s'}
                 />
               </div>
             </div>
