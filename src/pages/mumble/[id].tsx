@@ -1,9 +1,9 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { getToken } from 'next-auth/jwt';
 import { MumbleCard } from '../../components/mumble-card';
-import { fetchUsers, User } from '../../services/users';
+import { fetchUsers } from '../../services/users';
 import { fetchMumbleById, fetchReplies } from '../../services/posts';
-import { Mumble, Reply } from '../../services/service-types';
+import { Mumble, Reply, User } from '../../services/service-types';
 import { BorderType, Card, Size } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useReducer } from 'react';
 
@@ -48,7 +48,7 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
                 <ul className={'divide-y-1 divide-slate-200 -mx-xl'}>
                   {state.replies.map(
                     (reply: {
-                      id: any;
+                      id: string;
                       creator?: string;
                       creatorProfile?: User | undefined;
                       text?: string;
