@@ -47,7 +47,7 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
 
   return (
     <>
-      <div className={'grid grid-cols-1 justify-items-center my-xl'}>
+      <div className={'grid grid-cols-1 justify-items-center m-s md:my-xl'}>
         <div className={'w-full md:w-615'}>
           <Card borderType={BorderType.rounded} size={Size.M}>
             <div className={'divide-y-1 divide-slate-200'}>
