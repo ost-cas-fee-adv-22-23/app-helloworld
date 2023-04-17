@@ -3,7 +3,7 @@ import { getToken } from 'next-auth/jwt';
 import { MumbleCard } from '../../components/mumble-card';
 import { fetchUsers } from '../../services/users';
 import { fetchMumbleById, fetchReplies } from '../../services/posts';
-import { Mumble, Reply } from '../../services/serviceTypes';
+import { Mumble, Reply } from '../../services/service-types';
 import { BorderType, Card, Size } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useReducer } from 'react';
 

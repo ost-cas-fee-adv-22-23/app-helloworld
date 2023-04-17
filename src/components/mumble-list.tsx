@@ -2,22 +2,26 @@ import React, { FC, useReducer } from 'react';
 import { BorderType, Card } from '@smartive-education/design-system-component-library-hello-world-team';
 import { Mumble, User } from '../services/service-types';
 import { MumbleCard } from './mumble-card';
-import { fetchMumbles } from '../services/posts';
+import { fetchMumbles, fetchMumblesSearch } from '../services/posts';
 import InfiniteScroll from 'react-infinite-scroller';
 import { WriteCard } from './write-card';
 import { addCreatorToMumble } from '../utils/creator-to';
 import { listReducer } from '../state/list-reducer';
+import { useSession } from 'next-auth/react';
 
 interface MumbleList {
   mumbles: Mumble[];
   users: User[];
   totalMumbles: number;
+  mumbleKey: string;
+  userId?: string;
   showWriteCard?: boolean;
 }
 
-export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles, showWriteCard = false }) => {
+export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles, mumbleKey, userId, showWriteCard = false }) => {
   const mumblesWithCreator = addCreatorToMumble(mumbles, users);
 
+  const { data: session } = useSession();
   const [state, dispatch] = useReducer(listReducer, {
     mumbles: mumblesWithCreator,
     nextOffset: 10,
@@ -32,7 +36,18 @@ export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles, showW
   };
 
   const loadMore = async () => {
-    const reloadedMumbles = await fetchMumbles({ limit: 10, offset: state.nextOffset });
+    let reloadedMumbles: { mumbles: Mumble[]; count?: number };
+
+    if (mumbleKey === 'likes') {
+      reloadedMumbles = await fetchMumblesSearch({
+        likedBy: userId as string,
+        limit: 10,
+        offset: state.nextOffset,
+        accessToken: session?.accessToken,
+      });
+    } else {
+      reloadedMumbles = await fetchMumbles({ limit: 10, offset: state.nextOffset, creator: userId as string });
+    }
     dispatch({ type: 'reload_mumbles', reloadedMumbles: reloadedMumbles.mumbles });
   };
 

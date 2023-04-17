@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { QwackerUserResponse } from './service-types';
+import { QwackerUserResponse, User } from './service-types';
 
 export const fetchUsers = async (params?: { accessToken?: string }) => {
   const { accessToken } = params || {};

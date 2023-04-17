@@ -15,7 +15,7 @@ import { commentPost } from '../services/posts';
 import Link from 'next/link';
 import Image from 'next/image';
 import { cardReducer } from '../state/card-reducer';
-import { MumbleTextContent } from './mumbleTextContent';
+import { MumbleTextContent } from './mumble-text-content';
 
 interface MumbleCard {
   mumble: Mumble;

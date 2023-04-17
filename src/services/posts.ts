@@ -6,7 +6,7 @@ import {
   Reply,
   SearchRequestBody,
   transformMumble,
-} from './serviceTypes';
+} from './service-types';
 import axios from 'axios';
 
 export const fetchMumbles = async (params?: {

@@ -10,9 +10,9 @@ import Link from 'next/link';
 import { getToken } from 'next-auth/jwt';
 import React, { useState } from 'react';
 import { fetchMumbles, fetchMumblesSearch } from '../../services/posts';
-import { fetchUserById, fetchUserByMe, fetchUsers, User } from '../../services/users';
-import { Mumble } from '../../services/serviceTypes';
-import { MumbleList } from '../../components/mumbleList';
+import { fetchUserById, fetchUserByMe, fetchUsers } from '../../services/users';
+import { Mumble, User } from '../../services/service-types';
+import { MumbleList } from '../../components/mumble-list';
 import Image from 'next/image';
 
 type Props = {
