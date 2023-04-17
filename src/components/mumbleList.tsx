@@ -67,18 +67,21 @@ export const MumbleList: FC<MumbleListProps> = ({ mumbles, users, totalMumbles, 
   }
 
   const loadMore = async () => {
-    let reloadedMumbles: { mumbles: Mumble[]; count?: number };
-    if (mumbleKey === 'likes') {
-      reloadedMumbles = await fetchMumblesSearch({
-        likedBy: userId as string,
-        limit: 10,
-        offset: state.nextOffset,
-        accessToken: session?.accessToken,
-      });
-    } else {
-      reloadedMumbles = await fetchMumbles({ limit: 10, offset: state.nextOffset, creator: userId as string });
+    if (userId) {
+      let reloadedMumbles: { mumbles: Mumble[]; count?: number };
+
+      if (mumbleKey === 'likes') {
+        reloadedMumbles = await fetchMumblesSearch({
+          likedBy: userId,
+          limit: 10,
+          offset: state.nextOffset,
+          accessToken: session?.accessToken,
+        });
+      } else {
+        reloadedMumbles = await fetchMumbles({ limit: 10, offset: state.nextOffset, creator: userId });
+      }
+      dispatch({ type: 'reload_mumbles', reloadedMumbles: reloadedMumbles.mumbles });
     }
-    dispatch({ type: 'reload_mumbles', reloadedMumbles: reloadedMumbles.mumbles });
   };
 
   return (

@@ -142,16 +142,16 @@ export const fetchMumblesSearch = async (params?: {
     offset: offset || 0,
   };
 
-  if (text != null) {
+  if (text) {
     payload.text = text;
   }
-  if (tags != null) {
+  if (tags) {
     payload.tags = [tags];
   }
-  if (likedBy != null) {
+  if (likedBy) {
     payload.likedBy = [likedBy];
   }
-  if (mentions != null) {
+  if (mentions) {
     payload.mentions = [mentions];
   }
   if (isReply != null) {
