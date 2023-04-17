@@ -11,9 +11,9 @@ import { signOut, useSession } from 'next-auth/react';
 export const Header: FC = () => {
   const { data: session } = useSession();
 
-  if (session) {
-    return (
-      <>
+  return (
+    <>
+      {session && (
         <Navbar logoHref={'/'} logoAriaLabel={'Navigate to home'}>
           <span className={'absolute top-0'}>
             <a href={`/profile/me`}>
@@ -31,10 +31,7 @@ export const Header: FC = () => {
             </IconButton>
           </a>
         </Navbar>
-      </>
-    );
-  } else {
-    // TODO: Here better solution
-    return null;
-  }
+      )}
+    </>
+  );
 };
