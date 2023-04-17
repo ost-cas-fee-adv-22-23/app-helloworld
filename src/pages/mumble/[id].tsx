@@ -97,7 +97,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query: { id 
         userName: creator?.userName,
         firstName: creator?.firstName,
         lastName: creator?.lastName,
-        fullName: `${mumble?.creatorProfile?.firstName} ${mumble?.creatorProfile?.lastName}`,
+        fullName: `${creator?.firstName} ${creator?.lastName}`,
         avatarUrl: creator?.avatarUrl,
       },
     };
