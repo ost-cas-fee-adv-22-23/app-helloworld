@@ -131,6 +131,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
       )}
       {state.mumble.mediaUrl && (
         <div className={'mb-l h-328 w-full relative bg-slate-50'}>
+          {/*eslint-disable-next-line react/forbid-component-props*/}
           <Image src={state.mumble.mediaUrl} alt={'Posted image'} fill className="object-cover rounded-s" />
         </div>
       )}
