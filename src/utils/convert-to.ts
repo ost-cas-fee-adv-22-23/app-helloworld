@@ -1,4 +1,5 @@
 import { UploadState } from '@smartive-education/design-system-component-library-hello-world-team';
+import { Mumble } from '../services/service-types';
 import { FileState } from '../state/state-types';
 
 export function convertToFileState(upload: UploadState): FileState {
@@ -37,4 +38,21 @@ export function convertToUploadAction(upload: UploadState) {
     default:
       return 'upload_file_reset';
   }
+}
+
+export function convertToMumble(data: any): Mumble {
+  return {
+    id: data.id,
+    creator: data.creator,
+    creatorProfile: data.creatorProfile,
+    text: data.text,
+    mediaUrl: data.mediaUrl,
+    mediaType: data.mediaType,
+    likeCount: data.likeCount,
+    likedByUser: data.likedByUser,
+    type: data.type,
+    replyCount: data.replyCount,
+    createdTimestamp: data.createdTimestamp,
+    createdDate: data.createdDate,
+  };
 }

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, FormEvent, useReducer, useState } from 'react';
+import React, { ChangeEvent, FC, useReducer, useState } from 'react';
 import {
   BorderType,
   Button,
@@ -14,27 +14,22 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPost } from '../services/posts';
 import { useSession } from 'next-auth/react';
-import { PostArgs } from '../services/service-types';
-import toast, { Toaster } from 'react-hot-toast';
+import { Mumble, PostArgs } from '../services/service-types';
 import { Oval } from 'react-loader-spinner';
 import { ModalFileUpload } from './modal-file-upload';
 import { writeReducer } from '../state/write-reducer';
+import { convertToMumble } from '../utils/convert-to';
+import { FileData } from '../state/state-types';
 
-export interface WriteCard {
-  form?: {
-    file: File | null;
-    textinput: string;
-    textinputError: string;
-  };
-  onTextfieldChanged?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  onFileHandler?: (file: File) => boolean;
-  onSubmitPostHandler?: (e: FormEvent<HTMLFormElement>) => void;
+interface WriteCard {
+  onSubmit: (m: Mumble) => void;
 }
-export const WriteCard: FC<WriteCard> = () => {
+export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
   const [writeState, dispatch] = useReducer(writeReducer, {
     formInputError: '',
     form: {
       file: null,
+      filename: '',
       textInput: '',
       textInputError: '',
     },
@@ -48,20 +43,25 @@ export const WriteCard: FC<WriteCard> = () => {
   const mutation = useMutation((args: PostArgs) => createPost(args), {
     onSuccess: async (data) => {
       await queryClient.invalidateQueries();
+      dispatch({ type: 'form_submit_added' });
+      onSubmit(convertToMumble(data));
       console.log(data);
     },
     onError: async (error) => {
+      dispatch({ type: 'form_submit_error', error: 'Post konnte nicht hinzugefügt werden. Bitte versuche es nochmals!' });
       console.log(error);
     },
   });
 
   const onTextfieldChanged = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    dispatch({ type: 'file_error_reset' });
     dispatch({ type: 'form_change', textInput: e.target.value });
   };
 
   const onSubmitPostHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     dispatch({ type: 'file_upload_submitting' });
+    dispatch({ type: 'file_error_reset' });
 
     const mutationArgs: PostArgs = {
       text: writeState.form.textInput,
@@ -70,23 +70,16 @@ export const WriteCard: FC<WriteCard> = () => {
     };
 
     mutation.mutate(mutationArgs);
-
-    if (mutation.isError) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      toast.error('Something went wrong: ' + mutation?.error.message);
-    } else {
-      dispatch({ type: 'form_submit_added' });
-    }
   };
 
-  const onFileHandler = (file: File) => {
+  const onFileHandler = (file: FileData) => {
     dispatch({ type: 'file_upload_submitting' });
     dispatch({ type: 'file_upload_reset' });
     dispatch({ type: 'file_upload_add', payload: file });
   };
 
   const fileUploadClick = () => {
+    dispatch({ type: 'file_error_reset' });
     setIsOpenUpload(true);
   };
 
@@ -94,7 +87,7 @@ export const WriteCard: FC<WriteCard> = () => {
     <>
       <div className="p-10">
         {mutation.isLoading && (
-          <div>
+          <div className={'relative flex flex-row m-s w-fill justify-center'}>
             <Oval
               height={80}
               width={80}
@@ -135,6 +128,16 @@ export const WriteCard: FC<WriteCard> = () => {
                   value={writeState.form.textInput}
                   onChange={onTextfieldChanged}
                 />
+                {writeState.form.filename ? (
+                  <span className="text-slate-700 text-xxs font-medium mt-xxs self-start" id={`filename`}>
+                    {'Bild hinzugefügt: ' + writeState.form.filename}
+                  </span>
+                ) : null}
+                {writeState.form.textInputError ? (
+                  <span className="text-red text-xxs font-medium mt-xxs self-end" id={`textInputError`}>
+                    {writeState.form.textInputError}
+                  </span>
+                ) : null}
               </form>
               <div className="flex flex-row gap-l justify-between unset pt-xl">
                 <Button
@@ -150,7 +153,7 @@ export const WriteCard: FC<WriteCard> = () => {
                   label="Absenden"
                   size="L"
                   variant="purple"
-                  isDisabled={writeState.isSubmitting}
+                  isDisabled={writeState.isSubmitting || !(!!writeState.form.file || !!writeState.form.textInput)}
                   onClick={(e) => onSubmitPostHandler(e)}
                 >
                   <SendIcon size={16} />
@@ -159,7 +162,6 @@ export const WriteCard: FC<WriteCard> = () => {
             </div>
           </Card>
         </div>
-        <Toaster />
       </div>
     </>
   );

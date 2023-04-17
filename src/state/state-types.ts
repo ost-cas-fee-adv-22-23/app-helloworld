@@ -26,8 +26,14 @@ export type WriteState = {
   formInputError: string;
   form: {
     file: File | null;
+    filename?: string;
     textInput: string;
     textInputError: string;
   };
   isSubmitting: boolean;
+};
+
+export type FileData = {
+  file: File | null;
+  filename?: string;
 };

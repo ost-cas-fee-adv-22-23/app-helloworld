@@ -26,6 +26,12 @@ export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles, showW
     users,
   });
 
+  const onSubmitPost = async (m: Mumble) => {
+    const updatedMumbles = await fetchMumbles({ limit: 10 });
+    dispatch({ type: 'refetch_mumbles', updatedMumbles: updatedMumbles.mumbles });
+    dispatch({ type: 'refetch_count', count: updatedMumbles.count });
+  };
+
   const loadMore = async () => {
     const reloadedMumbles = await fetchMumbles({ limit: 10, offset: state.nextOffset });
     dispatch({ type: 'reload_mumbles', reloadedMumbles: reloadedMumbles.mumbles });
@@ -38,12 +44,7 @@ export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles, showW
           <ul className={'w-screen md:w-615'}>
             {state.showWriteCard && (
               <li>
-                <WriteCard
-                // form={WriteCard.form}
-                // onTextfieldChanged={onTextfieldChanged}
-                // onFileHandler={onFileHandler}
-                // onSubmitPostHandler={onSubmitPostHandler}
-                />
+                <WriteCard onSubmit={(m: Mumble) => onSubmitPost(m)} />
               </li>
             )}
             {state.mumbles.map((mumble: Mumble) => (

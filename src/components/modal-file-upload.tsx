@@ -9,13 +9,13 @@ import {
 import React, { useReducer } from 'react';
 import { uploadReducer } from '../state/upload-reducer';
 import { convertToFileState, convertToUploadAction } from '../utils/convert-to';
-import { FileState } from '../state/state-types';
+import { FileData, FileState } from '../state/state-types';
 
 interface ModalFileUpload {
   title: string;
   isOpen: boolean;
   onClose: (e: boolean) => void;
-  onSubmitFile: (file: File) => void;
+  onSubmitFile: (file: FileData) => void;
   isSubmitting: boolean;
 }
 
@@ -41,7 +41,7 @@ export const ModalFileUpload: React.FC<ModalFileUpload> = ({ title, isOpen, onCl
   const onSubmit = () => {
     if (fileState.file !== null) {
       isSubmitting = true;
-      onSubmitFile(fileState.file);
+      onSubmitFile({ file: fileState.file, filename: fileState.currentFile });
       onClose(false);
       isSubmitting = false;
     }
