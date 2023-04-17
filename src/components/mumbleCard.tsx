@@ -112,7 +112,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
 
   return (
     <>
-      <div className={'mb-s md:mb-l'}>
+      <div className={'mb-l'}>
         <ProfileHeader
           fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
           labelType={ProfileHeaderLabelType.M}
@@ -136,7 +136,6 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
             alt={'Posted image'}
             fill
             className="object-cover rounded-s"
-            placeholder="blur"
           />
         </div>
       )}
