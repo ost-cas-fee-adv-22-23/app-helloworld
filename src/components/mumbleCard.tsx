@@ -94,7 +94,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
 
   return (
     <>
-      <div className={'mb-l'}>
+      <div className={'mb-s md:mb-l'}>
         <ProfileHeader
           fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
           labelType={'M'}
@@ -123,7 +123,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           />
         </div>
       )}
-      <div className="flex relative -left-3 space-x-8 visible md:invisible">
+      <div className="flex md:hidden relative -left-3 space-x-8 visible md:invisible">
         {/*TODO This Comment should exist as label in the storybook*/}
         <Link href={`/mumble/${state.mumble.id}`}>
           {' '}
@@ -157,7 +157,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           }}
         />
       </div>
-      <div className="flex relative -left-3 space-x-8 invisible md:visible">
+      <div className="hidden md:flex relative -left-3 space-x-8">
         {/*TODO This Comment should exist as label in the storybook*/}
         <Link href={`/mumble/${state.mumble.id}`}>
           {' '}
