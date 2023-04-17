@@ -2,15 +2,17 @@ import React, { FC, useReducer } from 'react';
 import { BorderType, Card } from '@smartive-education/design-system-component-library-hello-world-team';
 import { Mumble } from '../services/serviceTypes';
 import { MumbleCard } from './mumbleCard';
-import { fetchMumbles } from '../services/posts';
+import { fetchMumbles, fetchMumblesSearch } from '../services/posts';
 import InfiniteScroll from 'react-infinite-scroller';
 import { User } from '../services/users';
+import { useSession } from 'next-auth/react';
 
 interface MumbleListProps {
   mumbles: Mumble[];
   users: User[];
   totalMumbles: number;
-  heading?: string;
+  mumbleKey: string;
+  userId?: string;
 }
 
 interface MumbleListState {
@@ -25,14 +27,14 @@ interface MumbleCardAction {
   reloadedMumbles: Mumble[];
 }
 
-export const MumbleList: FC<MumbleListProps> = ({ mumbles, users, totalMumbles, heading }) => {
+export const MumbleList: FC<MumbleListProps> = ({ mumbles, users, totalMumbles, mumbleKey, userId }) => {
   const initialMumbleListState: MumbleListState = {
     mumbles: addCreatorToMumble(mumbles, users),
     users,
     nextOffset: 10,
     totalMumbles,
   };
-
+  const { data: session } = useSession();
   const [state, dispatch] = useReducer(mumbleCardReducer, initialMumbleListState);
 
   function addCreatorToMumble(mumbles: Mumble[], users: User[]): Mumble[] {
@@ -65,16 +67,26 @@ export const MumbleList: FC<MumbleListProps> = ({ mumbles, users, totalMumbles, 
   }
 
   const loadMore = async () => {
-    const reloadedMumbles = await fetchMumbles({ limit: 10, offset: state.nextOffset });
+    let reloadedMumbles: { mumbles: Mumble[]; count?: number };
+
+    if (mumbleKey === 'likes') {
+      reloadedMumbles = await fetchMumblesSearch({
+        likedBy: userId as string,
+        limit: 10,
+        offset: state.nextOffset,
+        accessToken: session?.accessToken,
+      });
+    } else {
+      reloadedMumbles = await fetchMumbles({ limit: 10, offset: state.nextOffset, creator: userId as string });
+    }
     dispatch({ type: 'reload_mumbles', reloadedMumbles: reloadedMumbles.mumbles });
   };
 
   return (
     <>
       <InfiniteScroll pageStart={0} loadMore={loadMore} hasMore={state.nextOffset < totalMumbles} useWindow={true}>
-        <div className={'grid grid-cols-1 justify-items-center text-violet-500'}>
-          {heading && <h1 className={'head-4 md:head-1'}>{heading}</h1>}
-          <ul className={'w-full md:w-615 text-slate-900'}>
+        <div className={'grid grid-cols-1 justify-items-center'}>
+          <ul className={'w-full md:w-630'}>
             {state.mumbles.map((mumble: Mumble) => (
               <li key={mumble.id} className={'m-s'}>
                 <Card borderType={BorderType.rounded}>

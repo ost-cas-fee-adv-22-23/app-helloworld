@@ -52,3 +52,13 @@ export type Reply = {
   createdTimestamp?: number;
   createdDate?: string;
 };
+
+export type SearchRequestBody = {
+  text?: string;
+  tags?: string[];
+  likedBy?: string[];
+  mentions?: string[];
+  isReply?: boolean;
+  limit?: number;
+  offset?: number;
+};

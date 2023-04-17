@@ -123,6 +123,8 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           imageSrc={state.mumble?.creatorProfile?.avatarUrl}
           hrefProfile={'#'}
           altText={'Avatar'}
+          link={Link}
+          href={`/profile/${state.mumble?.creatorProfile?.id}`}
         ></ProfileHeader>
       </div>
       {state.mumble.text && (
@@ -133,7 +135,14 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
       {state.mumble.mediaUrl && (
         <div className={'mb-l h-328 w-full relative bg-slate-50'}>
           {/*eslint-disable-next-line react/forbid-component-props*/}
-          <Image src={state.mumble.mediaUrl} alt={'Posted image'} fill className="object-cover rounded-s" />
+          <Image
+            src={state.mumble.mediaUrl}
+            alt={'Posted image'}
+            fill
+            className={'object-cover rounded-s'}
+            placeholder={'blur'}
+            blurDataURL={state.mumble.mediaUrl}
+          />
         </div>
       )}
       <div className="flex relative -left-3 space-x-8">
