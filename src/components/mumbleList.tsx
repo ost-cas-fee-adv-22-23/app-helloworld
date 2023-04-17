@@ -30,7 +30,7 @@ export const MumbleList: FC<MumbleListProps> = ({ mumbles, users, totalMumbles, 
     mumbles: addCreatorToMumble(mumbles, users),
     users,
     nextOffset: 10,
-    totalMumbles
+    totalMumbles,
   };
 
   const [state, dispatch] = useReducer(mumbleCardReducer, initialMumbleListState);

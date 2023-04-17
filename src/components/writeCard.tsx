@@ -87,7 +87,7 @@ export const WriteCard: FC = () => {
                   altText={session?.user.username}
                   fullName={`${session?.user.firstname} ${session?.user.lastname}`}
                   imageSrc={session?.user.avatarUrl}
-                  labelType={ProfileHeaderLabelType.h4}
+                  labelType={ProfileHeaderLabelType.HEADER}
                   profilePictureSize={ProfileHeaderPictureSize.M}
                 />
               </div>
