@@ -150,7 +150,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
               noComments: 'Comment',
               someComments: 'Comments',
             }}
-            numberOfComments={state.mumble.replyCount}
+            numberOfComments={state.mumble.replyCount ?? 0}
             onClick={() => null}
             hideLabel={true}
           />
