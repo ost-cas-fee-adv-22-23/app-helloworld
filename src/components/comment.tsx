@@ -29,7 +29,7 @@ export const CommentMumble: FC<CurrentUser> = ({ user, handleCommentChanged, sub
           hrefProfile={'#'}
           altText={'Avatar'}
         />
-        <form className="mt-s">
+        <form className="mt-m">
           <Textfield placeholder="Und was meinst du dazu?" onChange={handleCommentChanged} />
 
           <div className="flex flex-row gap-l justify-between unset">
