@@ -1,17 +1,17 @@
 import { Mumble } from '../services/service-types';
-import { addCreatorToMumble } from '../utils/creator-to-mumble';
+import { addCreatorToMumble } from '../utils/creator-to';
 import { ListState } from './state-types';
 
 type ListAction =
-  | { type: 'update_mumbles'; updatedMumbles: Mumble[]; count: number }
+  | { type: 'load_new_mumbles'; loadNewMumbles: Mumble[]; count: number }
   | { type: 'reload_mumbles'; reloadedMumbles: Mumble[] };
 
 export function listReducer(state: ListState, action: ListAction) {
   switch (action.type) {
-    case 'update_mumbles': {
+    case 'load_new_mumbles': {
       return {
         ...state,
-        mumbles: [...addCreatorToMumble(action.updatedMumbles, state.users), ...state.mumbles],
+        mumbles: [...addCreatorToMumble(action.loadNewMumbles, state.users), ...state.mumbles],
         totalMumbles: state.totalMumbles + action.count,
       };
     }

@@ -28,7 +28,7 @@ const initialFile: FileState = {
 };
 
 export const ModalFileUpload: React.FC<ModalFileUpload> = ({ title, isOpen, onClose, onSubmitFile, isSubmitting }) => {
-  const [fileState, dispatch] = useReducer(uploadReducer, initialFile);
+  const [state, dispatch] = useReducer(uploadReducer, initialFile);
 
   const onHandleFile = (upload: UploadState) => {
     dispatch({ type: convertToUploadAction(upload), fileState: convertToFileState(upload) });
@@ -39,9 +39,9 @@ export const ModalFileUpload: React.FC<ModalFileUpload> = ({ title, isOpen, onCl
     onClose(false);
   };
   const onSubmit = () => {
-    if (fileState.file !== null) {
+    if (state.file !== null) {
       isSubmitting = true;
-      onSubmitFile({ file: fileState.file, filename: fileState.currentFile });
+      onSubmitFile({ file: state.file, filename: state.currentFile });
       onClose(false);
       isSubmitting = false;
     }
@@ -54,9 +54,9 @@ export const ModalFileUpload: React.FC<ModalFileUpload> = ({ title, isOpen, onCl
           <FileUpload
             hint="JPEG oder PNG, maximal 50 MB"
             label=""
-            isFileSelected={fileState.isFileSelected}
-            currentFile={fileState.currentFile}
-            errorMessage={fileState.errorMessage}
+            isFileSelected={state.isFileSelected}
+            currentFile={state.currentFile}
+            errorMessage={state.errorMessage}
             onAddFile={(f) => onHandleFile(f)}
           />
         </div>
@@ -68,7 +68,7 @@ export const ModalFileUpload: React.FC<ModalFileUpload> = ({ title, isOpen, onCl
             label="Speichern"
             size="L"
             variant="purple"
-            isDisabled={fileState.errorMessage.length > 0 || isSubmitting}
+            isDisabled={state.errorMessage.length > 0 || isSubmitting}
             onClick={() => onSubmit()}
           >
             <CheckmarkIcon size={16} />

@@ -24,7 +24,7 @@ interface WriteCard {
   onSubmit: () => void;
 }
 export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
-  const [writeState, dispatch] = useReducer(writeReducer, {
+  const [state, dispatch] = useReducer(writeReducer, {
     formInputError: '',
     form: {
       file: null,
@@ -61,8 +61,8 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
     dispatch({ type: 'file_error_reset' });
 
     const mutationArgs: PostArgs = {
-      text: writeState.form.textInput,
-      file: writeState.form.file,
+      text: state.form.textInput,
+      file: state.form.file,
       accessToken: session?.accessToken,
     };
 
@@ -104,7 +104,7 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
           isOpen={isOpenUpload}
           onClose={(e) => setIsOpenUpload(e)}
           onSubmitFile={onFileHandler}
-          isSubmitting={writeState.isSubmitting}
+          isSubmitting={state.isSubmitting}
         />
         <div className="m-s w-fill">
           <Card as="div" borderType={BorderType.rounded} size={Size.M}>
@@ -120,19 +120,15 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
                 />
               </div>
               <form className="mt-xl">
-                <Textfield
-                  placeholder="Deine Meinung zählt?"
-                  value={writeState.form.textInput}
-                  onChange={onTextfieldChanged}
-                />
-                {writeState.form.filename ? (
+                <Textfield placeholder="Deine Meinung zählt?" value={state.form.textInput} onChange={onTextfieldChanged} />
+                {state.form.filename ? (
                   <span className="text-slate-700 text-xxs font-medium mt-xxs self-start" id={`filename`}>
-                    {'Bild hinzugefügt: ' + writeState.form.filename}
+                    {'Bild hinzugefügt: ' + state.form.filename}
                   </span>
                 ) : null}
-                {writeState.form.textInputError ? (
+                {state.form.textInputError ? (
                   <span className="text-red text-xxs font-medium mt-xxs self-end" id={`textInputError`}>
-                    {writeState.form.textInputError}
+                    {state.form.textInputError}
                   </span>
                 ) : null}
               </form>
@@ -141,7 +137,7 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
                   label="Bild hochladen"
                   size="L"
                   variant="default"
-                  isDisabled={writeState.isSubmitting}
+                  isDisabled={state.isSubmitting}
                   onClick={fileUploadClick}
                 >
                   <UploadIcon size={16} />
@@ -150,7 +146,7 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
                   label="Absenden"
                   size="L"
                   variant="purple"
-                  isDisabled={writeState.isSubmitting || !(!!writeState.form.file || !!writeState.form.textInput)}
+                  isDisabled={state.isSubmitting || !(!!state.form.file || !!state.form.textInput)}
                   onClick={(e) => onSubmitPostHandler(e)}
                 >
                   <SendIcon size={16} />

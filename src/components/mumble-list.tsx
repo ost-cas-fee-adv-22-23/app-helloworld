@@ -5,7 +5,7 @@ import { MumbleCard } from './mumble-card';
 import { fetchMumbles } from '../services/posts';
 import InfiniteScroll from 'react-infinite-scroller';
 import { WriteCard } from './write-card';
-import { addCreatorToMumble } from '../utils/creator-to-mumble';
+import { addCreatorToMumble } from '../utils/creator-to';
 import { listReducer } from '../state/list-reducer';
 
 interface MumbleList {
@@ -27,8 +27,8 @@ export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles, showW
   });
 
   const onSubmitPost = async () => {
-    const updatedMumbles = await fetchMumbles({ limit: 10, newerThanMumbleId: state.mumbles[0].id });
-    dispatch({ type: 'update_mumbles', updatedMumbles: updatedMumbles.mumbles, count: updatedMumbles.count });
+    const loadNewMumbles = await fetchMumbles({ limit: 10, newerThanMumbleId: state.mumbles[0].id });
+    dispatch({ type: 'load_new_mumbles', loadNewMumbles: loadNewMumbles.mumbles, count: loadNewMumbles.count });
   };
 
   const loadMore = async () => {
