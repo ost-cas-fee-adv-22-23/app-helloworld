@@ -47,7 +47,7 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
 
   return (
     <>
-      <div className={'grid grid-cols-1 justify-items-center my-m'}>
+      <div className={'grid grid-cols-1 justify-items-center my-xl'}>
         <div className={'w-screen md:w-615'}>
           <Card borderType={BorderType.rounded} size={Size.M}>
             <div className={'divide-y-1 divide-slate-200'}>
@@ -97,7 +97,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query: { id 
         userName: creator?.userName,
         firstName: creator?.firstName,
         lastName: creator?.lastName,
-        fullName: `${mumble?.creatorProfile?.firstName} ${mumble?.creatorProfile?.lastName}`,
+        fullName: `${creator?.firstName} ${creator?.lastName}`,
         avatarUrl: creator?.avatarUrl,
       },
     };
@@ -111,6 +111,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query: { id 
       userName: creator?.userName,
       firstName: creator?.firstName,
       lastName: creator?.lastName,
+      // TODO: Why use mumble here
       fullName: `${mumble?.creatorProfile?.firstName} ${mumble?.creatorProfile?.lastName}`,
       avatarUrl: creator?.avatarUrl,
     },

@@ -3,6 +3,9 @@ import {
   BorderType,
   Button,
   Card,
+  ProfileHeader,
+  ProfileHeaderLabelType,
+  ProfileHeaderPictureSize,
   SendIcon,
   Size,
   Textfield,
@@ -79,15 +82,15 @@ export const WriteCard: FC = () => {
         <div className="w-[550px]">
           <Card as="div" borderType={BorderType.rounded} size={Size.M}>
             <div className="grid grid-cols-1">
-              {/*<div className="absolute flex flex-row md:-left-l">*/}
-              {/*  <ProfileHeader*/}
-              {/*    altText={session?.user.username}*/}
-              {/*    fullName={`${session?.user.firstname} ${session?.user.lastname}`}*/}
-              {/*    imageSrc={session?.user.avatarUrl}*/}
-              {/*    labelType={ProfileHeaderLabelType.HEADER}*/}
-              {/*    profilePictureSize={ProfileHeaderPictureSize.M}*/}
-              {/*  />*/}
-              {/*</div>*/}
+              <div className="absolute flex flex-row md:-left-l">
+                <ProfileHeader
+                  altText={session?.user.username}
+                  fullName={`${session?.user.firstname} ${session?.user.lastname}`}
+                  imageSrc={session?.user.avatarUrl}
+                  labelType={ProfileHeaderLabelType.HEADER}
+                  profilePictureSize={ProfileHeaderPictureSize.M}
+                />
+              </div>
               <form className="mt-xl">
                 <Textfield placeholder="Was gibt's Neues?" value={text || ''} onChange={(e) => textfieldChangeHandler(e)} />
               </form>
