@@ -136,46 +136,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           <Image src={state.mumble.mediaUrl} alt={'Posted image'} fill className="object-cover rounded-s" />
         </div>
       )}
-      {/*Mobile Version*/}
-      <div className="flex md:hidden relative -left-3 space-x-8">
-        {/*TODO This Comment should exist as label in the storybook*/}
-        <Link href={`/mumble/${state.mumble.id}`}>
-          {' '}
-          <CommentButton
-            label={{
-              noComments: 'Comment',
-              someComments: 'Comments',
-            }}
-            numberOfComments={state.mumble.replyCount ?? 0}
-            onClick={() => null}
-            hideLabel={true}
-          />
-        </Link>
-        <LikeButtonWithReactionButton
-          onClick={() => likedPost()}
-          active
-          label={{
-            noReaction: 'Like',
-            oneReaction: 'Like',
-            reactionByCurrentUser: 'Liked',
-            severalReaction: 'Likes',
-          }}
-          likes={state.mumble.likeCount ?? 0}
-          reactionByCurrentUser={state.mumble.likedByUser}
-          hideLabel={true}
-        />
-        <CopyButton
-          onClick={copyMumbleUrl}
-          active={false}
-          label={{
-            inactive: 'Copy Link',
-            active: 'Link copied',
-          }}
-          hideLabel={true}
-        />
-      </div>
-      {/*Desktop Version*/}
-      <div className="hidden md:flex relative -left-3 space-x-8">
+      <div className="flex relative -left-3 space-x-8">
         {/*TODO This Comment should exist as label in the storybook*/}
         <Link href={`/mumble/${state.mumble.id}`}>
           {' '}
