@@ -132,15 +132,58 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
       )}
       {state.mumble.mediaUrl && (
         <div className={'mb-l h-328 w-full relative bg-slate-50'}>
+          {/*eslint-disable-next-line react/forbid-component-props*/}
           <Image src={state.mumble.mediaUrl} alt={'Posted image'} fill className="object-cover rounded-s" />
         </div>
       )}
-      <div className="flex relative -left-3 space-x-8">
+      {/*Mobile Version*/}
+      <div className="flex md:hidden relative -left-3 space-x-8">
         {/*TODO This Comment should exist as label in the storybook*/}
         <Link href={`/mumble/${state.mumble.id}`}>
           {' '}
           <CommentButton
-            label={{ noComments: 'Comment', someComments: 'Comments' }}
+            label={{
+              noComments: 'Comment',
+              someComments: 'Comments',
+            }}
+            numberOfComments={state.mumble.replyCount ?? 0}
+            onClick={() => null}
+            hideLabel={true}
+          />
+        </Link>
+        <LikeButtonWithReactionButton
+          onClick={() => likedPost()}
+          active
+          label={{
+            noReaction: 'Like',
+            oneReaction: 'Like',
+            reactionByCurrentUser: 'Liked',
+            severalReaction: 'Likes',
+          }}
+          likes={state.mumble.likeCount ?? 0}
+          reactionByCurrentUser={state.mumble.likedByUser}
+          hideLabel={true}
+        />
+        <CopyButton
+          onClick={copyMumbleUrl}
+          active={false}
+          label={{
+            inactive: 'Copy Link',
+            active: 'Link copied',
+          }}
+          hideLabel={true}
+        />
+      </div>
+      {/*Desktop Version*/}
+      <div className="hidden md:flex relative -left-3 space-x-8">
+        {/*TODO This Comment should exist as label in the storybook*/}
+        <Link href={`/mumble/${state.mumble.id}`}>
+          {' '}
+          <CommentButton
+            label={{
+              noComments: 'Comment',
+              someComments: 'Comments',
+            }}
             numberOfComments={state.mumble.replyCount ?? 0}
             onClick={() => null}
           />
@@ -157,7 +200,14 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           likes={state.mumble.likeCount ?? 0}
           reactionByCurrentUser={state.mumble.likedByUser}
         />
-        <CopyButton onClick={copyMumbleUrl} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
+        <CopyButton
+          onClick={copyMumbleUrl}
+          active={false}
+          label={{
+            inactive: 'Copy Link',
+            active: 'Link copied',
+          }}
+        />
       </div>
       {state.showComments && (
         <CommentMumble

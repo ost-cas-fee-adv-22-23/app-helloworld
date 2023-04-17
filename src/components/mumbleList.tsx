@@ -72,9 +72,9 @@ export const MumbleList: FC<MumbleListProps> = ({ mumbles, users, totalMumbles, 
   return (
     <>
       <InfiniteScroll pageStart={0} loadMore={loadMore} hasMore={state.nextOffset < totalMumbles} useWindow={true}>
-        <div className={'grid grid-cols-1 justify-items-center'}>
-          {heading && <h1 className={'head-1 text-violet-500'}>{heading}</h1>}
-          <ul className={'w-screen md:w-615'}>
+        <div className={'grid grid-cols-1 justify-items-center text-violet-500'}>
+          {heading && <h1 className={'head-4 md:head-1'}>{heading}</h1>}
+          <ul className={'w-screen md:w-615 text-slate-900'}>
             {state.mumbles.map((mumble: Mumble) => (
               <li key={mumble.id} className={'m-s'}>
                 <Card borderType={BorderType.rounded}>
