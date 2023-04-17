@@ -3,22 +3,16 @@ import { addCreatorToMumble } from '../utils/creator-to-mumble';
 import { ListState } from './state-types';
 
 type ListAction =
-  | { type: 'refetch_count'; count: number }
-  | { type: 'refetch_mumbles'; updatedMumbles: Mumble[] }
+  | { type: 'update_mumbles'; updatedMumbles: Mumble[]; count: number }
   | { type: 'reload_mumbles'; reloadedMumbles: Mumble[] };
 
 export function listReducer(state: ListState, action: ListAction) {
   switch (action.type) {
-    case 'refetch_count': {
+    case 'update_mumbles': {
       return {
         ...state,
-        totalMumbles: action.count,
-      };
-    }
-    case 'refetch_mumbles': {
-      return {
-        ...state,
-        mumbles: addCreatorToMumble(action.updatedMumbles, state.users),
+        mumbles: [...addCreatorToMumble(action.updatedMumbles, state.users), ...state.mumbles],
+        totalMumbles: state.totalMumbles + action.count,
       };
     }
     case 'reload_mumbles': {

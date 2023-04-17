@@ -14,15 +14,14 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPost } from '../services/posts';
 import { useSession } from 'next-auth/react';
-import { Mumble, PostArgs } from '../services/service-types';
+import { PostArgs } from '../services/service-types';
 import { Oval } from 'react-loader-spinner';
 import { ModalFileUpload } from './modal-file-upload';
 import { writeReducer } from '../state/write-reducer';
-import { convertToMumble } from '../utils/convert-to';
 import { FileData } from '../state/state-types';
 
 interface WriteCard {
-  onSubmit: (m: Mumble) => void;
+  onSubmit: () => void;
 }
 export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
   const [writeState, dispatch] = useReducer(writeReducer, {
@@ -41,15 +40,13 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation((args: PostArgs) => createPost(args), {
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       await queryClient.invalidateQueries();
       dispatch({ type: 'form_submit_added' });
-      onSubmit(convertToMumble(data));
-      console.log(data);
+      onSubmit();
     },
-    onError: async (error) => {
+    onError: async () => {
       dispatch({ type: 'form_submit_error', error: 'Post konnte nicht hinzugefügt werden. Bitte versuche es nochmals!' });
-      console.log(error);
     },
   });
 
