@@ -3,7 +3,6 @@ import { FileData, WriteState } from './state-types';
 type WriteAction =
   | { type: 'file_error_reset' }
   | { type: 'file_upload_add'; payload: FileData }
-  | { type: 'file_upload_reset' }
   | { type: 'file_upload_submitting' }
   | { type: 'form_change'; textInput: string }
   | { type: 'form_submit_added' }
@@ -32,19 +31,13 @@ export function writeReducer(state: WriteState, action: WriteAction): WriteState
         isSubmitting: false,
       };
     }
-    case 'file_upload_reset': {
+    case 'file_upload_submitting': {
       return {
         ...state,
         form: {
           ...state.form,
-          file: null,
-          filename: '',
+          textInputError: '',
         },
-      };
-    }
-    case 'file_upload_submitting': {
-      return {
-        ...state,
         isSubmitting: true,
       };
     }

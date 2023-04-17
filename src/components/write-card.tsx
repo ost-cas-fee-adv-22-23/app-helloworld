@@ -58,7 +58,6 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
   const onSubmitPostHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     dispatch({ type: 'file_upload_submitting' });
-    dispatch({ type: 'file_error_reset' });
 
     const mutationArgs: PostArgs = {
       text: state.form.textInput,
@@ -71,7 +70,6 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
 
   const onFileHandler = (file: FileData) => {
     dispatch({ type: 'file_upload_submitting' });
-    dispatch({ type: 'file_upload_reset' });
     dispatch({ type: 'file_upload_add', payload: file });
   };
 

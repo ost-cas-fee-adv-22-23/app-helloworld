@@ -1,14 +1,14 @@
 import { Reply } from '../services/service-types';
 import { CardState } from './state-types';
 
-type WriteAction =
+type CardAction =
   | { type: 'add_comment' }
   | { type: 'comment' }
   | { type: 'comment_changed'; comment: string }
   | { type: 'comment_submitted'; newPost: Reply }
   | { type: 'post_liked'; likedByUser: boolean };
 
-export function cardReducer(state: CardState, action: WriteAction) {
+export function cardReducer(state: CardState, action: CardAction) {
   switch (action.type) {
     case 'add_comment': {
       return {
