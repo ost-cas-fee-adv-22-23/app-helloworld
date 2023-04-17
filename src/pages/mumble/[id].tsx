@@ -3,7 +3,7 @@ import { getToken } from 'next-auth/jwt';
 import { MumbleCard } from '../../components/mumble-card';
 import { fetchUsers } from '../../services/users';
 import { fetchMumbleById, fetchReplies } from '../../services/posts';
-import { Mumble, Reply, User } from '../../services/service-types';
+import { Mumble, Reply } from '../../services/serviceTypes';
 import { BorderType, Card, Size } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useReducer } from 'react';
 
@@ -12,20 +12,30 @@ type Props = {
   replies?: Reply[];
 };
 
-export default function MumblePage({ mumble, replies }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
-  const [state, dispatch] = useReducer(mumbleReducer, { mumble, replies });
+interface MumblePageState {
+  mumble: Mumble;
+  replies: Reply[];
+}
 
-  function mumbleReducer(state, action) {
+interface MumblePageAction {
+  type: 'comment_submitted';
+  newReply: Reply;
+}
+
+export default function MumblePage({ mumble, replies }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
+  const initialMumbleCardState: MumblePageState = { mumble, replies: replies ?? [] };
+  const [state, dispatch] = useReducer(mumbleReducer, initialMumbleCardState);
+
+  function mumbleReducer(state: MumblePageState, action: MumblePageAction): MumblePageState {
     switch (action.type) {
       case 'comment_submitted': {
         return {
           ...state,
           mumble: {
             ...state.mumble,
-            replyCount: state.mumble.replyCount + 1,
+            replyCount: state.mumble.replyCount ?? 0 + 1,
           },
-          replies: action.newReply,
-          ...state.replies,
+          replies: [action.newReply, ...state.replies],
         };
       }
     }
@@ -37,8 +47,8 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
 
   return (
     <>
-      <div className={'grid grid-cols-1 justify-items-center my-m'}>
-        <div className={'w-screen md:w-615'}>
+      <div className={'grid grid-cols-1 justify-items-center m-s md:my-xl'}>
+        <div className={'w-full md:w-615'}>
           <Card borderType={BorderType.rounded} size={Size.M}>
             <div className={'divide-y-1 divide-slate-200'}>
               <div className={'pb-m'}>
@@ -46,28 +56,13 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
               </div>
               {replies && replies.length > 0 && (
                 <ul className={'divide-y-1 divide-slate-200 -mx-xl'}>
-                  {state.replies.map(
-                    (reply: {
-                      id: string;
-                      creator?: string;
-                      creatorProfile?: User | undefined;
-                      text?: string;
-                      mediaUrl?: string;
-                      mediaType?: string;
-                      likeCount?: number;
-                      likedByUser?: boolean;
-                      type?: string;
-                      replyCount?: number;
-                      createdTimestamp?: number;
-                      createdDate?: string | undefined;
-                    }) => (
-                      <li key={reply.id} className={'pt-xl pb-m'}>
-                        <div className={'mx-xl'}>
-                          <MumbleCard mumble={reply} commentSubmitted={commentSubmitted}></MumbleCard>
-                        </div>
-                      </li>
-                    )
-                  )}
+                  {state.replies.map((reply) => (
+                    <li key={reply.id} className={'pt-xl pb-m'}>
+                      <div className={'mx-xl'}>
+                        <MumbleCard mumble={reply} commentSubmitted={commentSubmitted}></MumbleCard>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               )}
             </div>
@@ -102,7 +97,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query: { id 
         userName: creator?.userName,
         firstName: creator?.firstName,
         lastName: creator?.lastName,
-        fullName: `${mumble?.creatorProfile?.firstName} ${mumble?.creatorProfile?.lastName}`,
+        fullName: `${creator?.firstName} ${creator?.lastName}`,
         avatarUrl: creator?.avatarUrl,
       },
     };

@@ -18,7 +18,7 @@ export default function PageHome({ mumbles, users, error, count }: InferGetServe
           Voluptatem qui cumque voluptatem quia tempora dolores distinctio vel repellat dicta.
         </h4>
       </div>
-      <MumbleList mumbles={mumbles} users={users} totalMumbles={count} showWriteCard={true}></MumbleList>
+      <MumbleList mumbles={mumbles} users={users} totalMumbles={count} showWriteCard={true} mumbleKey={'mumbles'}></MumbleList>
     </div>
   );
 }

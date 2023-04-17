@@ -13,13 +13,12 @@
     "depcruise": "npx depcruise --config .dependency-cruiser.js src"
   },
   "dependencies": {
-    "@smartive-education/design-system-component-library-hello-world-team": "^1.20.10",
+    "@smartive-education/design-system-component-library-hello-world-team": "^1.20.11",
     "@tanstack/react-query": "^4.28.0",
     "@tanstack/react-table": "^8.8.0",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.8",
-    "@types/react-infinite-scroller": "^1.2.3",
     "axios": "^1.3.4",
     "eslint-config-next": "13.0.2",
     "eslint-plugin-react": "^7.32.2",
@@ -36,6 +35,7 @@
   "devDependencies": {
     "@smartive/eslint-config": "^3.1.1",
     "@smartive/prettier-config": "^3.0.0",
+    "@types/react-infinite-scroller": "^1.2.3",
     "autoprefixer": "^10.4.13",
     "dependency-cruiser": "^12.10.0",
     "eslint": "^8.35.0",

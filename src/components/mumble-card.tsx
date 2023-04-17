@@ -15,6 +15,7 @@ import { commentPost } from '../services/posts';
 import Link from 'next/link';
 import Image from 'next/image';
 import { cardReducer } from '../state/card-reducer';
+import { MumbleTextContent } from './mumbleTextContent';
 
 interface MumbleCard {
   mumble: Mumble;
@@ -65,22 +66,25 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           imageSrc={state.mumble?.creatorProfile?.avatarUrl}
           hrefProfile={'#'}
           altText={'Avatar'}
+          link={Link}
+          href={`/profile/${state.mumble?.creatorProfile?.id}`}
         ></ProfileHeader>
       </div>
       {state.mumble.text && (
         <div className={'mb-s w-full'}>
-          <p className={'paragraph-M'}>{state.mumble.text}</p>
+          <MumbleTextContent text={state.mumble.text}></MumbleTextContent>
         </div>
       )}
       {state.mumble.mediaUrl && (
         <div className={'mb-l h-328 w-full relative bg-slate-50'}>
+          {/*eslint-disable-next-line react/forbid-component-props*/}
           <Image
             src={state.mumble.mediaUrl}
             alt={'Posted image'}
             fill
             className={'object-cover rounded-s'}
-            blurDataURL={'../../public/vercel.svg'}
-            placeholder="blur"
+            placeholder={'blur'}
+            blurDataURL={state.mumble.mediaUrl}
           />
         </div>
       )}
@@ -89,8 +93,11 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
         <Link href={`/mumble/${state.mumble.id}`}>
           {' '}
           <CommentButton
-            label={{ noComments: 'Comment', someComments: 'Comments' }}
-            numberOfComments={state.mumble.replyCount}
+            label={{
+              noComments: 'Comment',
+              someComments: 'Comments',
+            }}
+            numberOfComments={state.mumble.replyCount ?? 0}
             onClick={() => null}
           />
         </Link>
@@ -106,7 +113,14 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           likes={state.mumble.likeCount ?? 0}
           reactionByCurrentUser={state.mumble.likedByUser}
         />
-        <CopyButton onClick={copyMumbleUrl} active={false} label={{ inactive: 'Copy Link', active: 'Link copied' }} />
+        <CopyButton
+          onClick={copyMumbleUrl}
+          active={false}
+          label={{
+            inactive: 'Copy Link',
+            active: 'Link copied',
+          }}
+        />
       </div>
       {state.showComments && (
         <CommentMumble
