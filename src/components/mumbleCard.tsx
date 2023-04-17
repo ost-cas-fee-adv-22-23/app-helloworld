@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useEffect, useReducer } from 'react';
+import React, { ChangeEvent, FC, useReducer } from 'react';
 import {
   CommentButton,
   CopyButton,
@@ -24,7 +24,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
 
   const [state, dispatch] = useReducer(mumbleCardReducer, {
     showComments,
-    mumble
+    mumble,
   });
 
   const likedPost = async () => {
@@ -123,40 +123,45 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           />
         </div>
       )}
-      <div className="flex md:hidden relative -left-3 space-x-8 visible md:invisible">
+      {/*Mobile Version*/}
+      <div className="flex md:hidden relative -left-3 space-x-8">
         {/*TODO This Comment should exist as label in the storybook*/}
         <Link href={`/mumble/${state.mumble.id}`}>
           {' '}
           <CommentButton
             label={{
-              noComments: '',
-              someComments: '',
+              noComments: 'Comment',
+              someComments: 'Comments',
             }}
             numberOfComments={state.mumble.replyCount}
             onClick={() => null}
+            hideLabel={true}
           />
         </Link>
         <LikeButtonWithReactionButton
           onClick={() => likedPost()}
           active
           label={{
-            noReaction: '',
-            oneReaction: '',
-            reactionByCurrentUser: '',
-            severalReaction: '',
+            noReaction: 'Like',
+            oneReaction: 'Like',
+            reactionByCurrentUser: 'Liked',
+            severalReaction: 'Likes',
           }}
           likes={state.mumble.likeCount ?? 0}
           reactionByCurrentUser={state.mumble.likedByUser}
+          hideLabel={true}
         />
         <CopyButton
           onClick={copyMumbleUrl}
           active={false}
           label={{
-            inactive: '',
-            active: '',
+            inactive: 'Copy Link',
+            active: 'Link copied',
           }}
+          hideLabel={true}
         />
       </div>
+      {/*Desktop Version*/}
       <div className="hidden md:flex relative -left-3 space-x-8">
         {/*TODO This Comment should exist as label in the storybook*/}
         <Link href={`/mumble/${state.mumble.id}`}>
