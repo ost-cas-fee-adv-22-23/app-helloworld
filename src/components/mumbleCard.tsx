@@ -137,7 +137,6 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
             alt={'Posted image'}
             fill
             className="object-cover rounded-s"
-            placeholder="blur"
           />
         </div>
       )}

@@ -7,11 +7,12 @@ interface MumbleTextContent {
 
 export const MumbleTextContent: FC<MumbleTextContent> = ({ text }) => {
   const processedText = text.split(' ');
+  const hashtagPattern = /#(\w+)(?!\w)/g;
 
   return (
     <div className={'paragraph-M'}>
       {processedText.map((text, index) =>
-        text.match(/#(\w+)(?!\w)/g) ? (
+        text.match(hashtagPattern) ? (
           <Link href={`tag/${text.substring(1)}`} className={'paragraph-M text-violet-600'} key={index}>
             {`${text} `}
           </Link>
