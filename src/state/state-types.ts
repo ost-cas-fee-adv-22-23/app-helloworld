@@ -1,4 +1,4 @@
-import { Mumble, User } from '../services/service-types';
+import { Mumble, Reply, User } from '../services/service-types';
 
 export type CardState = {
   comment: string;
@@ -31,6 +31,11 @@ export type WriteState = {
     textInputError: string;
   };
   isSubmitting: boolean;
+};
+
+export type MumblePageState = {
+  mumble: Mumble;
+  replies: Reply[];
 };
 
 export type FileData = {
