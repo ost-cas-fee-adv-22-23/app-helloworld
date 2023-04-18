@@ -10,11 +10,12 @@ import {
 import { useSession } from 'next-auth/react';
 import { CommentMumble } from './comment';
 import { likePost } from '../services/likes';
-import { Mumble, Reply } from '../services/serviceTypes';
+import { Mumble, Reply } from '../services/service-types';
 import { commentPost } from '../services/posts';
 import Link from 'next/link';
 import Image from 'next/image';
-import { MumbleTextContent } from './mumbleTextContent';
+import { cardReducer } from '../state/card-reducer';
+import { MumbleTextContent } from './mumble-text-content';
 
 interface MumbleCard {
   mumble: Mumble;
@@ -22,29 +23,10 @@ interface MumbleCard {
   commentSubmitted?: (newReply: Reply) => void;
 }
 
-interface MumbleCardState {
-  showComments: boolean;
-  mumble: Mumble;
-  comment: string;
-}
-
-interface MumbleCardAction {
-  type: 'post_liked' | 'comment' | 'add_comment' | 'comment_changed' | 'comment_submitted';
-  newPost?: Reply;
-  likedByUser?: boolean;
-  comment?: string;
-}
-
 export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted }) => {
   const { data: session } = useSession();
 
-  const initialMumbleCardState: MumbleCardState = {
-    showComments: !!showComments,
-    mumble,
-    comment: '',
-  };
-
-  const [state, dispatch] = useReducer(mumbleCardReducer, initialMumbleCardState);
+  const [state, dispatch] = useReducer(cardReducer, { showComments, mumble, comment: '' });
 
   const likedPost = async () => {
     await likePost({
@@ -71,45 +53,6 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
 
     commentSubmitted && commentSubmitted(newPost);
   };
-
-  function mumbleCardReducer(state: MumbleCardState, action: MumbleCardAction): MumbleCardState {
-    switch (action.type) {
-      case 'post_liked': {
-        return {
-          ...state,
-          mumble: {
-            ...state.mumble,
-            likedByUser: !!action.likedByUser,
-            likeCount: action.likedByUser ? (state.mumble?.likeCount ?? 0) + 1 : state.mumble?.likeCount - 1,
-          },
-        };
-      }
-      case 'comment': {
-        return {
-          ...state,
-          showComments: !state.showComments,
-        };
-      }
-      case 'add_comment': {
-        return {
-          ...state,
-          showComments: false,
-        };
-      }
-      case 'comment_changed': {
-        return {
-          ...state,
-          comment: action.comment ?? '',
-        };
-      }
-      case 'comment_submitted': {
-        return {
-          ...state,
-          comment: '',
-        };
-      }
-    }
-  }
 
   return (
     <>

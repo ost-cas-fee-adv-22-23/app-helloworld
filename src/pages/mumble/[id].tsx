@@ -1,45 +1,23 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { getToken } from 'next-auth/jwt';
-import { MumbleCard } from '../../components/mumbleCard';
+import { MumbleCard } from '../../components/mumble-card';
 import { fetchUsers } from '../../services/users';
 import { fetchMumbleById, fetchReplies } from '../../services/posts';
-import { Mumble, Reply } from '../../services/serviceTypes';
+import { Mumble, Reply } from '../../services/service-types';
 import { BorderType, Card, Size } from '@smartive-education/design-system-component-library-hello-world-team';
 import { useReducer } from 'react';
+import { mumblePageReducer } from '../../state/mumble-page-reducer';
+import { addCreatorToReply } from '../../utils/creator-to';
+import { MumblePageState } from '../../state/state-types';
 
 type Props = {
   mumble: Mumble;
   replies?: Reply[];
 };
 
-interface MumblePageState {
-  mumble: Mumble;
-  replies: Reply[];
-}
-
-interface MumblePageAction {
-  type: 'comment_submitted';
-  newReply: Reply;
-}
-
 export default function MumblePage({ mumble, replies }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
   const initialMumbleCardState: MumblePageState = { mumble, replies: replies ?? [] };
-  const [state, dispatch] = useReducer(mumbleReducer, initialMumbleCardState);
-
-  function mumbleReducer(state: MumblePageState, action: MumblePageAction): MumblePageState {
-    switch (action.type) {
-      case 'comment_submitted': {
-        return {
-          ...state,
-          mumble: {
-            ...state.mumble,
-            replyCount: state.mumble.replyCount ?? 0 + 1,
-          },
-          replies: [action.newReply, ...state.replies],
-        };
-      }
-    }
-  }
+  const [state, dispatch] = useReducer(mumblePageReducer, initialMumbleCardState);
 
   const commentSubmitted = (newReply: Reply) => {
     dispatch({ type: 'comment_submitted', newReply });
@@ -87,21 +65,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query: { id 
     fetchUsers({ accessToken: session?.accessToken }),
   ]);
 
-  const repliesWithUserInfo = replies.map((reply) => {
-    const creator = users?.find((user) => user.id === reply.creator);
-
-    return {
-      ...reply,
-      creatorProfile: {
-        id: creator?.id,
-        userName: creator?.userName,
-        firstName: creator?.firstName,
-        lastName: creator?.lastName,
-        fullName: `${creator?.firstName} ${creator?.lastName}`,
-        avatarUrl: creator?.avatarUrl,
-      },
-    };
-  });
+  const repliesWithUserInfo = addCreatorToReply(replies, users);
 
   const creator = users?.find((user) => user.id === mumble.creator);
   const mumbleWithUserInfo = {
@@ -111,7 +75,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query: { id 
       userName: creator?.userName,
       firstName: creator?.firstName,
       lastName: creator?.lastName,
-      // TODO: Why use mumble here
       fullName: `${mumble?.creatorProfile?.firstName} ${mumble?.creatorProfile?.lastName}`,
       avatarUrl: creator?.avatarUrl,
     },
