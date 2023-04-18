@@ -22,6 +22,7 @@ type Props = {
   likedCount: number;
   likedMumbles: Mumble[];
   users: User[];
+  currentUser: boolean;
 };
 
 export default function ProfilePage({
@@ -31,6 +32,7 @@ export default function ProfilePage({
   likedCount,
   likedMumbles,
   users,
+  currentUser,
 }: Props): InferGetServerSidePropsType<typeof getServerSideProps> {
   const [activeTab, setActiveTab] = useState('mumbles');
 
@@ -85,14 +87,20 @@ export default function ProfilePage({
           </p>
         </div>
         <div className={'w-screen px-xs md:w-615'}>
-          <Tabs>
-            <TabsItem
-              onClick={() => setActiveTab('mumbles')}
-              label={'Deine Mumbels'}
-              active={activeTab === 'mumbles'}
-            ></TabsItem>
-            <TabsItem onClick={() => setActiveTab('likes')} label={'Deine Likes'} active={activeTab === 'likes'}></TabsItem>
-          </Tabs>
+          {currentUser && (
+            <Tabs>
+              <TabsItem
+                onClick={() => setActiveTab('mumbles')}
+                label={'Deine Mumbels'}
+                active={activeTab === 'mumbles'}
+              ></TabsItem>
+              <TabsItem
+                onClick={() => setActiveTab('likes')}
+                label={'Deine Likes'}
+                active={activeTab === 'likes'}
+              ></TabsItem>
+            </Tabs>
+          )}
         </div>
       </div>
       <MumbleList
@@ -133,6 +141,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query: { id 
       likedCount,
       likedMumbles,
       users,
+      currentUser: session?.user.id === user.id,
     },
   };
 };
