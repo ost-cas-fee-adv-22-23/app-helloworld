@@ -6,21 +6,23 @@ import {
   Reply,
   SearchRequestBody,
   transformMumble,
-} from './serviceTypes';
+} from './service-types';
 import axios from 'axios';
 
 export const fetchMumbles = async (params?: {
   limit?: number;
   offset?: number;
   newerThanMumbleId?: string;
+  olderThanMumbleId?: string;
   creator?: string;
 }) => {
-  const { limit, offset, newerThanMumbleId, creator } = params || {};
+  const { limit, offset, newerThanMumbleId, olderThanMumbleId, creator } = params || {};
 
   const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}/posts?${new URLSearchParams({
     limit: limit?.toString() || '10',
     offset: offset?.toString() || '0',
     newerThan: newerThanMumbleId || '',
+    olderThan: olderThanMumbleId || '',
     creator: creator || '',
   })}`;
 

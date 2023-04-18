@@ -1,5 +1,5 @@
 import React from 'react';
-import { MumbleList } from '../../components/mumbleList';
+import { MumbleList } from '../../components/mumble-list';
 
 export default function MumblePage() {
   return (

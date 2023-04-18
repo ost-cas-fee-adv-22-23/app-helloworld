@@ -1,18 +1,5 @@
 import axios from 'axios';
-
-export type User = {
-  id?: string;
-  userName?: string;
-  firstName?: string;
-  lastName?: string;
-  avatarUrl?: string;
-};
-
-type QwackerUserResponse = {
-  count?: number;
-  data?: User[];
-  accessToken: string;
-};
+import { QwackerUserResponse, User } from './service-types';
 
 export const fetchUsers = async (params?: { accessToken?: string }) => {
   const { accessToken } = params || {};

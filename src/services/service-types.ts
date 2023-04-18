@@ -1,11 +1,10 @@
 import { decodeTime } from 'ulid';
-import { User } from './users';
 
-export type UploadImage = File & { preview: string };
+// export type UploadImage = File & { preview: string };
 
 export type PostArgs = {
   text: string;
-  file?: UploadImage;
+  file?: File | null;
   accessToken?: string;
 };
 
@@ -61,4 +60,18 @@ export type SearchRequestBody = {
   isReply?: boolean;
   limit?: number;
   offset?: number;
+};
+
+export type User = {
+  id: string;
+  userName: string;
+  firstName: string;
+  lastName: string;
+  avatarUrl: string;
+};
+
+export type QwackerUserResponse = {
+  count?: number;
+  data?: User[];
+  accessToken: string;
 };
