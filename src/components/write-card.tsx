@@ -25,7 +25,6 @@ interface WriteCard {
 }
 export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
   const [state, dispatch] = useReducer(writeReducer, {
-    formInputError: '',
     form: {
       file: null,
       filename: '',
@@ -51,7 +50,6 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
   });
 
   const onTextfieldChanged = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    dispatch({ type: 'file_error_reset' });
     dispatch({ type: 'form_change', textInput: e.target.value });
   };
 

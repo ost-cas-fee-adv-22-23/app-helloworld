@@ -11,20 +11,24 @@ export default function PageHome({ mumbles, users, error, count }: InferGetServe
   }
 
   return (
-    <div>
-      <div className={'grid grid-cols-1 justify-items-center'}>
-        <h2 className={'head-2 text-violet-500'}>Willkommen auf Mumble</h2>
-        <h4 className={'head-4 text-slate-500 w-[550px] mb-m'}>
-          Voluptatem qui cumque voluptatem quia tempora dolores distinctio vel repellat dicta.
-        </h4>
+    <div className={'text-violet-500 w-full'}>
+      <div className={'grid grid-cols-1 justify-items-center m-m'}>
+        <h1 className={'head-4 md:head-1'}>Willkommen auf Mumble</h1>
+        <div className={'text-slate-500 '}>
+          <h2 className={'paragraph-M md:head-4 md:w-615'}>
+            Voluptatem qui cumque voluptatem quia tempora dolores distinctio vel repellat dicta.
+          </h2>
+        </div>
       </div>
-      <MumbleList
-        mumbles={mumbles}
-        users={users}
-        totalMumbles={count}
-        showWriteCard={true}
-        mumbleKey={'mumbles'}
-      ></MumbleList>
+      <div className={'text-slate-900'}>
+        <MumbleList
+          mumbles={mumbles}
+          users={users}
+          totalMumbles={count}
+          showWriteCard={true}
+          mumbleKey={'mumbles'}
+        ></MumbleList>
+      </div>
     </div>
   );
 }

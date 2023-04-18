@@ -48,6 +48,7 @@ export function writeReducer(state: WriteState, action: WriteAction): WriteState
           ...state.form,
           textInput: action.textInput,
         },
+        isSubmitting: false,
       };
     }
     case 'form_submit_added': {

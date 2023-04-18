@@ -23,7 +23,6 @@ export type ListState = {
 };
 
 export type WriteState = {
-  formInputError: string;
   form: {
     file: File | null;
     filename?: string;
