@@ -134,6 +134,7 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
                   label="Bild hochladen"
                   size="L"
                   variant="default"
+                  hideLabelMobile={true}
                   isDisabled={state.isSubmitting}
                   onClick={fileUploadClick}
                 >
@@ -143,6 +144,7 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
                   label="Absenden"
                   size="L"
                   variant="purple"
+                  hideLabelMobile={true}
                   isDisabled={state.isSubmitting || !(!!state.form.file || !!state.form.textInput)}
                   onClick={(e) => onSubmitPostHandler(e)}
                 >
