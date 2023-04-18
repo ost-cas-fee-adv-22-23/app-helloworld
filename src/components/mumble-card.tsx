@@ -22,9 +22,10 @@ interface MumbleCard {
   mumble: Mumble;
   showComments?: boolean;
   commentSubmitted?: (newReply: Reply) => void;
+  isProfileIntended?: boolean;
 }
 
-export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted }) => {
+export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted, isProfileIntended = false }) => {
   const { data: session } = useSession();
 
   const [state, dispatch] = useReducer(cardReducer, { showComments, mumble, comment: '' });
@@ -54,14 +55,13 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
 
     commentSubmitted && commentSubmitted(newPost);
   };
-
   return (
     <>
-      <div className={'absolute flex flex-row md:-left-l'}>
+      <div className={`${'absolute flex flex-row'} - ${!isProfileIntended && 'md:-left-l'}`}>
         <ProfileHeader
           fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
           labelType={ProfileHeaderLabelType.M}
-          profilePictureSize={ProfileHeaderPictureSize.M}
+          profilePictureSize={isProfileIntended ? ProfileHeaderPictureSize.S : ProfileHeaderPictureSize.M}
           timestamp={state.mumble.createdDate}
           username={state.mumble?.creatorProfile?.userName}
           imageSrc={profileAvatar(state.mumble?.creatorProfile?.avatarUrl)}
