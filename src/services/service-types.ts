@@ -11,7 +11,7 @@ export type PostArgs = {
 export const transformMumble = (mumble: RawMumble | Reply) => ({
   ...mumble,
   createdTimestamp: decodeTime(mumble.id),
-  createdDate: new Date(decodeTime(mumble.id)).toLocaleDateString(),
+  createdDate: new Date(decodeTime(mumble.id)).toLocaleDateString('de-CH'),
 });
 
 export const calculateCreatedDate = (mumbleId: string) => new Date(decodeTime(mumbleId)).toLocaleDateString();
