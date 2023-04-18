@@ -67,7 +67,6 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
   };
 
   const onFileHandler = (file: FileData) => {
-    dispatch({ type: 'file_upload_submitting' });
     dispatch({ type: 'file_upload_add', payload: file });
   };
 
