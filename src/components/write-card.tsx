@@ -106,7 +106,7 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
         <div className="m-s w-fill">
           <Card as="div" borderType={BorderType.rounded} size={Size.M}>
             <div className="grid grid-cols-1">
-              <div className="absolute flex flex-row">
+              <div className="absolute flex flex-row md:-left-l">
                 <ProfileHeader
                   altText={session?.user.username}
                   fullName={'Hey, was läuft?'}
