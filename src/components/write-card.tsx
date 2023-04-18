@@ -19,6 +19,7 @@ import { Oval } from 'react-loader-spinner';
 import { ModalFileUpload } from './modal-file-upload';
 import { writeReducer } from '../state/write-reducer';
 import { FileData } from '../state/state-types';
+import { profileAvatar } from '../utils/profile-avatar';
 
 interface WriteCard {
   onSubmit: () => void;
@@ -109,13 +110,13 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
                 <ProfileHeader
                   altText={session?.user.username}
                   fullName={'Hey, was läuft?'}
-                  imageSrc={session?.user.avatarUrl}
+                  imageSrc={profileAvatar(session?.user.avatarUrl)}
                   labelType={ProfileHeaderLabelType.L}
                   href={'#'}
                   profilePictureSize={ProfileHeaderPictureSize.M}
                 />
               </div>
-              <form className="mt-xl">
+              <form className="mt-xl3">
                 <Textfield placeholder="Deine Meinung zählt?" value={state.form.textInput} onChange={onTextfieldChanged} />
                 {state.form.filename ? (
                   <span className="text-slate-700 text-xxs font-medium mt-xxs self-start" id={`filename`}>

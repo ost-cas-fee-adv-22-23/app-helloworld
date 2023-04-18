@@ -10,6 +10,7 @@ import {
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { User } from 'next-auth';
 import Link from 'next/link';
+import { profileAvatar } from '../utils/profile-avatar';
 
 interface CurrentUser {
   user?: User;
@@ -26,7 +27,7 @@ export const CommentMumble: FC<CurrentUser> = ({ user, handleCommentChanged, sub
           labelType={ProfileHeaderLabelType.S}
           profilePictureSize={ProfileHeaderPictureSize.S}
           username={user?.username}
-          imageSrc={user?.avatarUrl}
+          imageSrc={profileAvatar(user?.avatarUrl)}
           hrefProfile={'#'}
           altText={'Avatar'}
           link={Link}

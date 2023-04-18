@@ -14,6 +14,7 @@ import { fetchUserById, fetchUserByMe, fetchUsers } from '../../services/users';
 import { Mumble, User } from '../../services/service-types';
 import { MumbleList } from '../../components/mumble-list';
 import Image from 'next/image';
+import { profileAvatar } from '../../utils/profile-avatar';
 
 type Props = {
   profileUser: User;
@@ -59,7 +60,7 @@ export default function ProfilePage({
                 <ProfilePic
                   editLabel={'Bearbeiten'}
                   altText={'Profilbild'}
-                  imageUrl={`${profileUser.avatarUrl}`}
+                  imageUrl={`${profileAvatar(profileUser.avatarUrl)}`}
                   size={'XL'}
                 />
               </Link>

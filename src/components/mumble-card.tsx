@@ -16,6 +16,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { cardReducer } from '../state/card-reducer';
 import { MumbleTextContent } from './mumble-text-content';
+import { profileAvatar } from '../utils/profile-avatar';
 
 interface MumbleCard {
   mumble: Mumble;
@@ -63,7 +64,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           profilePictureSize={ProfileHeaderPictureSize.M}
           timestamp={state.mumble.createdDate}
           username={state.mumble?.creatorProfile?.userName}
-          imageSrc={state.mumble?.creatorProfile?.avatarUrl}
+          imageSrc={profileAvatar(state.mumble?.creatorProfile?.avatarUrl)}
           hrefProfile={'#'}
           altText={'Avatar'}
           link={Link}

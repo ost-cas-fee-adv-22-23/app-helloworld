@@ -7,6 +7,7 @@ import {
   SettingsIcon,
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { signOut, useSession } from 'next-auth/react';
+import { profileAvatar } from '../utils/profile-avatar';
 
 export const Header: FC = () => {
   const { data: session } = useSession();
@@ -17,7 +18,12 @@ export const Header: FC = () => {
         <Navbar logoHref={'/'} logoAriaLabel={'Navigate to home'}>
           <span className={'absolute top-0'}>
             <a href={`/profile/me`}>
-              <ProfilePic altText={'Profilbild'} editLabel={'Bearbeiten'} imageUrl={session?.user?.avatarUrl} size={'S'} />
+              <ProfilePic
+                altText={'Profilbild'}
+                editLabel={'Bearbeiten'}
+                imageUrl={profileAvatar(session?.user?.avatarUrl)}
+                size={'S'}
+              />
             </a>
           </span>
           <div className={'pl-xxl'}>
