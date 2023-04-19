@@ -44,6 +44,9 @@ export default NextAuth({
   session: {
     maxAge: 12 * 60 * 60, // 12 hours
   },
+  pages: {
+    signIn: '/login'
+  },
   callbacks: {
     async jwt({ token, user, account }) {
       if (account) {

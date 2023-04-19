@@ -36,18 +36,18 @@ export default function PageHome({ mumbles, users, error, count }: InferGetServe
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+  // if (!session) {
+  //   return {
+  //     redirect: {
+  //       destination: '/login',
+  //       permanent: false,
+  //     },
+  //   };
+  // }
 
   try {
     const { count, mumbles } = await fetchMumbles({ limit: 10 });
-    const { users } = await fetchUsers({ accessToken: session.accessToken });
+    const { users } = await fetchUsers({ accessToken: session?.accessToken });
 
     return { props: { count, mumbles, users } };
   } catch (error) {
