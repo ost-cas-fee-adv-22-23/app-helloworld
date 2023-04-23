@@ -4,6 +4,7 @@ export type CardState = {
   comment: string;
   mumble: Mumble;
   showComments?: boolean;
+  copiedActive: boolean;
 };
 
 export type FileState = {
