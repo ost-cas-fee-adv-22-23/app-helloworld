@@ -9,6 +9,7 @@ import {
 import { signOut, useSession } from 'next-auth/react';
 import { profileAvatar } from '../utils/profile-avatar';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 export const Header: FC = () => {
   const { data: session } = useSession();
@@ -26,9 +27,10 @@ export const Header: FC = () => {
           <span className={'absolute top-0'}>
             <a href={href} onClick={(e) => handleClick(e)}>
               <ProfilePic
-                altText={'Profilbild'}
+                altImage={'Profilbild'}
                 editLabel={'Bearbeiten'}
                 imageUrl={profileAvatar(session?.user?.avatarUrl)}
+                nextImage={Image}
                 size={'S'}
               />
             </a>

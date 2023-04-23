@@ -59,9 +59,10 @@ export default function ProfilePage({
               <Link href={`/profile/${profileUser.id}`}>
                 <ProfilePic
                   editLabel={'Bearbeiten'}
-                  altText={'Profilbild'}
+                  altImage={'Profilbild'}
                   imageUrl={`${profileAvatar(profileUser.avatarUrl)}`}
                   size={'XL'}
+                  nextImage={Image}
                 />
               </Link>
             </div>
@@ -69,7 +70,7 @@ export default function ProfilePage({
         </div>
       </div>
       <div className={'grid grid-cols-1 gap-1 place-items-center'}>
-        <div className={'w-615'}>
+        <div className={'md:w-615'}>
           <ProfileHeader
             fullName={`${profileUser.firstName} ${profileUser.lastName}`}
             labelType={ProfileHeaderLabelType.XL}

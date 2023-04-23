@@ -20,6 +20,7 @@ import { ModalFileUpload } from './modal-file-upload';
 import { writeReducer } from '../state/write-reducer';
 import { FileData } from '../state/state-types';
 import { profileAvatar } from '../utils/profile-avatar';
+import Image from 'next/image';
 
 interface WriteCard {
   onSubmit: () => void;
@@ -105,8 +106,9 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
                     fullName={'Hey, was läuft?'}
                     imageSrc={profileAvatar(session?.user.avatarUrl)}
                     labelType={ProfileHeaderLabelType.L}
-                    href={'#'}
+                    href={`/profile/${session?.user.id}`}
                     profilePictureSize={ProfileHeaderPictureSize.M}
+                    nextImage={Image}
                   />
                 </div>
                 <form className="mt-xl3">

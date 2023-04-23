@@ -55,9 +55,10 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
 
     commentSubmitted && commentSubmitted(newPost);
   };
+  const indentedClass = !isProfileIntended ? 'md:-left-l' : '';
   return (
     <>
-      <div className={`${'absolute flex flex-row'} - ${!isProfileIntended && 'md:-left-l'}`}>
+      <div className={`${'absolute flex flex-row'} - ${indentedClass}`}>
         <ProfileHeader
           fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
           labelType={ProfileHeaderLabelType.M}
@@ -68,10 +69,11 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           hrefProfile={'#'}
           altText={'Avatar'}
           link={Link}
+          nextImage={Image}
           href={`/profile/${state.mumble?.creatorProfile?.id}`}
         ></ProfileHeader>
       </div>
-      <div className={'inline-block mt-xl3'}>
+      <div className={'block mt-xl3'}>
         {state.mumble.text && (
           <div className={'mb-s w-full'}>
             <MumbleTextContent text={state.mumble.text}></MumbleTextContent>
