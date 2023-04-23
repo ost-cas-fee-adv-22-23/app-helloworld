@@ -104,9 +104,9 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
                   <ProfileHeader
                     altText={session?.user.username}
                     fullName={'Hey, was läuft?'}
+                    hrefProfile={`/profile/${session?.user.id}`}
                     imageSrc={profileAvatar(session?.user.avatarUrl)}
                     labelType={ProfileHeaderLabelType.L}
-                    href={`/profile/${session?.user.id}`}
                     profilePictureSize={ProfileHeaderPictureSize.M}
                     nextImage={Image}
                   />

@@ -73,11 +73,10 @@ export default function ProfilePage({
         <div className={'md:w-615'}>
           <ProfileHeader
             fullName={`${profileUser.firstName} ${profileUser.lastName}`}
+            hrefProfile={`/profile/${profileUser.id}`}
             labelType={ProfileHeaderLabelType.XL}
             username={`${profileUser.userName}`}
-            hrefProfile={'#'}
             link={Link}
-            href={`/profile/${profileUser.id}`}
           />
         </div>
       </div>

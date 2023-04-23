@@ -29,11 +29,10 @@ export const CommentMumble: FC<CurrentUser> = ({ user, handleCommentChanged, sub
           profilePictureSize={ProfileHeaderPictureSize.S}
           username={user?.username}
           imageSrc={profileAvatar(user?.avatarUrl)}
-          hrefProfile={'#'}
+          hrefProfile={`/profile/${user?.id}`}
           altText={'Avatar'}
           link={Link}
           nextImage={Image}
-          href={`/profile/${user?.id}`}
         />
         <form className="mt-m">
           <Textfield placeholder="Und was meinst du dazu?" onChange={handleCommentChanged} />

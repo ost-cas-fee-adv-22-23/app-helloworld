@@ -66,11 +66,10 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           timestamp={state.mumble.createdDate}
           username={state.mumble?.creatorProfile?.userName}
           imageSrc={profileAvatar(state.mumble?.creatorProfile?.avatarUrl)}
-          hrefProfile={'#'}
+          hrefProfile={`/profile/${state.mumble?.creatorProfile?.id}`}
           altText={'Avatar'}
           link={Link}
           nextImage={Image}
-          href={`/profile/${state.mumble?.creatorProfile?.id}`}
         ></ProfileHeader>
       </div>
       <div className={'block mt-xl3'}>
