@@ -62,7 +62,7 @@ export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles, mumbl
               </li>
             )}
             {state.mumbles.map((mumble: Mumble) => (
-              <li key={mumble.id} className={'m-s'}>
+              <li key={mumble.id} className={'m-s md:mx-none'}>
                 <Card borderType={BorderType.rounded}>
                   <MumbleCard mumble={mumble}></MumbleCard>
                 </Card>
