@@ -111,7 +111,7 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
                     nextImage={Image}
                   />
                 </div>
-                <form className="mt-xl3">
+                <form className="pt-xl3">
                   <Textfield placeholder="Deine Meinung zählt?" value={state.form.textInput} onChange={onTextfieldChanged} />
                   {state.form.filename ? (
                     <span className="text-slate-700 text-xxs font-medium mt-xxs self-start" id={`filename`}>

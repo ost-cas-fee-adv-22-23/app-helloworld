@@ -72,7 +72,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           nextImage={Image}
         ></ProfileHeader>
       </div>
-      <div className={'block mt-xl3'}>
+      <div className={'block pt-xl3'}>
         {state.mumble.text && (
           <div className={'mb-s w-full'}>
             <MumbleTextContent text={state.mumble.text}></MumbleTextContent>
