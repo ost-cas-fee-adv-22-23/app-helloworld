@@ -10,7 +10,7 @@ export const MumbleTextContent: FC<MumbleTextContent> = ({ text }) => {
   const hashtagPattern = /#(\w+)(?!\w)/g;
 
   return (
-    <div className={'paragraph-M'}>
+    <div className={'paragraph-M break-words'}>
       {processedText.map((text, index) =>
         text.match(hashtagPattern) ? (
           <Link href={`tag/${text.substring(1)}`} className={'paragraph-M text-violet-600'} key={index}>
