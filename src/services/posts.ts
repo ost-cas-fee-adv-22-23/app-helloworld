@@ -62,22 +62,23 @@ export const createPost = async (postArgs: PostArgs) => {
   }
 };
 
-export const commentPost = async (params: { postId: string; comment: string; accessToken?: string }) => {
-  const { postId, comment, accessToken } = params || {};
+export const commentPost = async (params: { postId: string; comment: string; file: File | null; accessToken?: string }) => {
+  const { postId, comment, file, accessToken } = params || {};
+  const formData = new FormData();
+  formData.append('text', comment);
+  if (file) {
+    formData.append('image', file);
+  }
 
   if (!accessToken) {
     throw new Error('No access token');
   }
 
-  const res = await axios.post(
-    `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}`,
-    { text: comment },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+  const res = await axios.post(`${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}`, formData, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
   const reply = (await res.data) as Reply;
 

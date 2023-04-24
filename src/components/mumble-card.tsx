@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useReducer } from 'react';
+import React, { FC, useReducer } from 'react';
 import {
   CommentButton,
   CopyButton,
@@ -16,6 +16,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { cardReducer } from '../state/card-reducer';
 import { MumbleTextContent } from './mumble-text-content';
+import { CardForm } from '../state/state-types';
 
 interface MumbleCard {
   mumble: Mumble;
@@ -26,7 +27,12 @@ interface MumbleCard {
 export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted }) => {
   const { data: session } = useSession();
 
-  const [state, dispatch] = useReducer(cardReducer, { showComments, mumble, comment: '' });
+  const [state, dispatch] = useReducer(cardReducer, {
+    form: { comment: '', commentError: '', filename: '', file: null },
+    showComments,
+    mumble,
+    isSubmitting: false,
+  });
 
   const likedPost = async () => {
     await likePost({
@@ -37,21 +43,28 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
     dispatch({ type: 'post_liked', likedByUser: !state.mumble.likedByUser });
   };
 
-  const handleCommentChanged = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    dispatch({ type: 'comment_changed', comment: e.target.value });
+  const handleCommentChanged = (f: CardForm) => {
+    if (f.comment) {
+      dispatch({ type: 'comment_changed', comment: f.comment });
+    } else if (f.file && f.filename) {
+      dispatch({ type: 'file_changed', file: f.file, name: f.filename });
+    } else if (f.commentError) {
+      dispatch({ type: 'comment_error', error: f.commentError });
+    }
   };
 
   const copyMumbleUrl = () => navigator.clipboard.writeText(`${window.location.href}mumble/${state.mumble.id}`);
 
   const submitComment = async () => {
+    dispatch({ type: 'comment_submitting' });
     const newPost = await commentPost({
       postId: state.mumble.id,
-      comment: state.comment,
+      comment: state.form.comment,
+      file: state.form.file,
       accessToken: session?.accessToken,
     });
-    dispatch({ type: 'comment_submitted', newPost });
-
     commentSubmitted && commentSubmitted(newPost);
+    dispatch({ type: 'comment_submitted', newPost });
   };
 
   return (
@@ -127,6 +140,8 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           user={session?.user}
           handleCommentChanged={handleCommentChanged}
           submitComment={submitComment}
+          form={state.form}
+          isSubmitting={state.isSubmitting}
         ></CommentMumble>
       )}
     </>
