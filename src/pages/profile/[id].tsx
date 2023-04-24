@@ -46,11 +46,11 @@ export default function ProfilePage({
               <div className={'w-auto h-auto'}>
                 <Image
                   alt={'image'}
-                  src={'https://picsum.photos/id/36/600/300'}
-                  width={600}
+                  src={'https://picsum.photos/id/36/615/300'}
+                  width={615}
                   height={300}
                   placeholder={'blur'}
-                  blurDataURL={'https://picsum.photos/id/36/600/300'}
+                  blurDataURL={'https://picsum.photos/id/36/615/300'}
                   className={'object-cover rounded-s'}
                 />
               </div>
