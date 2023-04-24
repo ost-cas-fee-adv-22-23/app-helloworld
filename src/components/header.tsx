@@ -25,7 +25,7 @@ export const Header: FC = () => {
               <SettingsIcon size={24} />
             </IconButton>
           </div>
-          <a href="#" onClick={() => signOut()}>
+          <a href="#" onClick={() => signOut({ redirect: true, callbackUrl: '/login' })}>
             <IconButton label={'Logout'} variant={'purple'} iconText={'Logout'}>
               <LogoutIcon size={24} />
             </IconButton>
