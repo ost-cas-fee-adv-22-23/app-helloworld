@@ -37,7 +37,7 @@ export default function MumblePage({ mumble, replies }: Props): InferGetServerSi
                   {state.replies.map((reply) => (
                     <li key={reply.id} className={'pt-xl pb-m'}>
                       <div className={'mx-xl'}>
-                        <MumbleCard mumble={reply} commentSubmitted={commentSubmitted}></MumbleCard>
+                        <MumbleCard mumble={reply} commentSubmitted={commentSubmitted} isProfileIntended={true}></MumbleCard>
                       </div>
                     </li>
                   ))}

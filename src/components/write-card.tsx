@@ -19,6 +19,8 @@ import { Oval } from 'react-loader-spinner';
 import { ModalFileUpload } from './modal-file-upload';
 import { writeReducer } from '../state/write-reducer';
 import { FileData } from '../state/state-types';
+import { profileAvatar } from '../utils/profile-avatar';
+import Image from 'next/image';
 
 interface WriteCard {
   onSubmit: () => void;
@@ -79,7 +81,7 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
   return (
     <>
       <div className="p-10">
-        {mutation.isLoading && (
+        {mutation.isLoading ? (
           <div className={'relative flex flex-row m-s w-fill justify-center'}>
             <Oval
               height={80}
@@ -94,64 +96,68 @@ export const WriteCard: FC<WriteCard> = ({ onSubmit }) => {
               strokeWidthSecondary={2}
             />
           </div>
+        ) : (
+          <div className="m-s w-fill">
+            <Card as="div" borderType={BorderType.rounded} size={Size.M}>
+              <div className="grid grid-cols-1">
+                <div className="absolute flex flex-row md:-left-l">
+                  <ProfileHeader
+                    altText={session?.user.username}
+                    fullName={'Hey, was läuft?'}
+                    hrefProfile={`/profile/${session?.user.id}`}
+                    imageSrc={profileAvatar(session?.user.avatarUrl)}
+                    labelType={ProfileHeaderLabelType.L}
+                    profilePictureSize={ProfileHeaderPictureSize.M}
+                    nextImage={Image}
+                  />
+                </div>
+                <form className="pt-xl3">
+                  <Textfield placeholder="Deine Meinung zählt?" value={state.form.textInput} onChange={onTextfieldChanged} />
+                  {state.form.filename ? (
+                    <span className="text-slate-700 text-xxs font-medium mt-xxs self-start" id={`filename`}>
+                      {'Bild hinzugefügt: ' + state.form.filename}
+                    </span>
+                  ) : null}
+                  {state.form.textInputError ? (
+                    <span className="text-red text-xxs font-medium mt-xxs self-end" id={`textInputError`}>
+                      {state.form.textInputError}
+                    </span>
+                  ) : null}
+                </form>
+                <div className="flex flex-row gap-l justify-between unset pt-xl">
+                  <Button
+                    label="Bild hochladen"
+                    size="L"
+                    variant="default"
+                    hideLabelMobile={true}
+                    isDisabled={state.isSubmitting}
+                    onClick={fileUploadClick}
+                  >
+                    <UploadIcon size={16} />
+                  </Button>
+                  <Button
+                    label="Absenden"
+                    size="L"
+                    variant="purple"
+                    hideLabelMobile={true}
+                    isDisabled={state.isSubmitting || !(!!state.form.file || !!state.form.textInput)}
+                    onClick={(e) => onSubmitPostHandler(e)}
+                  >
+                    <SendIcon size={16} />
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          </div>
         )}
-        <ModalFileUpload
-          title="Bild hochladen"
-          isOpen={isOpenUpload}
-          onClose={(e) => setIsOpenUpload(e)}
-          onSubmitFile={onFileHandler}
-          isSubmitting={state.isSubmitting}
-        />
-        <div className="m-s w-fill">
-          <Card as="div" borderType={BorderType.rounded} size={Size.M}>
-            <div className="grid grid-cols-1">
-              <div className="absolute flex flex-row">
-                <ProfileHeader
-                  altText={session?.user.username}
-                  fullName={'Hey, was läuft?'}
-                  imageSrc={session?.user.avatarUrl}
-                  labelType={ProfileHeaderLabelType.L}
-                  href={'#'}
-                  profilePictureSize={ProfileHeaderPictureSize.M}
-                />
-              </div>
-              <form className="mt-xl">
-                <Textfield placeholder="Deine Meinung zählt?" value={state.form.textInput} onChange={onTextfieldChanged} />
-                {state.form.filename ? (
-                  <span className="text-slate-700 text-xxs font-medium mt-xxs self-start" id={`filename`}>
-                    {'Bild hinzugefügt: ' + state.form.filename}
-                  </span>
-                ) : null}
-                {state.form.textInputError ? (
-                  <span className="text-red text-xxs font-medium mt-xxs self-end" id={`textInputError`}>
-                    {state.form.textInputError}
-                  </span>
-                ) : null}
-              </form>
-              <div className="flex flex-row gap-l justify-between unset pt-xl">
-                <Button
-                  label="Bild hochladen"
-                  size="L"
-                  variant="default"
-                  isDisabled={state.isSubmitting}
-                  onClick={fileUploadClick}
-                >
-                  <UploadIcon size={16} />
-                </Button>
-                <Button
-                  label="Absenden"
-                  size="L"
-                  variant="purple"
-                  isDisabled={state.isSubmitting || !(!!state.form.file || !!state.form.textInput)}
-                  onClick={(e) => onSubmitPostHandler(e)}
-                >
-                  <SendIcon size={16} />
-                </Button>
-              </div>
-            </div>
-          </Card>
-        </div>
       </div>
+      <ModalFileUpload
+        title="Bild hochladen"
+        isOpen={isOpenUpload}
+        onClose={(e) => setIsOpenUpload(e)}
+        onSubmitFile={onFileHandler}
+        isSubmitting={state.isSubmitting}
+      />
     </>
   );
 };

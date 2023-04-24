@@ -14,6 +14,7 @@ import { fetchUserById, fetchUserByMe, fetchUsers } from '../../services/users';
 import { Mumble, User } from '../../services/service-types';
 import { MumbleList } from '../../components/mumble-list';
 import Image from 'next/image';
+import { profileAvatar } from '../../utils/profile-avatar';
 
 type Props = {
   profileUser: User;
@@ -58,9 +59,10 @@ export default function ProfilePage({
               <Link href={`/profile/${profileUser.id}`}>
                 <ProfilePic
                   editLabel={'Bearbeiten'}
-                  altText={'Profilbild'}
-                  imageUrl={`${profileUser.avatarUrl}`}
+                  altImage={'Profilbild'}
+                  imageUrl={`${profileAvatar(profileUser.avatarUrl)}`}
                   size={'XL'}
+                  nextImage={Image}
                 />
               </Link>
             </div>
@@ -68,14 +70,13 @@ export default function ProfilePage({
         </div>
       </div>
       <div className={'grid grid-cols-1 gap-1 place-items-center'}>
-        <div className={'w-615'}>
+        <div className={'md:w-615'}>
           <ProfileHeader
             fullName={`${profileUser.firstName} ${profileUser.lastName}`}
+            hrefProfile={`/profile/${profileUser.id}`}
             labelType={ProfileHeaderLabelType.XL}
             username={`${profileUser.userName}`}
-            hrefProfile={'#'}
             link={Link}
-            href={`/profile/${profileUser.id}`}
           />
         </div>
       </div>

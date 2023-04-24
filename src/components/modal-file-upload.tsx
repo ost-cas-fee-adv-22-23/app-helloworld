@@ -61,13 +61,14 @@ export const ModalFileUpload: React.FC<ModalFileUpload> = ({ title, isOpen, onCl
           />
         </div>
         <div className={'flex flex-row gap-l justify-between py-l'}>
-          <Button label="Abbrechen" size="L" variant="default" onClick={() => onAbort()}>
+          <Button label="Abbrechen" size="L" variant="default" hideLabelMobile={true} onClick={() => onAbort()}>
             <CancelIcon size={16} />
           </Button>
           <Button
             label="Speichern"
             size="L"
             variant="purple"
+            hideLabelMobile={true}
             isDisabled={state.errorMessage.length > 0 || isSubmitting}
             onClick={() => onSubmit()}
           >

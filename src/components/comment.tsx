@@ -10,6 +10,8 @@ import {
 } from '@smartive-education/design-system-component-library-hello-world-team';
 import { User } from 'next-auth';
 import Link from 'next/link';
+import Image from 'next/image';
+import { profileAvatar } from '../utils/profile-avatar';
 
 interface CurrentUser {
   user?: User;
@@ -26,11 +28,11 @@ export const CommentMumble: FC<CurrentUser> = ({ user, handleCommentChanged, sub
           labelType={ProfileHeaderLabelType.S}
           profilePictureSize={ProfileHeaderPictureSize.S}
           username={user?.username}
-          imageSrc={user?.avatarUrl}
-          hrefProfile={'#'}
+          imageSrc={profileAvatar(user?.avatarUrl)}
+          hrefProfile={`/profile/${user?.id}`}
           altText={'Avatar'}
           link={Link}
-          href={`/profile/${user?.id}`}
+          nextImage={Image}
         />
         <form className="mt-m">
           <Textfield placeholder="Und was meinst du dazu?" onChange={handleCommentChanged} />
