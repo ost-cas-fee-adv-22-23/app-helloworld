@@ -65,10 +65,6 @@ export const createPost = async (postArgs: PostArgs) => {
 export const commentPost = async (params: { postId: string; comment: string; accessToken?: string }) => {
   const { postId, comment, accessToken } = params || {};
 
-  if (!accessToken) {
-    throw new Error('No access token');
-  }
-
   const res = await axios.post(
     `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}`,
     { text: comment },
@@ -86,10 +82,6 @@ export const commentPost = async (params: { postId: string; comment: string; acc
 
 export const fetchMumbleById = async (params?: { postId: string; accessToken?: string }) => {
   const { postId, accessToken } = params || {};
-
-  // if (!accessToken) {
-  //   throw new Error('No access token');
-  // }
 
   const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}`;
 
