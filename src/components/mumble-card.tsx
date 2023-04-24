@@ -26,7 +26,7 @@ interface MumbleCard {
 export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted }) => {
   const { data: session } = useSession();
 
-  const [state, dispatch] = useReducer(cardReducer, { showComments, mumble, comment: '' });
+  const [state, dispatch] = useReducer(cardReducer, { showComments, mumble, comment: '', copiedActive: false });
 
   const likedPost = async () => {
     await likePost({
@@ -41,7 +41,13 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
     dispatch({ type: 'comment_changed', comment: e.target.value });
   };
 
-  const copyMumbleUrl = () => navigator.clipboard.writeText(`${window.location.href}mumble/${state.mumble.id}`);
+  function copyMumbleUrl() {
+    navigator.clipboard.writeText(`${window.location.href}mumble/${state.mumble.id}`);
+    dispatch({ type: 'post_copied' });
+    setTimeout(function () {
+      dispatch({ type: 'post_copied_reset' });
+    }, 2000);
+  }
 
   const submitComment = async () => {
     const newPost = await commentPost({
@@ -115,7 +121,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
         />
         <CopyButton
           onClick={copyMumbleUrl}
-          active={false}
+          active={state.copiedActive}
           label={{
             inactive: 'Copy Link',
             active: 'Link copied',
