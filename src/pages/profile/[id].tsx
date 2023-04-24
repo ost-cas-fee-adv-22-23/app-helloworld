@@ -14,6 +14,7 @@ import { fetchUserById, fetchUserByMe, fetchUsers } from '../../services/users';
 import { Mumble, User } from '../../services/service-types';
 import { MumbleList } from '../../components/mumble-list';
 import Image from 'next/image';
+import { profileAvatar } from '../../utils/profile-avatar';
 
 type Props = {
   profileUser: User;
@@ -53,54 +54,54 @@ export default function ProfilePage({
                   className={'object-cover rounded-s'}
                 />
               </div>
-              <div className={'absolute -mt-xl4 right-xl7'}>
-                <Link href={`/profile/${profileUser.id}`}>
-                  <ProfilePic
-                    editLabel={'Bearbeiten'}
-                    altText={'Profilbild'}
-                    imageUrl={`${profileUser.avatarUrl}`}
-                    size={'XL'}
-                  />
-                </Link>
-              </div>
+            </div>
+            <div className={'absolute -mt-xl4 right-xl7'}>
+              <Link href={`/profile/${profileUser.id}`}>
+                <ProfilePic
+                  editLabel={'Bearbeiten'}
+                  altImage={'Profilbild'}
+                  imageUrl={`${profileAvatar(profileUser.avatarUrl)}`}
+                  size={'XL'}
+                  nextImage={Image}
+                />
+              </Link>
             </div>
           </div>
         </div>
-        <div className={'grid grid-cols-1 gap-1 place-items-center'}>
-          <div className={'w-full md:w-615'}>
-            <ProfileHeader
-              fullName={`${profileUser.firstName} ${profileUser.lastName}`}
-              labelType={ProfileHeaderLabelType.XL}
-              username={`${profileUser.userName}`}
-              hrefProfile={'#'}
-              link={Link}
-              href={`/profile/${profileUser.id}`}
-            />
-          </div>
+      </div>
+      <div className={'grid grid-cols-1 gap-1 place-items-center'}>
+        <div className={'md:w-615'}>
+          <ProfileHeader
+            fullName={`${profileUser.firstName} ${profileUser.lastName}`}
+            hrefProfile={`/profile/${profileUser.id}`}
+            labelType={ProfileHeaderLabelType.XL}
+            username={`${profileUser.userName}`}
+            link={Link}
+          />
         </div>
-        <div className={'grid grid-cols-1 gap-2 place-items-center'}>
-          <div className={'relative flex mt-m mb-m words-break w-full md:w-615'}>
-            <p className={'paragraph-M justify-text-center text-slate-400'}>
-              Quia aut et aut. Sunt et eligendi similique enim qui quo minus. Aut aut error velit voluptatum optio sed quis
-              cumque error magni.
-            </p>
-          </div>
-          <div className={'w-screen px-s md:px-none md:w-615'}>
-            {currentUser && (
-              <Tabs>
-                <TabsItem
-                  onClick={() => setActiveTab('mumbles')}
-                  label={'Deine Mumbels'}
-                  active={activeTab === 'mumbles'}
-                ></TabsItem>
-                <TabsItem
-                  onClick={() => setActiveTab('likes')}
-                  label={'Deine Likes'}
-                  active={activeTab === 'likes'}
-                ></TabsItem>
-              </Tabs>
-            )}
-          </div>
+      </div>
+      <div className={'grid grid-cols-1 gap-2 place-items-center'}>
+        <div className={'relative flex mt-m mb-m'}>
+          <p className={'paragraph-M justify-text-center text-slate-400 w-[600px]'}>
+            Quia aut et aut. Sunt et eligendi similique enim qui quo minus. Aut aut error velit voluptatum optio sed quis
+            cumque error magni.
+          </p>
+        </div>
+        <div className={'w-screen px-xs md:w-615'}>
+          {currentUser && (
+            <Tabs>
+              <TabsItem
+                onClick={() => setActiveTab('mumbles')}
+                label={'Deine Mumbels'}
+                active={activeTab === 'mumbles'}
+              ></TabsItem>
+              <TabsItem
+                onClick={() => setActiveTab('likes')}
+                label={'Deine Likes'}
+                active={activeTab === 'likes'}
+              ></TabsItem>
+            </Tabs>
+          )}
         </div>
       </div>
       <MumbleList
