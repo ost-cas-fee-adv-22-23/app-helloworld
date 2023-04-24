@@ -1,11 +1,7 @@
 # Team Hello World - Frontend Engineering Advanced
 
-## About
-This is the project of Mehmet Ali Bekooglu and Carole Hug.
-
 ## Deployed Application
 You find the deployed application here: https://app-helloworld-1.vercel.app/
-
 
 ## Installation Guide
 ### Clone this repo
@@ -54,3 +50,9 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Authors
+
+[Mehmet Ali Bekooglu](https://github.com/malib)
+
+[Carole Hug](https://github.com/CaroleHug)
