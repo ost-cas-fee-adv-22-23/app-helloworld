@@ -44,12 +44,12 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
   };
 
   const handleCommentChanged = (f: CardForm) => {
-    if (f.comment) {
-      dispatch({ type: 'comment_changed', comment: f.comment });
-    } else if (f.file && f.filename) {
+    if (f.file && f.filename) {
       dispatch({ type: 'file_changed', file: f.file, name: f.filename });
     } else if (f.commentError) {
       dispatch({ type: 'comment_error', error: f.commentError });
+    } else {
+      dispatch({ type: 'comment_changed', comment: f.comment || '' });
     }
   };
 
