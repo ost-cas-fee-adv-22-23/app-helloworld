@@ -33,7 +33,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
     form: { comment: '', commentError: '', filename: '', file: null },
     showComments,
     mumble,
-    copiedActive: false
+    copiedActive: false,
     isSubmitting: false,
   });
 
