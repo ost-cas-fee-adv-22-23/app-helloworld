@@ -39,18 +39,18 @@ export default function ProfilePage({
 
   return (
     <>
-      <div className={'mx-s'}>
-        <div className={'relative grid grid-cols-1 gap-2 place-content-center justify-items-center'}>
-          <div className={'w-full md:w-615 my-m'}>
-            <div className={'pt-16/9 bg-violet-200 rounded-s relative mb-s'}>
-              <div className={'w-auto h-auto rounded-s'}>
+      <div className={'relative grid grid-cols-1 gap-2 place-content-center justify-items-center mx-s md:mx-none'}>
+        <div className={'my-m '}>
+          <div className={'w-full pt-16/9 relative mb-s'}>
+            <div className={'rounded-s bg-violet-200'}>
+              <div className={'w-auto h-auto'}>
                 <Image
                   alt={'image'}
-                  src={'https://picsum.photos/id/36/615/300'}
-                  width={615}
+                  src={'https://picsum.photos/id/36/600/300'}
+                  width={600}
                   height={300}
                   placeholder={'blur'}
-                  blurDataURL={'https://picsum.photos/id/36/615/300'}
+                  blurDataURL={'https://picsum.photos/id/36/600/300'}
                   className={'object-cover rounded-s'}
                 />
               </div>
@@ -69,8 +69,8 @@ export default function ProfilePage({
           </div>
         </div>
       </div>
-      <div className={'grid grid-cols-1 gap-1 place-items-center'}>
-        <div className={'md:w-615'}>
+      <div className={'grid grid-cols-1 gap-1 md:place-items-center'}>
+        <div className={'md:w-615 px-s md:px-none'}>
           <ProfileHeader
             fullName={`${profileUser.firstName} ${profileUser.lastName}`}
             hrefProfile={`/profile/${profileUser.id}`}
@@ -81,13 +81,13 @@ export default function ProfilePage({
         </div>
       </div>
       <div className={'grid grid-cols-1 gap-2 place-items-center'}>
-        <div className={'relative flex mt-m mb-m'}>
-          <p className={'paragraph-M justify-text-center text-slate-400 w-[600px]'}>
+        <div className={'relative flex mt-m mb-m px-s md:px-none'}>
+          <p className={'paragraph-M justify-text-center text-slate-400 w-full md:w-615 words-break'}>
             Quia aut et aut. Sunt et eligendi similique enim qui quo minus. Aut aut error velit voluptatum optio sed quis
             cumque error magni.
           </p>
         </div>
-        <div className={'w-screen px-xs md:w-615'}>
+        <div className={'w-screen px-s md:px-none md:w-615'}>
           {currentUser && (
             <Tabs>
               <TabsItem
