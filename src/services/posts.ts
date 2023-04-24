@@ -70,15 +70,15 @@ export const commentPost = async (params: { postId: string; comment: string; fil
     formData.append('image', file);
   }
 
-  if (!accessToken) {
-    throw new Error('No access token');
-  }
-
-  const res = await axios.post(`${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}`, formData, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  const res = await axios.post(
+    `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}`,
+    { text: comment },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
 
   const reply = (await res.data) as Reply;
 
@@ -87,10 +87,6 @@ export const commentPost = async (params: { postId: string; comment: string; fil
 
 export const fetchMumbleById = async (params?: { postId: string; accessToken?: string }) => {
   const { postId, accessToken } = params || {};
-
-  if (!accessToken) {
-    throw new Error('No access token');
-  }
 
   const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}`;
 
@@ -109,9 +105,6 @@ export const fetchMumbleById = async (params?: { postId: string; accessToken?: s
 
 export const fetchReplies = async (params?: { postId: string; accessToken?: string }) => {
   const { postId, accessToken } = params || {};
-  if (!accessToken) {
-    throw new Error('No access token');
-  }
 
   const url = `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}/replies`;
 
