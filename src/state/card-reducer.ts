@@ -9,6 +9,8 @@ type CardAction =
   | { type: 'file_changed'; file: File; name: string }
   | { type: 'comment_submitting' }
   | { type: 'comment_submitted'; newPost: Reply }
+  | { type: 'post_copied' }
+  | { type: 'post_copied_reset' }
   | { type: 'post_liked'; likedByUser: boolean };
 
 export function cardReducer(state: CardState, action: CardAction) {
@@ -79,6 +81,18 @@ export function cardReducer(state: CardState, action: CardAction) {
           likedByUser: action.likedByUser,
           likeCount: action.likedByUser ? (state.mumble?.likeCount ?? 0) + 1 : state.mumble?.likeCount - 1,
         },
+      };
+    }
+    case 'post_copied': {
+      return {
+        ...state,
+        copiedActive: true,
+      };
+    }
+    case 'post_copied_reset': {
+      return {
+        ...state,
+        copiedActive: false,
       };
     }
   }

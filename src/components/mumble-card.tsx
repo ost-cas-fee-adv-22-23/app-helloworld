@@ -16,21 +16,24 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { cardReducer } from '../state/card-reducer';
 import { MumbleTextContent } from './mumble-text-content';
+import { profileAvatar } from '../utils/profile-avatar';
 import { CardForm } from '../state/state-types';
 
 interface MumbleCard {
   mumble: Mumble;
   showComments?: boolean;
   commentSubmitted?: (newReply: Reply) => void;
+  isProfileIntended?: boolean;
 }
 
-export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted }) => {
+export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmitted, isProfileIntended = false }) => {
   const { data: session } = useSession();
 
   const [state, dispatch] = useReducer(cardReducer, {
     form: { comment: '', commentError: '', filename: '', file: null },
     showComments,
     mumble,
+    copiedActive: false
     isSubmitting: false,
   });
 
@@ -53,7 +56,13 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
     }
   };
 
-  const copyMumbleUrl = () => navigator.clipboard.writeText(`${window.location.href}mumble/${state.mumble.id}`);
+  function copyMumbleUrl() {
+    navigator.clipboard.writeText(`${window.location.href}mumble/${state.mumble.id}`);
+    dispatch({ type: 'post_copied' });
+    setTimeout(function () {
+      dispatch({ type: 'post_copied_reset' });
+    }, 2000);
+  }
 
   const submitComment = async () => {
     dispatch({ type: 'comment_submitting' });
@@ -66,84 +75,86 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
     commentSubmitted && commentSubmitted(newPost);
     dispatch({ type: 'comment_submitted', newPost });
   };
-
+  const indentedClass = !isProfileIntended ? 'md:-left-l' : '';
   return (
     <>
-      <div className={'mb-l'}>
+      <div className={`${'absolute flex flex-row'} - ${indentedClass}`}>
         <ProfileHeader
           fullName={`${state.mumble?.creatorProfile?.firstName} ${state.mumble?.creatorProfile?.lastName}`}
           labelType={ProfileHeaderLabelType.M}
-          profilePictureSize={ProfileHeaderPictureSize.M}
+          profilePictureSize={isProfileIntended ? ProfileHeaderPictureSize.S : ProfileHeaderPictureSize.M}
           timestamp={state.mumble.createdDate}
           username={state.mumble?.creatorProfile?.userName}
-          imageSrc={state.mumble?.creatorProfile?.avatarUrl}
-          hrefProfile={'#'}
+          imageSrc={profileAvatar(state.mumble?.creatorProfile?.avatarUrl)}
+          hrefProfile={`/profile/${state.mumble?.creatorProfile?.id}`}
           altText={'Avatar'}
           link={Link}
-          href={`/profile/${state.mumble?.creatorProfile?.id}`}
+          nextImage={Image}
         ></ProfileHeader>
       </div>
-      {state.mumble.text && (
-        <div className={'mb-s w-full'}>
-          <MumbleTextContent text={state.mumble.text}></MumbleTextContent>
-        </div>
-      )}
-      {state.mumble.mediaUrl && (
-        <div className={'mb-l h-328 w-full relative bg-slate-50'}>
-          {/*eslint-disable-next-line react/forbid-component-props*/}
-          <Image
-            src={state.mumble.mediaUrl}
-            alt={'Posted image'}
-            fill
-            className={'object-cover rounded-s'}
-            placeholder={'blur'}
-            blurDataURL={state.mumble.mediaUrl}
-          />
-        </div>
-      )}
-      <div className="flex relative -left-3 space-x-8">
-        {/*TODO This Comment should exist as label in the storybook*/}
-        <Link href={`/mumble/${state.mumble.id}`}>
-          {' '}
-          <CommentButton
+      <div className={'block pt-xl3'}>
+        {state.mumble.text && (
+          <div className={'mb-s w-full'}>
+            <MumbleTextContent text={state.mumble.text}></MumbleTextContent>
+          </div>
+        )}
+        {state.mumble.mediaUrl && (
+          <div className={'mb-l h-328 w-full relative bg-slate-50'}>
+            {/*eslint-disable-next-line react/forbid-component-props*/}
+            <Image
+              src={state.mumble.mediaUrl}
+              alt={'Posted image'}
+              fill
+              className={'object-cover rounded-s'}
+              placeholder={'blur'}
+              blurDataURL={state.mumble.mediaUrl}
+            />
+          </div>
+        )}
+        <div className="flex relative -left-3 space-x-8">
+          {/*TODO This Comment should exist as label in the storybook*/}
+          <Link href={`/mumble/${state.mumble.id}`}>
+            {' '}
+            <CommentButton
+              label={{
+                noComments: 'Comment',
+                someComments: 'Comments',
+              }}
+              numberOfComments={state.mumble.replyCount ?? 0}
+              onClick={() => null}
+            />
+          </Link>
+          <LikeButtonWithReactionButton
+            onClick={() => likedPost()}
+            active
             label={{
-              noComments: 'Comment',
-              someComments: 'Comments',
+              noReaction: 'Like',
+              oneReaction: 'Like',
+              reactionByCurrentUser: 'Liked',
+              severalReaction: 'Likes',
             }}
-            numberOfComments={state.mumble.replyCount ?? 0}
-            onClick={() => null}
+            likes={state.mumble.likeCount ?? 0}
+            reactionByCurrentUser={state.mumble.likedByUser}
           />
-        </Link>
-        <LikeButtonWithReactionButton
-          onClick={() => likedPost()}
-          active
-          label={{
-            noReaction: 'Like',
-            oneReaction: 'Like',
-            reactionByCurrentUser: 'Liked',
-            severalReaction: 'Likes',
-          }}
-          likes={state.mumble.likeCount ?? 0}
-          reactionByCurrentUser={state.mumble.likedByUser}
-        />
-        <CopyButton
-          onClick={copyMumbleUrl}
-          active={false}
-          label={{
-            inactive: 'Copy Link',
-            active: 'Link copied',
-          }}
-        />
+          <CopyButton
+            onClick={copyMumbleUrl}
+            active={state.copiedActive}
+            label={{
+              inactive: 'Copy Link',
+              active: 'Link copied',
+            }}
+          />
+        </div>
+        {state.showComments && (
+          <CommentMumble
+            user={session?.user}
+            handleCommentChanged={handleCommentChanged}
+            submitComment={submitComment}
+            form={state.form}
+            isSubmitting={state.isSubmitting}
+          ></CommentMumble>
+        )}
       </div>
-      {state.showComments && (
-        <CommentMumble
-          user={session?.user}
-          handleCommentChanged={handleCommentChanged}
-          submitComment={submitComment}
-          form={state.form}
-          isSubmitting={state.isSubmitting}
-        ></CommentMumble>
-      )}
     </>
   );
 };

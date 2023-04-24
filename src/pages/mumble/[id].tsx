@@ -42,7 +42,7 @@ export default function MumblePage({
                   {state.replies.map((reply) => (
                     <li key={reply.id} className={'pt-xl pb-m'}>
                       <div className={'mx-xl'}>
-                        <MumbleCard mumble={reply} commentSubmitted={commentSubmitted}></MumbleCard>
+                        <MumbleCard mumble={reply} commentSubmitted={commentSubmitted} isProfileIntended={true}></MumbleCard>
                       </div>
                     </li>
                   ))}

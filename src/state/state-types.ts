@@ -16,6 +16,7 @@ export type CardState = {
   };
   mumble: Mumble;
   showComments?: boolean;
+  copiedActive: boolean;
   isSubmitting: boolean;
 };
 
