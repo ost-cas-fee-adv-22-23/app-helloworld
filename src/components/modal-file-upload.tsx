@@ -48,7 +48,7 @@ export const ModalFileUpload: React.FC<ModalFileUpload> = ({ title, isOpen, onCl
   };
 
   return (
-    <div className={'absolute w-355 h-[400px]'}>
+    <div className={'absolute h-[400px]'}>
       <Modal title={title} isOpen={isOpen} onClose={() => onAbort()}>
         <div>
           <FileUpload
