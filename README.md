@@ -68,7 +68,7 @@ ZITADEL_CLIENT_ID=[insert zitadel client id]
 
 ### Register a user
 
-To use the application the user has to register at [Zitadel](https://zitadel.cloud/)
+To use the application the user has to register at [Zitadel](https://zitadel.cloud/).
 
 ### Start the developement server
 Now, you can run the development server:
@@ -119,6 +119,8 @@ npm run depcruise
 The application uses the default settings of next-pwa lib.
 
 ## Deploy on Vercel
+
+To deploy the NextJS application the [Vercel Platform](https://vercel.com/new?filter=next.js) is used.
 
 ## Development
 
