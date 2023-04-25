@@ -5,6 +5,9 @@ type CardAction =
   | { type: 'add_comment' }
   | { type: 'comment' }
   | { type: 'comment_changed'; comment: string }
+  | { type: 'comment_error'; error: string }
+  | { type: 'file_changed'; file: File; name: string }
+  | { type: 'comment_submitting' }
   | { type: 'comment_submitted'; newPost: Reply }
   | { type: 'post_copied' }
   | { type: 'post_copied_reset' }
@@ -27,13 +30,47 @@ export function cardReducer(state: CardState, action: CardAction) {
     case 'comment_changed': {
       return {
         ...state,
-        comment: action.comment,
+        form: {
+          ...state.form,
+          comment: action.comment,
+        },
+      };
+    }
+    case 'comment_error': {
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          commentError: action.error,
+        },
+      };
+    }
+    case 'file_changed': {
+      return {
+        ...state,
+        form: {
+          ...state.form,
+          file: action.file,
+          filename: action.name,
+        },
+      };
+    }
+    case 'comment_submitting': {
+      return {
+        ...state,
+        isSubmitting: true,
       };
     }
     case 'comment_submitted': {
       return {
         ...state,
-        comment: '',
+        form: {
+          comment: '',
+          commentError: '',
+          file: null,
+          filename: '',
+        },
+        isSubmitting: false,
       };
     }
     case 'post_liked': {
