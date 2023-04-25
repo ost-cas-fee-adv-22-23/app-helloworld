@@ -116,7 +116,7 @@ npm run depcruise
 
 ## PWA
 
-The application uses the default settings of next-pwa lib, which provides the following main features:
+The application uses the default settings of next-pwa lib.
 
 ## Deploy on Vercel
 
