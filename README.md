@@ -128,16 +128,16 @@ Besides the achievement of the MVP, we decided on some architectural and feature
 
 ### Architecture
 
-The decisions are:
-- Each member of the project can decided which knowledge she or he wants to acquire during thw development.
-- Implemented rest calls to [qwacker API](https://qwacker-api-http-prod-4cxdci3drq-oa.a.run.app/rest/#/) with [Axios](https://axios-http.com/) 
-- Used [TanStack Query](https://tanstack.com/query/latest) for fetch. Only for the mutation of data.
-  - Here only the mutation of the write card is build with TanStack Query and the other with Axios fetch.This was on purpose mention before.
-- Every page or component which needs a state has its own hooks.
+The decisions:
+- Each member of the project decides which knowledge she or he wants to acquire during thw development of the app
+- Implemented rest calls to [qwacker API](https://qwacker-api-http-prod-4cxdci3drq-oa.a.run.app/rest/#/) with [Axios](https://axios-http.com/)
+- Used [TanStack Query](https://tanstack.com/query/latest) for fetch. Only for the mutation of data
+  - Here only the mutation of the write card is build with TanStack Query and the other post in the comments detail is with Axios fetch. This was on purpose mention before.
+- Every page or component which needs a state has its own hooks
   - The [useReducer](https://react.dev/reference/react/useReducer) was preferred, even it has only one action. The decision is made for the future development
 - Emphasis was placed on the mobile & desktop view
 - NextJS [Middleware](https://nextjs.org/docs/advanced-features/middleware) is used to redirect to certain page, when the response is not as excepted or session is expired
-- Disable Buttons are used if the click generates a asynchronous rest call
+- Disabled button is used if the click generates a asynchronous rest post call
 
 ### Rendering Strategies
 
@@ -147,7 +147,7 @@ Login page.
 
 #### Server-Side Rendering (SSR)
 
-Main page, profile and detail site for comment, when switching the first time to the site.
+Main page with timeline, profile page and detail page, when .
 
 #### CLient-Side Rendering
 
