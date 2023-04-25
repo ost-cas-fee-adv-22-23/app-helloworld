@@ -12,6 +12,8 @@ an application from the beginning to the end.
 - [PWA](#pwa)
 - [Deploy on Vercel](#deploy-on-vercel)
 - [Architecture and Strategies](#architecture-and-strategies)
+- [Project History and Status](#project-history-and-status)
+- [Improvements for next project](#improvements-for-next-project)
 - [Authors](#authors)
 
 ## General Info
@@ -147,11 +149,23 @@ Login page.
 
 #### Server-Side Rendering (SSR)
 
-Main page with timeline, profile page and detail page, when .
+Main page with timeline, profile page and detail page, when redirected to the page.
 
 #### CLient-Side Rendering
 
-Timeline is expanded with the infinity scroller and with a post. The redirection to the profile of the logged in user is client-side.
+Timeline for the automated scrolling and for a new created post. The redirection to the profile page over the navbar.
+
+## Project History and Status
+
+Our projects follow the conventions of the [Semantic Versioning 2.0.0](https://semver.org/). The tickets are tracked with [Trello](https://trello.com/b/f3ETlXfM/app).
+
+## Improvements for next project
+
+- The error handling for api calls has to be implemented
+- Clean up tailwind classes
+- Add reload button for new mumbles
+- Add unit and integration tests
+- Refactor some componenets in storybook
 
 ## Authors
 
