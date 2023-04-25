@@ -95,13 +95,21 @@ export const CommentMumble: FC<CurrentUser> = ({ user, handleCommentChanged, sub
             ) : null}
           </form>
           <div className="flex flex-row gap-l justify-between unset">
-            <Button label="Bild hochladen" size="L" variant="default" isDisabled={isSubmitting} onClick={fileUploadClick}>
+            <Button
+              label="Bild hochladen"
+              size="L"
+              variant="default"
+              hideLabelMobile={true}
+              isDisabled={isSubmitting}
+              onClick={fileUploadClick}
+            >
               <UploadIcon size={16} />
             </Button>
             <Button
               label="Absenden"
               size="L"
               variant="purple"
+              hideLabelMobile={true}
               isDisabled={isSubmitting || !(!!form.file || !!form.comment)}
               onClick={submitComment}
             >
