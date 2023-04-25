@@ -10,6 +10,8 @@ an application from the beginning to the end.
 - [Installation Guide](#installation-guide)
 - [Scripts](#scripts)
 - [PWA](#pwa)
+- [Deploy on Vercel](#deploy-on-vercel)
+- [Development](#development)
 - [Authors](#authors)
 
 ## General Info
@@ -115,6 +117,10 @@ npm run depcruise
 ## PWA
 
 The application uses the default settings of next-pwa lib, which provides the following main features:
+
+## Deploy on Vercel
+
+## Development
 
 ## Authors
 
