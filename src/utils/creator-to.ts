@@ -19,18 +19,7 @@ export function addCreatorToMumbles(mumbles: Mumble[], users: User[]) {
 
 export function addCreatorToReplies(replies: Reply[], users: User[] | undefined) {
   return replies.map((reply) => {
-    const creator = users?.find((user) => user.id === reply.creator);
-    return {
-      ...reply,
-      creatorProfile: {
-        id: creator?.id,
-        userName: creator?.userName,
-        firstName: creator?.firstName,
-        lastName: creator?.lastName,
-        fullName: `${creator?.firstName} ${creator?.lastName}`,
-        avatarUrl: creator?.avatarUrl,
-      },
-    };
+    return addCreatorToReply(reply, users);
   });
 }
 
