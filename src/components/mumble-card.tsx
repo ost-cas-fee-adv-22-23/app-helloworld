@@ -112,16 +112,14 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           </div>
         )}
         <div className="flex relative -left-3 space-x-8">
-          {/*TODO This Comment should exist as label in the storybook*/}
           <Link href={`/mumble/${state.mumble.id}`}>
-            {' '}
             <CommentButton
               label={{
                 noComments: 'Comment',
                 someComments: 'Comments',
               }}
+              variant={'label'}
               numberOfComments={state.mumble.replyCount ?? 0}
-              onClick={() => null}
             />
           </Link>
           <LikeButtonWithReactionButton
