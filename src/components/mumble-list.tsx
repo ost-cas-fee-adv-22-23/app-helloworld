@@ -5,7 +5,7 @@ import { MumbleCard } from './mumble-card';
 import { fetchMumbles, fetchMumblesSearch } from '../services/posts';
 import InfiniteScroll from 'react-infinite-scroller';
 import { WriteCard } from './write-card';
-import { addCreatorToMumble } from '../utils/creator-to';
+import { addCreatorToMumbles } from '../utils/creator-to';
 import { listReducer } from '../state/list-reducer';
 import { useSession } from 'next-auth/react';
 
@@ -19,7 +19,7 @@ interface MumbleList {
 }
 
 export const MumbleList: FC<MumbleList> = ({ mumbles, users, totalMumbles, mumbleKey, userId, showWriteCard = false }) => {
-  const mumblesWithCreator = addCreatorToMumble(mumbles, users);
+  const mumblesWithCreator = addCreatorToMumbles(mumbles, users);
 
   const { data: session } = useSession();
   const [state, dispatch] = useReducer(listReducer, {

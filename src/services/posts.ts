@@ -62,8 +62,13 @@ export const createPost = async (postArgs: PostArgs) => {
   }
 };
 
-export const commentPost = async (params: { postId: string; comment: string; accessToken?: string }) => {
-  const { postId, comment, accessToken } = params || {};
+export const commentPost = async (params: { postId: string; comment: string; file: File | null; accessToken?: string }) => {
+  const { postId, comment, file, accessToken } = params || {};
+  const formData = new FormData();
+  formData.append('text', comment);
+  if (file) {
+    formData.append('image', file);
+  }
 
   const res = await axios.post(
     `${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}`,

@@ -1,10 +1,23 @@
 import { Mumble, Reply, User } from '../services/service-types';
 
+export type CardForm = {
+  file?: File | null;
+  filename?: string;
+  comment?: string;
+  commentError?: string;
+};
+
 export type CardState = {
-  comment: string;
+  form: {
+    file: File | null;
+    filename: string;
+    comment: string;
+    commentError: string;
+  };
   mumble: Mumble;
   showComments?: boolean;
   copiedActive: boolean;
+  isSubmitting: boolean;
 };
 
 export type FileState = {
