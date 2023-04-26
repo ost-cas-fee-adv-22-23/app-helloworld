@@ -1,34 +1,174 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# CAS FEE ADV Application: Team Hello World
 
-## Getting Started
+This is a repository for the CAS FEE ADV application part at [Ostschweizer Fachhochschule](https://www.ost.ch/de/weiterbildung/weiterbildungsangebot/informatik/software-engineering-testing/cas-frontend-engineering-advanced).
+The main goal of the CAS is to rebuild a Twitter clone called Mumble by applying all the tools and knowledge learned in the lectures to create
+an application from the beginning to the end.
 
-First, run the development server:
+## Table of Content
 
+- [General Info](#general-info)
+- [Installation Guide](#installation-guide)
+- [Scripts](#scripts)
+- [PWA](#pwa)
+- [Deploy on Vercel](#deploy-on-vercel)
+- [Architecture and Strategies](#architecture-and-strategies)
+- [Project History and Status](#project-history-and-status)
+- [Improvements for next project](#improvements-for-next-project)
+- [Authors](#authors)
+
+## General Info
+
+This application is the second part of the CAS based on [NextJS](https://nextjs.org/) with the component library [Helloworld](https://smartive-education.github.io/design-system-component-library-helloworld/?path=/story/design-tokens-branding-app-icon--page) from the first part.
+
+### Live Demo
+
+You find the deployed application [here](https://app-helloworld-1.vercel.app/).
+
+## Installation Guide
+
+Instructions on how to set up and install the project.
+
+### Clone this repo
+```bash
+git clone https://github.com/smartive-education/app-helloworld.git
+```
+
+### Authenticating GitHub Registry
+
+To install the UI component library package you need a personal GitHub Access Token.
+
+- Create a GitHub [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)
+- Create a new `.npmrc` file in the root of your repository
+- Add the key and the declaration of the owner to your project. Replace TOKEN with your access token.
+
+```console
+@smartive-education:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=TOKEN
+```
+
+To find more detailed information see [Working with the npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry).
+
+### Install the dependencies
+Then, install the dependencies:
+```bash
+npm ci
+```
+
+### Create Environment Variables
+Insert te missing content into the .env file in the root.
+```console
+# Qwacker backend
+NEXT_PUBLIC_QWACKER_API_URL=[insert URL of Qwacker API]
+
+# Authentication
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=[insert nextauth secret]
+
+ZITADEL_ISSUER=[insert zitadel issuer URL]
+ZITADEL_CLIENT_ID=[insert zitadel client id]
+```
+
+### Register a user
+
+To use the application the user has to register at [Zitadel](https://zitadel.cloud/).
+
+### Start the developement server
+Now, you can run the development server:
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### Build and start the application
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```bash
+npm run build
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+npm run start
+```
+## Scripts
 
-## Learn More
+### ESLint
 
-To learn more about Next.js, take a look at the following resources:
+ESLint is configured to check:
+- @smartive/prettier-config
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```console
+npm run lint
+npm run lint:fix
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Prettier
+
+Prettier configuration:
+
+- @smartive/prettier-config
+
+```console
+npm run prettier
+npm run prettier:check
+```
+
+### Dependency cruiser
+
+```console
+npm run depcruise
+```
+
+## PWA
+
+The application uses the default settings of next-pwa lib.
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To deploy the NextJS application the [Vercel Platform](https://vercel.com/new?filter=next.js) is used.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Architecture and Strategies
+
+Besides the achievement of the MVP, we decided on some architectural and features along the way during development.
+
+### Architecture
+
+The decisions:
+- Each member of the project decides which knowledge she or he wants to acquire during thw development of the app
+- Implemented rest calls to [qwacker API](https://qwacker-api-http-prod-4cxdci3drq-oa.a.run.app/rest/#/) with [Axios](https://axios-http.com/)
+- Used [TanStack Query](https://tanstack.com/query/latest) for fetch. Only for the mutation of data
+  - Here only the mutation of the write card is build with TanStack Query and the other post in the comments detail is with Axios fetch. This was on purpose mention before.
+- Every page or component which needs a state has its own hooks
+  - The [useReducer](https://react.dev/reference/react/useReducer) was preferred, even it has only one action. The decision is made for the future development
+- Emphasis was placed on the mobile & desktop view
+- NextJS [Middleware](https://nextjs.org/docs/advanced-features/middleware) is used to redirect to certain page, when the response is not as excepted or session is expired
+- Disabled button is used if the click generates a asynchronous rest post call
+
+### Rendering Strategies
+
+#### Static Site Generation
+
+Login page.
+
+#### Server-Side Rendering (SSR)
+
+Main page with timeline, profile page and detail page, when redirected to the page.
+
+#### CLient-Side Rendering
+
+Timeline for the automated scrolling and for a new created post. The redirection to the profile page over the navbar.
+
+## Project History and Status
+
+Our projects follow the conventions of the [Semantic Versioning 2.0.0](https://semver.org/). The tickets are tracked with [Trello](https://trello.com/b/f3ETlXfM/app).
+
+## Improvements for next project
+
+- The error handling for api calls has to be implemented
+- Clean up tailwind classes
+- Add reload button for new mumbles
+- Add unit and integration tests
+- Refactor some componenets in storybook
+
+## Authors
+
+[Mehmet Ali Bekooglu](https://github.com/malib)
+
+[Carole Hug](https://github.com/CaroleHug)
