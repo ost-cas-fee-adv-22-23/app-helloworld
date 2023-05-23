@@ -44,3 +44,6 @@ next-env.d.ts
 .npmrc
 .iml
 .idea
+/test-results/
+/playwright-report/
+/playwright/.cache/
