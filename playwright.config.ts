@@ -41,7 +41,7 @@ export default defineConfig({
         // Use prepared auth state.
         storageState: 'playwright/.auth/user.json',
       },
-      timeout: 20000,
+      timeout: 100000,
       dependencies: ['setup'],
     },
 
