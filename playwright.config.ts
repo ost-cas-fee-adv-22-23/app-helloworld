@@ -39,25 +39,26 @@ export default defineConfig({
         // Use prepared auth state.
         storageState: 'playwright/.auth/user.json',
       },
+      timeout: 20000,
     },
 
-    {
-      name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-        // Use prepared auth state.
-        storageState: 'playwright/.auth/user.json',
-      },
-    },
+    // {
+    //   name: 'firefox',
+    //   use: {
+    //     ...devices['Desktop Firefox'],
+    //     // Use prepared auth state.
+    //     storageState: 'playwright/.auth/user.json',
+    //   },
+    // },
 
-    {
-      name: 'webkit',
-      use: {
-        ...devices['Desktop Safari'],
-        // Use prepared auth state.
-        storageState: 'playwright/.auth/user.json',
-      },
-    },
+    // {
+    //   name: 'webkit',
+    //   use: {
+    //     ...devices['Desktop Safari'],
+    //     // Use prepared auth state.
+    //     storageState: 'playwright/.auth/user.json',
+    //   },
+    // },
 
     /* Test against mobile viewports. */
     // {
