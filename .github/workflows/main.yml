@@ -1,0 +1,24 @@
+name: Workflow on Push into Main
+run-name: ${{ github.actor }} triggered workflow
+
+on:
+  push:
+    branches: 
+      - main
+    workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: unbuntu-latest
+    
+     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          registry-url: https://npm.pkg.github.com/
+          scope: '@smartive-education'
+      - name: Install Dependencies
+        run: npm ci
