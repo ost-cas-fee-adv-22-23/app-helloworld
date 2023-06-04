@@ -16,11 +16,11 @@ jobs:
   trigger-jest:
     name: Jest Tests
     needs: trigger-build
-    uses: ./.github/workflows/reusable-jest-tests.yml
+    uses: ./.github/workflows/reusable-unit-tests.yml
     secrets: inherit
 
   trigger-playwright:
     name: Playwright Tests
     needs: trigger-build
-    uses: ./.github/workflows/reusable-playwright.yml
+    uses: ./.github/workflows/reusable-e2e.yml
     secrets: inherit

@@ -8,21 +8,19 @@ on:
     workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    concurrency:
-      group: 'production'
+  trigger-build:
+    name: Lint, Prettier, Dep Graph and Build
+    uses: ./.github/workflows/reusable-code-quality.yml
+    secrets: inherit
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-          registry-url: https://npm.pkg.github.com/
-          scope: '@smartive-education'
-      - name: Install Dependencies
-        run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  trigger-jest:
+    name: Jest Tests
+    needs: trigger-build
+    uses: ./.github/workflows/reusable-unit-tests.yml
+    secrets: inherit
+
+  trigger-playwright:
+    name: Playwright Tests
+    needs: trigger-build
+    uses: ./.github/workflows/reusable-e2e.yml
+    secrets: inherit
