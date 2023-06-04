@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { describe } from 'node:test';
 
 describe('index page', function () {
-  const indexPageUrl = 'https://app-helloworld-1.vercel.app/';
+  const indexPageUrl = process.env.E2E_TEST_URL ?? '';
   test('[#01] should verify default texts', async ({ page }) => {
     // Arrange
     const pageTitle = 'Mumble - The best social network!';

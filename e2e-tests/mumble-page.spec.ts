@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { describe } from 'node:test';
 
 describe('mumble:id page', function () {
-  const mumbleUrl = 'https://app-helloworld-1.vercel.app/mumble/01H1C7VH4CTJRC86GM6ZC8DB49';
+  const mumbleUrl = `${process.env.E2E_TEST_URL}mumble/01H1C7VH4CTJRC86GM6ZC8DB49`;
 
   test('[#01] should add new comment', async ({ page }) => {
     // Arrange
