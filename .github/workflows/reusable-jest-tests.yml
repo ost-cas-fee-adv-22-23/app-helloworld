@@ -1,0 +1,31 @@
+name: Reusable - Jest Tests
+
+on:
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          registry-url: https://npm.pkg.github.com/
+          scope: '@smartive-education'
+      - name: Install dependencies
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "@smartive-education:registry=https://npm.pkg.github.com" > ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ env.NODE_AUTH_TOKEN }}" > ~/.npmrc
+          npm ci
+      - name: Run Jest Tests
+        run: npm run test
+      - name: Upload Test Reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: jest-reports
+          path: ./coverage/lcov-report
