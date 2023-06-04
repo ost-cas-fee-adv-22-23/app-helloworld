@@ -19,10 +19,7 @@ jobs:
       - name: Install dependencies
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          echo "@smartive-education:registry=https://npm.pkg.github.com" > ~/.npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secret.NPM_TOKEN }}" > ~/.npmrc
-          npm ci
+        run: npm ci
       - name: Run Prettier
         run: npm run prettier:check
       - name: Run ESLint
