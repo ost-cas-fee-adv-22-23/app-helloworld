@@ -23,7 +23,7 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
           npm ci
       - name: Run Jest Tests
-        run: npm run test
+        run: npm run test:unit
       - name: Upload Test Reports
         uses: actions/upload-artifact@v2
         if: failure()
