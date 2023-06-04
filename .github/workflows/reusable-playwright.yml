@@ -24,7 +24,7 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=${{ env.NODE_AUTH_TOKEN }}" > ~/.npmrc
           npm ci
       - name: Run Playwright Browser
-        run: npm run test:e2e
+        run: npx playwright install --with-deps
       - name: Run Playwright
         run: npm run test:e2e
       - name: 'Upload report as an artifact'
