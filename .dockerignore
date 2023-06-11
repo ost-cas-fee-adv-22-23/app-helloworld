@@ -1,0 +1,29 @@
+Dockerfile
+.dockerignore
+
+# Ignore development files and directories
+node_modules
+npm-debug.log
+coverage/
+
+# Ignore build artifacts
+dist
+
+# Ignore editor-specific files
+.vscode
+.idea
+
+# Ignore environment-specific files
+.env
+
+# Ignore version control files
+.github/
+.git
+.gitignore
+
+README.md
+.run
+.npmrc
+.prettierrc
+.dependency-cruiser.json
+.next
