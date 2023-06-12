@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { describe } from 'node:test';
 
 describe('index page', function () {
-  const indexPageUrl = process.env.E2E_TEST_URL ?? '';
+  const indexPageUrl = 'http://localhost:3000';
   test('[#01] should verify default texts', async ({ page }) => {
     // Arrange
     const pageTitle = 'Mumble - The best social network!';
@@ -47,7 +47,7 @@ describe('index page', function () {
 
   test('[#03/01] should navigate to profile page', async ({ page }) => {
     // Arrange
-    const profileUrl = 'https://app-helloworld-1.vercel.app/profile/me';
+    const profileUrl = 'http://localhost:3000/profile/me';
     const altTextProfile = 'Profilbild';
 
     // Act
