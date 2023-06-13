@@ -90,6 +90,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           altText={'Avatar'}
           link={Link}
           nextImage={Image}
+          data-testid="profile-header"
         ></ProfileHeader>
       </div>
       <div className={'block pt-xl3'}>
