@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} triggered workflow
 
 on:
   pull_request:
-    branches: 
+    branches:
       - main
     workflow_dispatch:
 

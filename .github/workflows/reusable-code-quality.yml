@@ -28,4 +28,3 @@ jobs:
         run: npm run dep-cruise:validate
       - name: Build
         run: npm run build
-

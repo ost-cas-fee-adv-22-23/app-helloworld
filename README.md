@@ -29,6 +29,7 @@ You find the deployed application [here](https://app-helloworld-1.vercel.app/).
 Instructions on how to set up and install the project.
 
 ### Clone this repo
+
 ```bash
 git clone https://github.com/smartive-education/app-helloworld.git
 ```
@@ -49,13 +50,17 @@ To install the UI component library package you need a personal GitHub Access To
 To find more detailed information see [Working with the npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry).
 
 ### Install the dependencies
+
 Then, install the dependencies:
+
 ```bash
 npm ci
 ```
 
 ### Create Environment Variables
+
 Insert te missing content into the .env file in the root.
+
 ```console
 # Qwacker backend
 NEXT_PUBLIC_QWACKER_API_URL=[insert URL of Qwacker API]
@@ -73,7 +78,9 @@ ZITADEL_CLIENT_ID=[insert zitadel client id]
 To use the application the user has to register at [Zitadel](https://zitadel.cloud/).
 
 ### Start the developement server
+
 Now, you can run the development server:
+
 ```bash
 npm run dev
 ```
@@ -87,11 +94,13 @@ npm run build
 
 npm run start
 ```
+
 ## Scripts
 
 ### ESLint
 
 ESLint is configured to check:
+
 - @smartive/prettier-config
 
 ```console
@@ -131,6 +140,7 @@ Besides the achievement of the MVP, we decided on some architectural and feature
 ### Architecture
 
 The decisions:
+
 - Each member of the project decides which knowledge she or he wants to acquire during thw development of the app
 - Implemented rest calls to [qwacker API](https://qwacker-api-http-prod-4cxdci3drq-oa.a.run.app/rest/#/) with [Axios](https://axios-http.com/)
 - Used [TanStack Query](https://tanstack.com/query/latest) for fetch. Only for the mutation of data
