@@ -39,6 +39,10 @@ export const fetchMumbles = async (params?: {
 };
 
 export const createPost = async (postArgs: PostArgs) => {
+  if (!postArgs.accessToken) {
+    throw new Error('No access token');
+  }
+
   const formData = new FormData();
   formData.append('text', postArgs.text);
   if (postArgs.file) {
