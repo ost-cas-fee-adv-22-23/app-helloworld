@@ -5,7 +5,7 @@ const authFile = 'playwright/.auth/user.json';
 // https://playwright.dev/docs/auth
 setup('authenticate', async ({ page }) => {
   const userName = 'hello-world-tester@smartive.zitadel.cloud';
-  const password = '';
+  const password = 'disPfdHWTU5?';
   const url = 'http://localhost:3000';
 
   await page.goto(url);
