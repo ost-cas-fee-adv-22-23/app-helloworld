@@ -1,17 +1,17 @@
 Dockerfile
 .dockerignore
+docker-compose.yml
 
 # Ignore development files and directories
 node_modules
-npm-debug.log
 coverage/
 
 # Ignore build artifacts
 dist
 
 # Ignore editor-specific files
-.vscode
-.idea
+.vscode/
+.idea/
 
 # Ignore environment-specific files
 .env
@@ -23,7 +23,10 @@ dist
 
 README.md
 .run
-.npmrc
 .prettierrc
 .dependency-cruiser.json
-.next
+.next/
+e2e-tests
+playwright
+playwright-report
+test-results

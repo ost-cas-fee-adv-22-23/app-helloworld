@@ -6,7 +6,6 @@ services:
       target: runner
     volumes:
       - .:/app
-      # - ./.npmrc:/root/.npmrc
     secrets:
       - npmrc_secret
     command: npm run dev

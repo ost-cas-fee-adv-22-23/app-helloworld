@@ -6,7 +6,7 @@ FROM node:18-alpine AS builder
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json package-lock.json ./
+COPY ./package.json ./package-lock.json ./
 
 # Could not use that
 RUN --mount=type=secret,id=npmrc_secret,target=/root/.npmrc npm ci
@@ -28,21 +28,25 @@ ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
 # Creates a system user and group named nextjs
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+#RUN addgroup --system --gid 1001 nodejs
+#RUN adduser --system --uid 1001 nextjs
 
 # Copys the .next directory from builder stage to runner stage
 COPY --from=builder /app/package.json /app/package-lock.json /app/next.config.js ./
+COPY --from=builder /app/node_modules ./node_modules
 RUN --mount=type=secret,id=npmrc_secret,target=/root/.npmrc npm ci
-COPY --from=builder --chown=nextjs:node /app/.next ./.next
-COPY --from=builder --chown=nextjs:node /app/public ./public
-
-USER nextjs
+COPY --from=builder --chown=node:node /app/.next ./.next
+COPY --from=builder --chown=node:node /app/public ./public
 
 # Expose the desired port (e.g., 3000) for the app
 EXPOSE 3000
+
+USER node
 
 ENV PORT 3000
 
 # Run the Next.js app
 CMD ["npm", "start"]
+
+# docker build . -f Dockerfile -t  secure-app-secrets --secret id=npmrc_secret,src=$HOME/.npmrc
+# docker run -p 3000:3000 --env-file .env app-pizza-hawaii
