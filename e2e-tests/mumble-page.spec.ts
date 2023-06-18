@@ -38,9 +38,11 @@ describe('mumble:id page', function () {
   //   // Act
   //   const copyButton = await page.getByText(copyButtonText);
   //   await copyButton.first().click();
-  //   const clipboardText = await page.evaluate('navigator.clipboard.readText()');
-  //   // Assert
-  //   expect(clipboardText).toEqual(mumbleUrl);
+  //
+  //   setTimeout(function () {
+  //     // Assert
+  //     expect(page.evaluate('navigator.clipboard.readText()')).toEqual(mumbleUrl);
+  //   }, 1000);
   // });
 
   test('[#03] should like mumble', async ({ page }) => {
