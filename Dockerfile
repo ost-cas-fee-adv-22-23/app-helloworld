@@ -1,11 +1,14 @@
 # https://geshan.com.np/blog/2023/01/nextjs-docker/
 # https://meeg.dev/blog/using-docker-compose-to-deploy-to-a-next-js-app-to-a-linux-app-service-in-azure
+# https://steveholgado.com/nginx-for-nextjs/
 
 # build stage
 FROM node:18-alpine AS builder
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
+# Install PM2 globally. PM2 ensuring that our app is always restarted after crashing
+# RUN npm install --global pm2
 COPY ./package.json ./package-lock.json ./
 
 # Could not use that
@@ -27,10 +30,6 @@ WORKDIR /app
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
-# Creates a system user and group named nextjs
-#RUN addgroup --system --gid 1001 nodejs
-#RUN adduser --system --uid 1001 nextjs
-
 # Copys the .next directory from builder stage to runner stage
 COPY --from=builder /app/package.json /app/package-lock.json /app/next.config.js ./
 COPY --from=builder /app/node_modules ./node_modules
@@ -43,10 +42,11 @@ EXPOSE 3000
 
 USER node
 
-ENV PORT 3000
+# ENV PORT 3000
 
 # Run the Next.js app
 CMD ["npm", "start"]
+# CMD [ "pm2-runtime", "npm", "--", "start" ]
 
 # docker build . -f Dockerfile -t  secure-app-secrets --secret id=npmrc_secret,src=$HOME/.npmrc
 # docker run -p 3000:3000 --env-file .env app-pizza-hawaii
