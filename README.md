@@ -155,6 +155,23 @@ Main page with timeline, profile page and detail page, when redirected to the pa
 
 Timeline for the automated scrolling and for a new created post. The redirection to the profile page over the navbar.
 
+## Testing
+### e2e-testing
+The goal of our e2e test is to ensure that the most important functionalities can be executed in the UI of the application. This includes writing a new mumble, liking a picture, and commenting on an existing mumble. As we are already testing the Mumble and Index pages, we would add tests for the profile page in a further step.
+
+The e2e tests were implemented using Playwright as test framework.
+
+### Unit testing
+In this application, unit tests are used to test individual code sections that either contain important logic, are reused or are complex. Specifically, we have therefore decided that tests for the utils and the API calls are required.
+
+#### Notes on the utils:
+- creator-to.ts: As addCreatorToMumbles is already being tested, we would also add tests for the other functions.
+- convert-to.ts: The tests were omitted here, since these functions would be refactored again.
+
+#### Notes on the services:
+
+Some tests for liking mumbles and for loading and creating a mumble have already been created. So we would also test the other services. It would also be important for us to ensure that the application can deal with a missing access token and any error from the API. (However, error handling has not yet been implemented in the application.)
+
 ## Project History and Status
 
 Our projects follow the conventions of the [Semantic Versioning 2.0.0](https://semver.org/). The tickets are tracked with [Trello](https://trello.com/b/f3ETlXfM/app).
