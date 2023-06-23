@@ -12,7 +12,7 @@ describe('likePost', () => {
   test('[#01] should like mumble', () => {
     likePost({ postId, likedByUser: false, accessToken }).then((_) => {
       expect(axios.put).toHaveBeenCalledTimes(1);
-      expect(axios.put).toHaveBeenCalledWith('undefinedposts/123/likes', undefined, {
+      expect(axios.put).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}/likes`, undefined, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
     });
@@ -21,7 +21,7 @@ describe('likePost', () => {
   test('[#02] should dislike mumble', () => {
     likePost({ postId, likedByUser: true, accessToken }).then((_) => {
       expect(axios.delete).toHaveBeenCalledTimes(1);
-      expect(axios.delete).toHaveBeenCalledWith('undefinedposts/123/likes', {
+      expect(axios.delete).toHaveBeenCalledWith(`${process.env.NEXT_PUBLIC_QWACKER_API_URL}posts/${postId}/likes`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
     });
