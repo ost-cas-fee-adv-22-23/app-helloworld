@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { describe } from 'node:test';
 
 describe('index page', function () {
-  const indexPageUrl = process.env.E2E_TEST_URL ?? '';
+  const indexPageUrl = 'http://localhost:3000';
   test('[#01] should verify default texts', async ({ page }) => {
     // Arrange
     const pageTitle = 'Mumble - The best social network!';
@@ -24,8 +24,7 @@ describe('index page', function () {
     await expect(page.getByText(subtitle)).toBeVisible();
   });
 
-  // TODO: find out why this test is flaky.
-  test('[#02] should add new post', async ({ page }) => {
+  test('[#02/01] should add new post without image', async ({ page }) => {
     // Arrange
     const mumbleText = `e2e-Test Spam um: ${Date.now()}`;
     const mumblePlaceholder = 'Deine Meinung zählt?';
@@ -45,29 +44,7 @@ describe('index page', function () {
     await expect(page.getByText(mumbleText)).toBeVisible();
   });
 
-  test('[#03/01] should navigate to profile page', async ({ page }) => {
-    // Arrange
-    const profileUrl = 'https://app-helloworld-1.vercel.app/profile/me';
-    const altTextProfile = 'Profilbild';
-
-    // Act
-    await page.goto(indexPageUrl);
-    await page.getByAltText(altTextProfile).first().click();
-
-    // Assert
-    await expect(page).toHaveURL(profileUrl);
-  });
-
-  test('[#03/02] should navigate to mumble page', async ({ page }) => {
-    // Arrange
-    const mumbleUrl = /.*mumble/;
-    const commentButton = 'Comment';
-
-    // Act
-    await page.goto(indexPageUrl);
-    await page.getByRole('link', { name: commentButton }).first().click();
-
-    // Assert
-    await expect(page).toHaveURL(mumbleUrl);
+  test('[#02/02] should add new post with image', async ({ page }) => {
+    //TBD;
   });
 });

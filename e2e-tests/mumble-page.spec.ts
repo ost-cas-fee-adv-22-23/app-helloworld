@@ -2,7 +2,11 @@ import { expect, test } from '@playwright/test';
 import { describe } from 'node:test';
 
 describe('mumble:id page', function () {
-  const mumbleUrl = `${process.env.E2E_TEST_URL}mumble/01H1C7VH4CTJRC86GM6ZC8DB49`;
+  const mumbleUrl = 'http://localhost:3000/mumble/01H1C7VH4CTJRC86GM6ZC8DB49';
+
+  test.beforeEach(async ({ page }) => {
+    await page.goto(mumbleUrl);
+  });
 
   test('[#01] should add new comment', async ({ page }) => {
     // Arrange
@@ -12,7 +16,6 @@ describe('mumble:id page', function () {
     const sendButtonText = 'Absenden';
 
     // Act
-    await page.goto(mumbleUrl);
     await expect(page.getByText(mumbleText)).toBeVisible();
 
     const textArea = await page.getByPlaceholder(commentPlaceholder);
@@ -26,5 +29,35 @@ describe('mumble:id page', function () {
 
     // Assert
     await expect(page.getByText(comment)).toBeVisible();
+  });
+
+  // test('[#02] should copy link to mumble', async ({ page }) => {
+  //   // Arrange
+  //   const copyButtonText = 'Copy Link';
+  //
+  //   // Act
+  //   const copyButton = await page.getByText(copyButtonText);
+  //   await copyButton.first().click();
+  //
+  //   setTimeout(function () {
+  //     // Assert
+  //     expect(page.evaluate('navigator.clipboard.readText()')).toEqual(mumbleUrl);
+  //   }, 1000);
+  // });
+
+  test('[#03] should like mumble', async ({ page }) => {
+    // Arrange
+    const likeButtonText = 'Like';
+    const likedButtonText = 'Liked';
+
+    // Act
+    const likeButton = await page.getByText(likeButtonText);
+    await likeButton.first().click();
+
+    // Assert
+    await expect(page.getByText(likedButtonText)).toBeVisible();
+
+    // undo change
+    await likeButton.first().click();
   });
 });

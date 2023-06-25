@@ -57,7 +57,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
   };
 
   function copyMumbleUrl() {
-    navigator.clipboard.writeText(`${window.location.href}mumble/${state.mumble.id}`);
+    navigator.clipboard.writeText(`${location.protocol}//${location.host}/mumble/${state.mumble.id}`);
     dispatch({ type: 'post_copied' });
     setTimeout(function () {
       dispatch({ type: 'post_copied_reset' });
@@ -90,6 +90,7 @@ export const MumbleCard: FC<MumbleCard> = ({ mumble, showComments, commentSubmit
           altText={'Avatar'}
           link={Link}
           nextImage={Image}
+          data-testid="profile-header"
         ></ProfileHeader>
       </div>
       <div className={'block pt-xl3'}>
