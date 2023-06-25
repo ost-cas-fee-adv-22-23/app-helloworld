@@ -18,6 +18,8 @@ setup('authenticate', async ({ page }) => {
   await page.waitForSelector('input[name="password"]').then((field) => field.fill(password));
   await page.getByText('next').click();
 
+  // await page.getByText('skip').click();
+
   await expect(page.getByText('Willkommen auf Mumble')).toBeVisible();
 
   // End of authentication steps.

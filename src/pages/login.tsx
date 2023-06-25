@@ -29,7 +29,15 @@ export default function Home() {
       <div className={'flex justify-center items-center'}>
         <div>
           <h1 className={'label-XL'}>Anmelden</h1>
-          <Button label="Let's mumble" onClick={() => signIn('zitadel', { callbackUrl: '/' })} size="L" variant="gradient">
+          <Button
+            label="Let's mumble"
+            onClick={(e) => {
+              e.preventDefault();
+              signIn('zitadel', { callbackUrl: '/' });
+            }}
+            size="L"
+            variant="gradient"
+          >
             <MumbleIcon size={16} />
           </Button>
         </div>
