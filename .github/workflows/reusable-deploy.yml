@@ -56,7 +56,7 @@ jobs:
             europe-west6-docker.pkg.dev/expanded-symbol-389711/helloworld/app-helloworld:latest
             europe-west6-docker.pkg.dev/expanded-symbol-389711/helloworld/app-helloworld:${{ github.sha }}
           secrets: |
-            "npmrc_secret=${{ secrets.NPMRC_SECRET }}"
+            "npmrc_secret=${{ secrets.NPM_TOKEN }}"
   deploy:
     name: Deploy To GCP
     runs-on: ubuntu-latest
