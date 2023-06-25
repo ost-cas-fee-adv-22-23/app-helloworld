@@ -57,6 +57,13 @@ jobs:
             europe-west6-docker.pkg.dev/expanded-symbol-389711/helloworld/app-helloworld:${{ github.sha }}
           secrets: |
             "npmrc_secret=${{ secrets.NPM_TOKEN }}"
+      - name: Docker Failure Report
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: failure-docker-report
+          path: failure-docker-report/
+          retention-days: 15
   deploy:
     name: Deploy To GCP
     runs-on: ubuntu-latest
@@ -71,11 +78,21 @@ jobs:
           credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
           token_format: 'access_token'
       - uses: hashicorp/setup-terraform@v2
+      - run: terraform fmt -check
+        working-directory: terraform
       - run: terraform init
         working-directory: terraform
-
+      - run: terraform validate
+        working-directory: terraform
       - run: terraform apply -auto-approve
         env:
           TF_VAR_commit_hash: ${{ github.sha }}
         working-directory: terraform
+      - name: Terraform Failure Report
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: terraform-docker-report
+          path: terraform-docker-report/
+          retention-days: 15
 
