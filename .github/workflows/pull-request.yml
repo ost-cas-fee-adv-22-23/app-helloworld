@@ -24,3 +24,9 @@ jobs:
     needs: trigger-build
     uses: ./.github/workflows/reusable-e2e.yml
     secrets: inherit
+
+  trigger-lighthouse:
+    name: Lighthouse Tests
+    needs: trigger-build
+    uses: ./.github/workflows/reusable-lighthouse.yml
+    secrets: inherit
