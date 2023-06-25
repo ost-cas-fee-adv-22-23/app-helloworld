@@ -9,9 +9,11 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "prettier": "prettier --check .",
+    "prettier:check": "prettier --check './**/*.{ts,tsx}' --config ./.prettierrc",
     "prettier:fix": "prettier --write .",
     "depcruise": "npx depcruise --config .dependency-cruiser.js src",
-    "test": "jest",
+    "dep-cruise:validate": "npx depcruise src --include-only \"^src\" --config .dependency-cruiser.js",
+    "test:unit": "jest",
     "test:e2e": "npx playwright test"
   },
   "dependencies": {

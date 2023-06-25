@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  app-helloworld:
+    build:
+      context: ./
+      target: runner
+    volumes:
+      - .:/app
+    secrets:
+      - npmrc_secret
+    command: npm run dev
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: development
+secrets:
+  npmrc_secret:
+    file: ~/.npmrc_secret

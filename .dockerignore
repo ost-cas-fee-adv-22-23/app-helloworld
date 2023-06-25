@@ -1,0 +1,32 @@
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Ignore development files and directories
+node_modules
+coverage/
+
+# Ignore build artifacts
+dist
+
+# Ignore editor-specific files
+.vscode/
+.idea/
+
+# Ignore environment-specific files
+.env
+
+# Ignore version control files
+.github/
+.git
+.gitignore
+
+README.md
+.run
+.prettierrc
+.dependency-cruiser.json
+.next/
+e2e-tests
+playwright
+playwright-report
+test-results

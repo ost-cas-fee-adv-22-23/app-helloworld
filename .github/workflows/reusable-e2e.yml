@@ -1,0 +1,42 @@
+name: Reusable - e2e Tests
+
+on:
+  workflow_call:
+
+jobs:
+  e2e-test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          registry-url: https://npm.pkg.github.com/
+          scope: '@smartive-education'
+      - name: Install dependencies
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "@smartive-education:registry=https://npm.pkg.github.com" > ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+          npm ci
+      - name: Run Playwright Browser
+        run: npx playwright install --with-deps
+      - name: Run Playwright
+        env:
+          NEXT_PUBLIC_QWACKER_API_URL: ${{ secrets.NEXT_PUBLIC_QWACKER_API_URL }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          ZITADEL_ISSUER: ${{ secrets.ZITADEL_ISSUER }}
+          ZITADEL_CLIENT_ID: ${{ secrets.ZITADEL_CLIENT_ID }}
+        run: npm run test:e2e
+      - name: 'Upload report as an artifact'
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 15
