@@ -19,6 +19,11 @@ jobs:
       - name: Install dependencies
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NEXT_PUBLIC_QWACKER_API_URL: ${{ secrets.NEXT_PUBLIC_QWACKER_API_URL }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          ZITADEL_ISSUER: ${{ secrets.ZITADEL_ISSUER }}
+          ZITADEL_CLIENT_ID: ${{ secrets.ZITADEL_CLIENT_ID }}
         run: |
           echo "@smartive-education:registry=https://npm.pkg.github.com" > ~/.npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc

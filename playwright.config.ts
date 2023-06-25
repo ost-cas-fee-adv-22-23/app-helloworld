@@ -87,8 +87,8 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'next dev',
-    url: 'http://127.0.0.1:3000',
+    command: 'npm run build && npm start',
+    url: 'http://localhost:3000/',
     reuseExistingServer: false,
   },
 });
