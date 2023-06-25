@@ -4,7 +4,7 @@ locals {
 }
 
 provider "google" {
-  project = "cas-fee-advanced-helloworld"
+  project = "expanded-symbol-389711"
   region  = local.gcp_region
 }
 

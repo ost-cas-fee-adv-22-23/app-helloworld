@@ -38,7 +38,7 @@ resource "google_cloud_run_service" "cas-fee-advanced-helloworld" {
   template {
     spec {
       containers {
-        image = "europe-west6-docker.pkg.dev/expanded-symbol-389711/helloworld/app-helloworld:latest"
+        image = "europe-west6-docker.pkg.dev/expanded-symbol-389711/helloworld/app-helloworld:${var.commit_hash}"
 
         resources {
           limits = {
@@ -48,7 +48,7 @@ resource "google_cloud_run_service" "cas-fee-advanced-helloworld" {
 
         ports {
           name           = "http1"
-          container_port = 3000
+          container_port = 8080
         }
 
         env {

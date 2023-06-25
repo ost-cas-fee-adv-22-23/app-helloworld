@@ -24,3 +24,9 @@ jobs:
     needs: trigger-build
     uses: ./.github/workflows/reusable-e2e.yml
     secrets: inherit
+
+  trigger-deploy:
+    name: Build and Publish Docker image
+    needs: [trigger-build, trigger-jest, trigger-playwright]
+    uses: ./.github/workflows/reusable-deploy.yml
+    secrets: inherit
