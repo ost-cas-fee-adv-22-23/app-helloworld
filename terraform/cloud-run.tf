@@ -48,12 +48,12 @@ resource "google_cloud_run_service" "cas-fee-advanced-helloworld" {
 
         ports {
           name           = "http1"
-          container_port = 8080
+          container_port = 3000
         }
 
         env {
-            name = "NEXT_PUBLIC_QWACKER_API_URL"
-            value = "https://qwacker-api-http-prod-4cxdci3drq-oa.a.run.app/"
+          name  = "NEXT_PUBLIC_QWACKER_API_URL"
+          value = "https://qwacker-api-http-prod-4cxdci3drq-oa.a.run.app/"
         }
 
         env {
@@ -63,7 +63,7 @@ resource "google_cloud_run_service" "cas-fee-advanced-helloworld" {
 
         env {
           name  = "NEXTAUTH_SECRET"
-          value = "${random_uuid.random_nextauth_secret.result}"
+          value = random_uuid.random_nextauth_secret.result
         }
 
         env {
