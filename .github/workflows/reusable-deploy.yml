@@ -51,19 +51,15 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
+          file: ./Dockerfile
+          build-args: |
+            NEXT_PUBLIC_QWACKER_API_URL=${{ secrets.NEXT_PUBLIC_QWACKER_API_URL }}
+          secrets: |
+            "npmrc_secret=${{ secrets.NPMRC_SECRET }}"
           push: true
           tags: |
             europe-west6-docker.pkg.dev/expanded-symbol-389711/helloworld/app-helloworld:latest
             europe-west6-docker.pkg.dev/expanded-symbol-389711/helloworld/app-helloworld:${{ github.sha }}
-          secrets: |
-            "npmrc_secret=${{ secrets.NPM_TOKEN }}"
-      - name: Docker Failure Report
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: failure-docker-report
-          path: failure-docker-report/
-          retention-days: 15
   deploy:
     name: Deploy To GCP
     runs-on: ubuntu-latest
@@ -88,11 +84,4 @@ jobs:
         env:
           TF_VAR_commit_hash: ${{ github.sha }}
         working-directory: terraform
-      - name: Terraform Failure Report
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: terraform-docker-report
-          path: terraform-docker-report/
-          retention-days: 15
 
