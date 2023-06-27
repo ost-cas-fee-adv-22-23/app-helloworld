@@ -26,7 +26,7 @@ RUN npm run build
 FROM node:18-alpine AS runner
 WORKDIR /app
 
-# Set the environment variable for Next.js to optimize Next.js for production
+# Set the environment variable for Next.js to signal that it should enable optimizations.
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
