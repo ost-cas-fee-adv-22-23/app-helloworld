@@ -1,9 +1,11 @@
+# New service account is created or reused by terraform
 resource "google_service_account" "cloud-runner" {
   account_id   = "cloud-runner"
   display_name = "Google Cloud Run"
   description  = "Account to deploy applications to google cloud run."
 }
 
+# Added roles to the service account
 resource "google_project_iam_member" "cloud-runner" {
   for_each = toset([
     "roles/run.serviceAgent",
@@ -16,6 +18,7 @@ resource "google_project_iam_member" "cloud-runner" {
   project = data.google_project.project.id
 }
 
+# In the context of the project give permission to execute
 resource "google_project_iam_member" "cloud-runner-svc" {
   role    = "roles/run.serviceAgent"
   member  = "serviceAccount:service-${data.google_project.project.number}@serverless-robot-prod.iam.gserviceaccount.com"
@@ -91,6 +94,7 @@ output "cloud-run-url" {
   value = google_cloud_run_service.cas-fee-advanced-helloworld.status[0].url
 }
 
+# Allow all user to invoke service
 data "google_iam_policy" "noauth" {
   binding {
     role = "roles/run.invoker"
@@ -100,6 +104,7 @@ data "google_iam_policy" "noauth" {
   }
 }
 
+# Allow all user, which are not auth with google account can access
 resource "google_cloud_run_service_iam_policy" "noauth" {
   location = google_cloud_run_service.cas-fee-advanced-helloworld.location
   project  = google_cloud_run_service.cas-fee-advanced-helloworld.project
