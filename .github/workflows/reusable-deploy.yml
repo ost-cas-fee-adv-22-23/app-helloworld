@@ -49,7 +49,7 @@ jobs:
           push: true
           tags: |
             europe-west6-docker.pkg.dev/expanded-symbol-389711/helloworld/app-helloworld:latest
-            europe-west6-docker.pkg.dev/expanded-symbol-389711/helloworld/app-helloworld:${{ needs.release.outputs.new_release_version }}
+            europe-west6-docker.pkg.dev/expanded-symbol-389711/helloworld/app-helloworld:${{ steps.semantic.outputs.new_release_version }}
   deploy:
     name: Deploy To GCP
     runs-on: ubuntu-latest
