@@ -31,10 +31,9 @@ ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
 # Copys the .next directory from builder stage to runner stage
-COPY --from=builder /app/package.json /app/package-lock.json /app/next.config.js ./
-RUN --mount=type=secret,id=npmrc_secret,target=/root/.npmrc npm ci
-COPY --from=builder --chown=node:node /app/.next ./.next
 COPY --from=builder --chown=node:node /app/public ./public
+COPY --from=builder --chown=node:node /app/.next/standalone ./
+COPY --from=builder --chown=node:node /app/.next/static ./.next/static
 
 # Expose the desired port (e.g., 3000) for the app
 EXPOSE 3000
@@ -44,4 +43,4 @@ USER node
 ENV PORT 3000
 
 # Run the Next.js app
-CMD ["npm", "--", "start"]
+CMD ["node", "server.js"]
