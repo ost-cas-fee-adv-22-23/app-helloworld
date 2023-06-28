@@ -40,7 +40,7 @@ resource "google_cloud_run_service" "cas-fee-advanced-helloworld" {
   template {
     spec {
       containers {
-        image = "europe-west6-docker.pkg.dev/expanded-symbol-389711/helloworld/app-helloworld:${var.commit_hash}"
+        image = "europe-west6-docker.pkg.dev/expanded-symbol-389711/helloworld/app-helloworld:${var.release_version}"
 
         resources {
           limits = {
