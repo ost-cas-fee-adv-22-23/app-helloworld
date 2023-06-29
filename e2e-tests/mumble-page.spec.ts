@@ -31,19 +31,21 @@ describe('mumble:id page', function () {
     await expect(page.getByText(comment)).toBeVisible();
   });
 
-  // test('[#02] should copy link to mumble', async ({ page }) => {
+  test.only('[#02] should copy link to mumble', async ({ page }) => {
   //   // Arrange
-  //   const copyButtonText = 'Copy Link';
+    const copyButtonText = 'Copy Link';
   //
   //   // Act
-  //   const copyButton = await page.getByText(copyButtonText);
-  //   await copyButton.first().click();
-  //
-  //   setTimeout(function () {
-  //     // Assert
-  //     expect(page.evaluate('navigator.clipboard.readText()')).toEqual(mumbleUrl);
-  //   }, 1000);
-  // });
+    const copyButton = await page.getByText(copyButtonText);
+    await copyButton.first().click();
+
+    expect(page.evaluate('navigator.clipboard.readText()')).toEqual(mumbleUrl);
+
+    // setTimeout(function () {
+    //   // Assert
+    //   expect(page.evaluate('navigator.clipboard.readText()')).toEqual(mumbleUrl);
+    // }, 1000);
+  });
 
   test('[#03] should like mumble', async ({ page }) => {
     // Arrange

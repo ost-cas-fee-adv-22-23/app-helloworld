@@ -18,7 +18,11 @@ setup('authenticate', async ({ page }) => {
   await page.waitForSelector('input[name="password"]').then((field) => field.fill(password));
   await page.getByText('next').click();
 
-  // await page.getByText('skip').click();
+  try {
+    if (await page.getByText('skip').isVisible()) await page.getByText('skip').click();
+  } catch (e) {
+    console.log('2 factor authentication page does not exist.');
+  }
 
   await expect(page.getByText('Willkommen auf Mumble')).toBeVisible();
 

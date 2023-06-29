@@ -40,7 +40,7 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         // Use prepared auth state.
         storageState: 'playwright/.auth/user.json',
-        permissions: ['clipboard-read'],
+        permissions: ['clipboard-write', 'clipboard-read'],
       },
       timeout: 100000,
       dependencies: ['setup'],
