@@ -12,6 +12,10 @@ an application from the beginning to the end.
 - [PWA](#pwa)
 - [Deploy on Vercel](#deploy-on-vercel)
 - [Architecture and Strategies](#architecture-and-strategies)
+- [Testing](#testing)
+- [Docker](#docker)
+- [Terraform](#terraform)
+- [Github Actions](#github-actions)
 - [Project History and Status](#project-history-and-status)
 - [Improvements for next project](#improvements-for-next-project)
 - [Authors](#authors)
@@ -181,6 +185,88 @@ In this application, unit tests are used to test individual code sections that e
 #### Notes on the services:
 
 Some tests for liking mumbles and for loading and creating a mumble have already been created. So we would also test the other services. It would also be important for us to ensure that the application can deal with a missing access token and any error from the API. (However, error handling has not yet been implemented in the application.)
+
+## Docker
+
+The application can be run on a docker. Before docker can be used [install Docker Engine](https://docs.docker.com/engine/install/). To build a docker image locally, you need to ensure a local [.nmprc](#authenticating-github-registry) and [.env](#create-environment-variables) file. Additionally copy the `.npmrc` file to your user directory. After execute following code:
+
+```console
+docker build . -t app-helloworld --build-arg NEXT_PUBLIC_QWACKER_API_URL=https://qwacker-api-http-prod-4cxdci3drq-oa.a.run.app/ --secret id=npmrc_secret,src=$HOME/.npmrc
+```
+
+When the build was successfully, you can run the image with following command:
+
+```console
+docker run -p 3000:3000 --env-file ./.env --rm --name app-helloworld app-helloworld
+```
+
+You can also run the image on the docker compose, like following:
+
+```console
+docker-compose --env-file ./.env up
+```
+
+If you want to upload your docker image manually to the [google cloud](https://cloud.google.com/?hl=de), push the following code:
+
+```console
+docker push europe-west6-docker.pkg.dev/expanded-symbol-389711/helloworld/app-helloworld
+```
+## Terraform
+
+Before using terraform, you need to [install terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli) on your system. In this project terraform deploys the application on [google cloud](https://cloud.google.com/?hl=de), see the terraform configuration on this project under the `/terraform` folder.
+
+First you need to login with your account to google cloud, to get access.
+
+```console
+gcloud auth login
+gcloud auth application-default login
+```
+
+After the login there are permission you need to have. Most of the time these permissions are enough
+
+```console
+gcloud projects add-iam-policy-binding expanded-symbol-389711 /
+--member='serviceAccount:tf-deploy-helloworld@expanded-symbol-389711.iam.gserviceaccount.com' /
+--role='roles/resourcemanager.projectIamAdmin'
+```
+
+```console
+gcloud projects add-iam-policy-binding expanded-symbol-389711 /
+--member='serviceAccount:tf-deploy-helloworld@expanded-symbol-389711.iam.gserviceaccount.com' /
+--role='roles/iam.serviceAccountUser'
+```
+
+```console
+gcloud projects add-iam-policy-binding expanded-symbol-389711 /
+--member='serviceAccount:tf-deploy-helloworld@expanded-symbol-389711.iam.gserviceaccount.com' /
+--role='roles/iam.serviceAccountTokenCreator'
+```
+
+To deploy with terraform manually, the following commands have to be executed in order
+
+### Terraform commands
+
+You need to initializes a working directory containing terraform configuration files. This command is executed once after writing a new Terraform configuration or cloning an existing one.
+
+```console
+terraform init
+```
+
+To create an execution plan, that shows you the changes that terraform plans to make to your infrastructure.
+
+```console
+terraform plan
+```
+
+The last command executes the actions proposed in a terraform plan.
+
+```console
+terraform apply --auto-approve
+```
+
+## Github Actions
+
+The project starts after every pull request and merge into main a pineapple, that makes some quality checks and after that is successful, the unit and e2e tests are ran. Only for the merge to main, a docker image is build and pushed to google cloud with terraform.
 
 ## Project History and Status
 
