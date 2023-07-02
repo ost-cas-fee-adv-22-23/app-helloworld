@@ -14,6 +14,7 @@
     "depcruise": "npx depcruise --config .dependency-cruiser.js src",
     "dep-cruise:validate": "npx depcruise src --include-only \"^src\" --config .dependency-cruiser.js",
     "test:unit": "jest",
+    "test:e2e:watch": "npx playwright test --ui",
     "test:e2e": "npx playwright test"
   },
   "dependencies": {
