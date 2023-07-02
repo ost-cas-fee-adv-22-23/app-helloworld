@@ -40,7 +40,7 @@ export default defineConfig({
         ...devices['Desktop Chrome'],
         // Use prepared auth state.
         storageState: 'playwright/.auth/user.json',
-        permissions: ['clipboard-read'],
+        permissions: ['clipboard-write', 'clipboard-read'],
       },
       timeout: 100000,
       dependencies: ['setup'],
@@ -87,7 +87,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run build && npm start',
+    command: process.env.CI ? 'npm run build && npm start' : 'next dev',
     url: 'http://localhost:3000/',
     reuseExistingServer: false,
   },

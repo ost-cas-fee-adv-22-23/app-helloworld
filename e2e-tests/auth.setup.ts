@@ -9,16 +9,26 @@ setup('authenticate', async ({ page }) => {
   const url = 'http://localhost:3000';
 
   await page.goto(url);
-  await page.getByText("Let's mumble").click();
+  const letsMumbleButton = await page.getByText("Let's mumble");
+  await letsMumbleButton.click();
 
   const input = page.getByPlaceholder('username@domain');
   await input.fill(userName);
-  await page.getByText('next').click();
+
+  const nextButton = await page.getByText('next');
+  await nextButton.click();
 
   await page.waitForSelector('input[name="password"]').then((field) => field.fill(password));
-  await page.getByText('next').click();
+  const loginButton = await page.getByText('next');
+  await loginButton.click();
 
-  // await page.getByText('skip').click();
+  try {
+    if (await page.getByText('skip').isVisible()) {
+      await page.getByText('skip').click();
+    }
+  } catch (e) {
+    console.log('2 factor authentication page does not exist.');
+  }
 
   await expect(page.getByText('Willkommen auf Mumble')).toBeVisible();
 
