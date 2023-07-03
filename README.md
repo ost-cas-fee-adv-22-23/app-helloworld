@@ -279,6 +279,7 @@ Our projects follow the conventions of the [Semantic Versioning 2.0.0](https://s
 - Add reload button for new mumbles
 - Add unit and integration tests
 - Refactor some componenets in storybook
+- Add further vital checks as github actions workflow for the application
 
 ## Authors
 
