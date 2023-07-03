@@ -266,7 +266,7 @@ terraform apply --auto-approve
 
 ## Github Actions
 
-The project starts after every pull request and merge into main a pineapple, that makes some quality checks and after that is successful, the unit and e2e tests are ran. Only for the merge to main, a docker image is build and pushed to google cloud with terraform.
+The project starts after every pull request and after every merge into main a workflow. On both workflow's, it starts first the quality checks for eslint, prettier and dependency cruiser. When the checks are finished successful the next pipeline with unit and e2e test are executed. Further the main merge triggers the docker image and the push to google cloud with terraform. The strategy for the github actions uses the reusable workflow technique.
 
 ## Project History and Status
 
