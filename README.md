@@ -26,7 +26,7 @@ This application is the second part of the CAS based on [NextJS](https://nextjs.
 
 ### Live Demo
 
-You find the deployed application [here](https://app-helloworld-1.vercel.app/).
+You find the deployed application on Vercel [here](https://app-helloworld-1.vercel.app/). The deployed application on google cloud is [here](https://app-helloworld-bdyvgt3zva-oa.a.run.app).
 
 ## Installation Guide
 
@@ -277,9 +277,10 @@ Our projects follow the conventions of the [Semantic Versioning 2.0.0](https://s
 - The error handling for api calls has to be implemented
 - Clean up tailwind classes
 - Add reload button for new mumbles
-- Add unit and integration tests
-- Refactor some componenets in storybook
-- Add further vital checks as github actions workflow for the application
+- Add more unit and integration tests
+- Refactor some components in storybook
+- Add further github actions workflow for web vitality checks
+- Add renovate for dependency updates
 
 ## Authors
 
